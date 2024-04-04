@@ -5,7 +5,7 @@ import '../../../../mocks.dart';
 import 'home_robot.dart';
 
 void main() {
-  testWidgets('home screen ...', (tester) async {
+  testWidgets('Render home screen correctly', (tester) async {
     final r = HomeRobot(tester);
     final songRepository = MockSongRepository();
     final albumRepository = MockAlbumRepository();
@@ -16,6 +16,13 @@ void main() {
       albumRepository: albumRepository,
       releaseEventRepository: releaseEventRepository,
     );
+
+    // Verify Shortcut menus
+    await r.expectShortcutSongSearchIsVisible(true);
+    await r.expectShortcutArtistSearchIsVisible(true);
+    await r.expectShortcutAlbumSearchIsVisible(true);
+    await r.expectShortcutTagSearchIsVisible(true);
+    await r.expectShortcutEventSearchIsVisible(true);
 
     await r.scrollDown();
 

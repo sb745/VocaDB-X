@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vocadb_app/src/features/albums/data/album_repository.dart';
 import 'package:vocadb_app/src/features/home/presentation/home_screen/home_screen.dart';
+import 'package:vocadb_app/src/features/home/presentation/home_screen/shortcut_menu_button.dart';
 import 'package:vocadb_app/src/features/releaseEvents/data/release_event_repository.dart';
 import 'package:vocadb_app/src/features/songs/data/song_repository.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -42,4 +43,30 @@ class HomeRobot {
     await tester.drag(find.byType(ListView), Offset(0, offset));
     await tester.pump();
   }
+
+  Future<void> expectShortcutSongSearchIsVisible(bool visible) async {
+    final finder = find.widgetWithText(ShortcutMenuButton, 'Songs');
+    (visible) ? expect(finder, findsOneWidget) : expect(finder, findsNothing);
+  }
+
+  Future<void> expectShortcutArtistSearchIsVisible(bool visible) async {
+    final finder = find.widgetWithText(ShortcutMenuButton, 'Artists');
+    (visible) ? expect(finder, findsOneWidget) : expect(finder, findsNothing);
+  }
+  
+  Future<void> expectShortcutAlbumSearchIsVisible(bool visible) async {
+    final finder = find.widgetWithText(ShortcutMenuButton, 'Albums');
+    (visible) ? expect(finder, findsOneWidget) : expect(finder, findsNothing);
+  }
+  
+  Future<void> expectShortcutTagSearchIsVisible(bool visible) async {
+    final finder = find.widgetWithText(ShortcutMenuButton, 'Tags');
+    (visible) ? expect(finder, findsOneWidget) : expect(finder, findsNothing);
+  }
+  
+  Future<void> expectShortcutEventSearchIsVisible(bool visible) async {
+    final finder = find.widgetWithText(ShortcutMenuButton, 'Events');
+    (visible) ? expect(finder, findsOneWidget) : expect(finder, findsNothing);
+  }
+
 }
