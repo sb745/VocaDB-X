@@ -9,6 +9,7 @@ import 'package:vocadb_app/src/features/home/presentation/home_screen/random_alb
 import 'package:vocadb_app/src/features/home/presentation/home_screen/recent_albums_section.dart';
 import 'package:vocadb_app/src/features/home/presentation/home_screen/recent_events_section.dart';
 import 'package:vocadb_app/src/features/home/presentation/home_screen/shortcut_menu_button.dart';
+import 'package:vocadb_app/src/routing/app_route_context.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -38,7 +39,9 @@ class HomeScreen extends StatelessWidget {
                   ShortcutMenuButton(
                     title: 'Artists', 
                     iconData: Icons.person, 
-                    onPressed: () {},
+                    onPressed: () {
+                      context.goArtistSearchScreen();
+                    },
                   ),
                   ShortcutMenuButton(
                     title: 'Albums', 

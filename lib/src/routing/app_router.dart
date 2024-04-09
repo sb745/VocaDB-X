@@ -27,6 +27,7 @@ import 'package:vocadb_app/src/features/users/presentation/rated_songs_screen/ra
 import 'package:vocadb_app/src/features/users/presentation/rated_songs_screen/rated_songs_screen.dart';
 import 'package:vocadb_app/src/features/songs/presentation/song_detail_screen/song_detail_screen.dart';
 import 'package:vocadb_app/src/features/tags/presentation/tag_detail_screen/tag_detail_screen.dart';
+import 'package:vocadb_app/src/routing/app_route_context.dart';
 import 'package:vocadb_app/src/routing/go_router_refresh_stream.dart';
 
 enum AppRoute {
@@ -91,13 +92,15 @@ final goRouterProvider = Provider.autoDispose<GoRouter>(
               },
             ),
             GoRoute(
-              path: 'Artists',
+              path: 'Ar',
               name: AppRoute.artistsList.name,
-              pageBuilder: (context, state) => MaterialPage(
-                key: state.pageKey,
-                fullscreenDialog: true,
-                child: const ArtistsListScreen(),
-              ),
+              builder: (context, state) {
+                return ArtistsListScreen(
+                  onSelectArtist: (artist) {
+                    context.goArtistDetail(artist);
+                  }
+                );
+              },
               routes: [
                 GoRoute(
                   path: 'Filter',
@@ -107,7 +110,15 @@ final goRouterProvider = Provider.autoDispose<GoRouter>(
                     fullscreenDialog: true,
                     child: const ArtistsFilterScreen(),
                   ),
-                )
+                ),
+            GoRoute(
+              path: ':id',
+              name: AppRoute.artistDetail.name,
+              builder: (context, state) {
+                final artistId = state.pathParameters['id']!;
+                return ArtistDetailScreen(artistId: artistId);
+              },
+            ),
               ],
             ),
             GoRoute(
@@ -116,14 +127,6 @@ final goRouterProvider = Provider.autoDispose<GoRouter>(
               builder: (context, state) {
                 final albumId = state.pathParameters['id']!;
                 return AlbumDetailScreen(album: Album(id: int.parse(albumId)));
-              },
-            ),
-            GoRoute(
-              path: 'Ar/:id',
-              name: AppRoute.artistDetail.name,
-              builder: (context, state) {
-                final artistId = state.pathParameters['id']!;
-                return ArtistDetailScreen(artistId: artistId);
               },
             ),
             GoRoute(
