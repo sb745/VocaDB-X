@@ -34,6 +34,11 @@ extension AppRouteContext on BuildContext {
 
   }
 
+  Future<void> goSongSearchScreen() async {
+    goNamed(AppRoute.songsList.name);
+
+  }
+
   Future<void> goArtistsListFilterScreen() async {
     goNamed(AppRoute.artistsListFilter.name);
 

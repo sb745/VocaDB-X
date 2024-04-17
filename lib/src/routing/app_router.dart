@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vocadb_app/src/features/albums/domain/album.dart';
 import 'package:vocadb_app/src/features/albums/presentation/album_detail_screen/album_detail_screen.dart';
+import 'package:vocadb_app/src/features/songs/presentation/songs_list_screen/songs_list_screen.dart';
 import 'package:vocadb_app/src/features/users/presentation/user_albums_screen/user_albums_filter_screen.dart';
 import 'package:vocadb_app/src/features/users/presentation/user_albums_screen/user_albums_screen.dart';
 import 'package:vocadb_app/src/features/artists/presentation/artist_detail_screen/artist_detail_screen.dart';
@@ -35,6 +36,7 @@ enum AppRoute {
   songDetail,
   account,
   signIn,
+  songsList,
   albumDetail,
   artistDetail,
   artistsList,
@@ -84,22 +86,31 @@ final goRouterProvider = Provider.autoDispose<GoRouter>(
           builder: (context, state) => const MainScreen(),
           routes: [
             GoRoute(
-              path: 'S/:id',
-              name: AppRoute.songDetail.name,
+              path: 'S',
+              name: AppRoute.songsList.name,
               builder: (context, state) {
-                final songId = state.pathParameters['id']!;
-                return SongDetailScreen(song: Song(id: int.parse(songId)));
+                return SongsListScreen(onSelectSong: (song) {
+                  context.goSongDetail(song);
+                });
               },
+              routes: [
+                GoRoute(
+                  path: ':id',
+                  name: AppRoute.songDetail.name,
+                  builder: (context, state) {
+                    final songId = state.pathParameters['id']!;
+                    return SongDetailScreen(song: Song(id: int.parse(songId)));
+                  },
+                ),
+              ],
             ),
             GoRoute(
               path: 'Ar',
               name: AppRoute.artistsList.name,
               builder: (context, state) {
-                return ArtistsListScreen(
-                  onSelectArtist: (artist) {
-                    context.goArtistDetail(artist);
-                  }
-                );
+                return ArtistsListScreen(onSelectArtist: (artist) {
+                  context.goArtistDetail(artist);
+                });
               },
               routes: [
                 GoRoute(
@@ -111,14 +122,14 @@ final goRouterProvider = Provider.autoDispose<GoRouter>(
                     child: const ArtistsFilterScreen(),
                   ),
                 ),
-            GoRoute(
-              path: ':id',
-              name: AppRoute.artistDetail.name,
-              builder: (context, state) {
-                final artistId = state.pathParameters['id']!;
-                return ArtistDetailScreen(artistId: artistId);
-              },
-            ),
+                GoRoute(
+                  path: ':id',
+                  name: AppRoute.artistDetail.name,
+                  builder: (context, state) {
+                    final artistId = state.pathParameters['id']!;
+                    return ArtistDetailScreen(artistId: artistId);
+                  },
+                ),
               ],
             ),
             GoRoute(

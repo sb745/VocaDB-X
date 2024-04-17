@@ -34,7 +34,9 @@ class HomeScreen extends StatelessWidget {
                   ShortcutMenuButton(
                     title: 'Songs', 
                     iconData: Icons.music_note, 
-                    onPressed: () {},
+                    onPressed: () {
+                      context.goSongSearchScreen();
+                    },
                   ),
                   ShortcutMenuButton(
                     title: 'Artists', 

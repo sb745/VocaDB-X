@@ -6,6 +6,7 @@ class SearchAppBar extends StatefulWidget implements PreferredSizeWidget {
   static const iconClearKey = Key('icon-clear');
   static const iconSearchKey = Key('icon-search');
   static const textTitleKey = Key('text-title');
+  static const searchInputKey = Key('search-input');
 
   const SearchAppBar(
       {super.key,
@@ -58,6 +59,7 @@ class _SearchAppBarState extends State<SearchAppBar> {
     return AppBar(
       title: (showTextInput)
           ? TextField(
+              key: SearchAppBar.searchInputKey,
               controller: _textEditingController,
               onChanged: (value) {
                 if (widget.onChanged != null) {
