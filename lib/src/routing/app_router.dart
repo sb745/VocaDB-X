@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vocadb_app/src/features/albums/domain/album.dart';
 import 'package:vocadb_app/src/features/albums/presentation/album_detail_screen/album_detail_screen.dart';
+import 'package:vocadb_app/src/features/songs/presentation/songs_list_screen/songs_list_filter_screen.dart';
 import 'package:vocadb_app/src/features/songs/presentation/songs_list_screen/songs_list_screen.dart';
 import 'package:vocadb_app/src/features/users/presentation/user_albums_screen/user_albums_filter_screen.dart';
 import 'package:vocadb_app/src/features/users/presentation/user_albums_screen/user_albums_screen.dart';
@@ -37,6 +38,7 @@ enum AppRoute {
   account,
   signIn,
   songsList,
+  songsListFilter,
   albumDetail,
   artistDetail,
   artistsList,
@@ -94,6 +96,15 @@ final goRouterProvider = Provider.autoDispose<GoRouter>(
                 });
               },
               routes: [
+                GoRoute(
+                  path: 'Filter',
+                  name: AppRoute.songsListFilter.name,
+                  pageBuilder: (context, state) => MaterialPage(
+                    key: state.pageKey,
+                    fullscreenDialog: true,
+                    child: const SongsFilterScreen(),
+                  ),
+                ),
                 GoRoute(
                   path: ':id',
                   name: AppRoute.songDetail.name,

@@ -7,6 +7,7 @@ import 'package:vocadb_app/src/features/songs/data/song_repository.dart';
 import 'package:vocadb_app/src/features/songs/domain/song.dart';
 import 'package:vocadb_app/src/features/songs/presentation/songs_list/songs_list_view.dart';
 import 'package:vocadb_app/src/features/songs/presentation/songs_list_screen/songs_list_params_state.dart';
+import 'package:vocadb_app/src/routing/app_route_context.dart';
 
 class SongsListScreen extends ConsumerWidget {
   const SongsListScreen({super.key, this.onSelectSong});
@@ -24,7 +25,7 @@ class SongsListScreen extends ConsumerWidget {
           IconButton(
             key: filterKey,
             icon: const Icon(Icons.tune),
-            onPressed: () => {}
+            onPressed: () => context.goSongsListFilterScreen(),
           ),
         ],
         onSubmitted: (value) {
