@@ -6,6 +6,7 @@ import 'package:vocadb_app/src/common_widgets/search_appbar.dart';
 import 'package:vocadb_app/src/features/settings/data/user_settings_repository.dart';
 import 'package:vocadb_app/src/features/songs/data/song_repository.dart';
 import 'package:vocadb_app/src/features/songs/presentation/song_tile/song_tile.dart';
+import 'package:vocadb_app/src/features/songs/presentation/songs_list_screen/songs_list_filter_screen.dart';
 import 'package:vocadb_app/src/features/songs/presentation/songs_list_screen/songs_list_screen.dart';
 
 class SongsListScreenRobot {
@@ -25,6 +26,27 @@ class SongsListScreenRobot {
         ],
         child: const MaterialApp(
           home: SongsListScreen(),
+        ),
+      ),
+    );
+
+    await tester.pump();
+    await tester.pump();
+    await tester.pump();
+  }
+
+  Future<void> pumpSongsListFilterScreen(
+      {SongRepository? songRepository}) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          if (songRepository != null)
+            songRepositoryProvider.overrideWithValue(songRepository),
+          userSettingsRepositoryProvider
+              .overrideWithValue(UserSettingsRepository())
+        ],
+        child: const MaterialApp(
+          home: SongsFilterScreen(),
         ),
       ),
     );
