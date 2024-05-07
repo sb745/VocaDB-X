@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vocadb_app/src/features/albums/domain/album.dart';
 import 'package:vocadb_app/src/features/albums/presentation/album_detail_screen/album_detail_screen.dart';
+import 'package:vocadb_app/src/features/albums/presentation/albums_list/albums_list_filter_screen.dart';
+import 'package:vocadb_app/src/features/albums/presentation/albums_list/albums_list_screen.dart';
 import 'package:vocadb_app/src/features/songs/presentation/songs_list_screen/songs_list_filter_screen.dart';
 import 'package:vocadb_app/src/features/songs/presentation/songs_list_screen/songs_list_screen.dart';
 import 'package:vocadb_app/src/features/users/presentation/user_albums_screen/user_albums_filter_screen.dart';
@@ -40,6 +42,8 @@ enum AppRoute {
   songsList,
   songsListFilter,
   albumDetail,
+  albumsList,
+  albumsListFilter,
   artistDetail,
   artistsList,
   artistsListFilter,
@@ -87,6 +91,7 @@ final goRouterProvider = Provider.autoDispose<GoRouter>(
           name: AppRoute.home.name,
           builder: (context, state) => const MainScreen(),
           routes: [
+            //// Songs
             GoRoute(
               path: 'S',
               name: AppRoute.songsList.name,
@@ -115,6 +120,8 @@ final goRouterProvider = Provider.autoDispose<GoRouter>(
                 ),
               ],
             ),
+
+            //// Artists
             GoRoute(
               path: 'Ar',
               name: AppRoute.artistsList.name,
@@ -143,14 +150,37 @@ final goRouterProvider = Provider.autoDispose<GoRouter>(
                 ),
               ],
             ),
+
             GoRoute(
-              path: 'A/:id',
-              name: AppRoute.albumDetail.name,
+              path: 'A',
+              name: AppRoute.albumsList.name,
               builder: (context, state) {
-                final albumId = state.pathParameters['id']!;
-                return AlbumDetailScreen(album: Album(id: int.parse(albumId)));
+                return AlbumsListScreen(onSelectAlbum: (album) {
+                  context.goAlbumDetail(album);
+                });
               },
+              routes: [
+                GoRoute(
+                  path: 'Filter',
+                  name: AppRoute.albumsListFilter.name,
+                  pageBuilder: (context, state) => MaterialPage(
+                    key: state.pageKey,
+                    fullscreenDialog: true,
+                    child: const AlbumsFilterScreen(),
+                  ),
+                ),
+                GoRoute(
+                  path: ':id',
+                  name: AppRoute.albumDetail.name,
+                  builder: (context, state) {
+                    final albumId = state.pathParameters['id']!;
+                    return AlbumDetailScreen(album: Album(id: int.parse(albumId)));
+                  },
+                ),
+              ],
             ),
+
+            //// Tags
             GoRoute(
               path: 'T/:id',
               name: AppRoute.tagDetail.name,
@@ -159,6 +189,8 @@ final goRouterProvider = Provider.autoDispose<GoRouter>(
                 return TagDetailScreen(tagId: tagId);
               },
             ),
+
+            //// Release events
             GoRoute(
               path: 'E/:id',
               name: AppRoute.releaseEventDetail.name,
@@ -167,6 +199,8 @@ final goRouterProvider = Provider.autoDispose<GoRouter>(
                 return ReleaseEventDetailScreen(releaseEventId: releaseEventId);
               },
             ),
+
+            //// Personal
             GoRoute(
               path: 'MySongs',
               name: AppRoute.userRatedSongs.name,

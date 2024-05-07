@@ -48,7 +48,9 @@ class HomeScreen extends StatelessWidget {
                   ShortcutMenuButton(
                     title: 'Albums', 
                     iconData: Icons.album, 
-                    onPressed: () {},
+                    onPressed: () {
+                      context.goAlbumSearchScreen();
+                    },
                   ),
                   ShortcutMenuButton(
                     title: 'Tags', 

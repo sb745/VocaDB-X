@@ -34,6 +34,11 @@ extension AppRouteContext on BuildContext {
 
   }
 
+  Future<void> goAlbumSearchScreen() async {
+    goNamed(AppRoute.albumsList.name);
+
+  }
+
   Future<void> goSongSearchScreen() async {
     goNamed(AppRoute.songsList.name);
 
@@ -45,6 +50,10 @@ extension AppRouteContext on BuildContext {
 
   Future<void> goSongsListFilterScreen() async {
     goNamed(AppRoute.songsListFilter.name);
+  }
+
+  Future<void> goAlbumsListFilterScreen() async {
+    goNamed(AppRoute.albumsListFilter.name);
   }
 
   Future<void> goEntryDetail(Entry entry) async {
