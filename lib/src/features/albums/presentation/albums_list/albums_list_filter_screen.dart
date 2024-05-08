@@ -26,7 +26,7 @@ class AlbumsFilterScreen extends StatelessWidget {
           return ListView(
             children: [
               DropdownAlbumType(
-                value: state.discTypes ?? '',
+                value: state.discTypes ?? 'Unknown',
                 onChanged: (value) =>
                     onAlbumTypesChanged?.call(value) ??
                     ref
