@@ -1,31 +1,32 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:vocadb_app/src/features/albums/data/constants/fake_albums_list.dart';
+import 'package:vocadb_app/src/features/albums/domain/albums_list_params.dart';
 
-import 'albums_list_filter_screen_robot.dart';
+import '../../../../mocks.dart';
+import 'albums_list_screen_robot.dart';
 
 void main() {
-  group('albums filter screen', () {
-    testWidgets('change album type', (tester) async {
-      String? selectedValue;
-      final r = AlbumsListFilterScreenRobot(tester);
+  testWidgets('albums list screen ...', (tester) async {
+    registerFallbackValue(FakeAlbumsListParams());
 
-      await r.pumpAlbumsListFilterScreen(
-        onAlbumsTypesChanged: (value) => selectedValue = value,
-      );
+    final r = AlbumsListScreenRobot(tester);
+    final albumRepository = MockAlbumRepository();
 
-      await r.selectAlbumTypes('E.P.');
-      expect(selectedValue, 'EP');
-    });
+    when(() => albumRepository.fetchAlbums(
+          params: any(named: 'params', that: isNotNull),
+        )).thenAnswer((_) => Future.value(kFakeAlbumsList));
 
-    testWidgets('change album sort', (tester) async {
-      String? selectedValue;
-      final r = AlbumsListFilterScreenRobot(tester);
+    await r.pumpAlbumsListScreen(albumRepository: albumRepository);
 
-      await r.pumpAlbumsListFilterScreen(
-        onAlbumsTypesChanged: (value) => selectedValue = value,
-      );
+    await r.expectAlbumsDisplayCountAtLeast(3);
 
-      await r.selectSort('Addition date');
-      expect(selectedValue, 'AdditionDate');
-    });
+    expect(
+        verify(() =>
+                albumRepository.fetchAlbums(params: captureAny(named: 'params')))
+            .captured,
+        [
+          const AlbumsListParams(),
+        ]);
   });
 }

@@ -2,6 +2,7 @@ import 'package:hive/hive.dart';
 import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:vocadb_app/src/features/albums/data/album_repository.dart';
+import 'package:vocadb_app/src/features/albums/domain/albums_list_params.dart';
 import 'package:vocadb_app/src/features/api/api_cache.dart';
 import 'package:vocadb_app/src/features/api/api_client.dart';
 import 'package:vocadb_app/src/features/api/data/cookie_storage.dart';
@@ -36,6 +37,8 @@ class MockUserRepository extends Mock implements UserRepository {}
 class RatedSongsListParamsFake extends Fake implements RatedSongsListParams {}
 
 class FakeArtistsListParams extends Fake implements ArtistsListParams {}
+
+class FakeAlbumsListParams extends Fake implements AlbumsListParams {}
 
 class FakeSongsListParams extends Fake implements SongsListParams {}
 
