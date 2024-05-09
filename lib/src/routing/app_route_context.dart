@@ -29,6 +29,10 @@ extension AppRouteContext on BuildContext {
     goNamed(AppRoute.releaseEventDetail.name, pathParameters: { 'id': releaseEvent.id.toString() });
   }
 
+  Future<void> goReleaseEventList() async {
+    goNamed(AppRoute.releaseEventList.name);
+  }
+
   Future<void> goArtistSearchScreen() async {
     goNamed(AppRoute.artistsList.name);
 

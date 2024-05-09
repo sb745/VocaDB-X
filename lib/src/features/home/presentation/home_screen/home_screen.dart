@@ -60,7 +60,9 @@ class HomeScreen extends StatelessWidget {
                   ShortcutMenuButton(
                     title: 'Events', 
                     iconData: Icons.event, 
-                    onPressed: () {},
+                    onPressed: () {
+                      context.goReleaseEventList();
+                    },
                   )
                 ],
             ),

@@ -5,6 +5,7 @@ import 'package:vocadb_app/src/features/albums/domain/album.dart';
 import 'package:vocadb_app/src/features/albums/presentation/album_detail_screen/album_detail_screen.dart';
 import 'package:vocadb_app/src/features/albums/presentation/albums_list/albums_list_filter_screen.dart';
 import 'package:vocadb_app/src/features/albums/presentation/albums_list/albums_list_screen.dart';
+import 'package:vocadb_app/src/features/releaseEvents/presentation/release_events_list_screen/release_events_list_screen.dart';
 import 'package:vocadb_app/src/features/songs/presentation/songs_list_screen/songs_list_filter_screen.dart';
 import 'package:vocadb_app/src/features/songs/presentation/songs_list_screen/songs_list_screen.dart';
 import 'package:vocadb_app/src/features/users/presentation/user_albums_screen/user_albums_filter_screen.dart';
@@ -48,6 +49,7 @@ enum AppRoute {
   artistsList,
   artistsListFilter,
   tagDetail,
+  releaseEventList,
   releaseEventDetail,
   entriesSearch,
   entriesFilter,
@@ -191,6 +193,15 @@ final goRouterProvider = Provider.autoDispose<GoRouter>(
             ),
 
             //// Release events
+                        GoRoute(
+              path: 'E',
+              name: AppRoute.releaseEventList.name,
+              builder: (context, state) {
+                return ReleaseEventsListScreen(onSelectEvent: (event) {
+                  context.goReleaseEventDetail(event);
+                });
+              },
+              routes: [
             GoRoute(
               path: 'E/:id',
               name: AppRoute.releaseEventDetail.name,
@@ -199,6 +210,10 @@ final goRouterProvider = Provider.autoDispose<GoRouter>(
                 return ReleaseEventDetailScreen(releaseEventId: releaseEventId);
               },
             ),
+              ],
+            ),
+
+
 
             //// Personal
             GoRoute(

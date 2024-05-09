@@ -11,6 +11,7 @@ import 'package:vocadb_app/src/features/artists/domain/artists_list_params.dart'
 import 'package:vocadb_app/src/features/authentication/data/auth_repository.dart';
 import 'package:vocadb_app/src/features/entries/data/entry_repository.dart';
 import 'package:vocadb_app/src/features/releaseEvents/data/release_event_repository.dart';
+import 'package:vocadb_app/src/features/releaseEvents/domain/release_events_list_params.dart';
 import 'package:vocadb_app/src/features/settings/data/user_settings_repository.dart';
 import 'package:vocadb_app/src/features/songs/data/song_repository.dart';
 import 'package:vocadb_app/src/features/songs/domain/songs_list_params.dart';
@@ -37,6 +38,8 @@ class MockUserRepository extends Mock implements UserRepository {}
 class RatedSongsListParamsFake extends Fake implements RatedSongsListParams {}
 
 class FakeArtistsListParams extends Fake implements ArtistsListParams {}
+
+class FakeReleaseEventsListParams extends Fake implements ReleaseEventsListParams {}
 
 class FakeAlbumsListParams extends Fake implements AlbumsListParams {}
 
