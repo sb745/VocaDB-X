@@ -29,5 +29,28 @@ void main() {
 
       expect(result, Tag(id: 1, name: 'Miku'));
     });
+
+    test('fetch tags', () async {
+      when(() => client
+              .get('/api/tags', params: any(named: 'params', that: isMap)))
+          .thenAnswer((_) async => {
+                'items': [
+                  {'id': 1, 'name': 'Tag_A'},
+                  {'id': 2, 'name': 'Tag_B'},
+                ],
+                'totalCount': 2,
+              });
+
+      final result = await tagRepository.fetchTagsList();
+
+      verify(() =>
+          client.get('/api/tags', params: any(named: 'params', that: isMap)));
+      expect(result, isA<List<Tag>>());
+      expect(result, isNotEmpty);
+      expect(result, [
+        Tag(id: 1, name: 'Tag_A'),
+        Tag(id: 2, name: 'Tag_B'),
+      ]);
+    });
   });
 }

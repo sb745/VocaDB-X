@@ -16,6 +16,7 @@ import 'package:vocadb_app/src/features/settings/data/user_settings_repository.d
 import 'package:vocadb_app/src/features/songs/data/song_repository.dart';
 import 'package:vocadb_app/src/features/songs/domain/songs_list_params.dart';
 import 'package:vocadb_app/src/features/tags/data/tag_repository.dart';
+import 'package:vocadb_app/src/features/tags/domain/tags_list_params.dart';
 import 'package:vocadb_app/src/features/users/data/user_repository.dart';
 import 'package:vocadb_app/src/features/users/domain/rated_songs_list_params.dart';
 import 'package:vocadb_app/src/utils/share_launcher.dart';
@@ -33,6 +34,8 @@ class MockSongRepository extends Mock implements SongRepository {}
 
 class MockAlbumRepository extends Mock implements AlbumRepository {}
 
+class MockTagRepository extends Mock implements TagRepository {}
+
 class MockUserRepository extends Mock implements UserRepository {}
 
 class RatedSongsListParamsFake extends Fake implements RatedSongsListParams {}
@@ -43,14 +46,14 @@ class FakeReleaseEventsListParams extends Fake implements ReleaseEventsListParam
 
 class FakeAlbumsListParams extends Fake implements AlbumsListParams {}
 
+class FakeTagsListParams extends Fake implements TagsListParams {}
+
 class FakeSongsListParams extends Fake implements SongsListParams {}
 
 class MockUserSettingsRepository extends Mock
     implements UserSettingsRepository {}
 
 class MockArtistRepository extends Mock implements ArtistRepository {}
-
-class MockTagRepository extends Mock implements TagRepository {}
 
 class MockReleaseEventRepository extends Mock
     implements ReleaseEventRepository {}

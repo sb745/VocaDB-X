@@ -48,6 +48,11 @@ extension AppRouteContext on BuildContext {
 
   }
 
+  Future<void> goTagSearchScreen() async {
+    goNamed(AppRoute.tagsList.name);
+
+  }
+
   Future<void> goArtistsListFilterScreen() async {
     goNamed(AppRoute.artistsListFilter.name);
   }

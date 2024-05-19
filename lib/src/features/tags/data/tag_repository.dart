@@ -4,9 +4,11 @@ import 'package:vocadb_app/src/features/settings/data/user_settings_repository.d
 import 'package:vocadb_app/src/features/tags/data/tag_api_repository.dart';
 import 'package:vocadb_app/src/features/tags/data/tag_fake_repository.dart';
 import 'package:vocadb_app/src/features/tags/domain/tag.dart';
+import 'package:vocadb_app/src/features/tags/domain/tags_list_params.dart';
 
 abstract class TagRepository {
   Future<Tag> fetchTagID(int id, {String lang = 'Default'});
+  Future<List<Tag>> fetchTagsList({TagsListParams params});
 }
 
 final tagRepositoryProvider = Provider.autoDispose<TagRepository>((ref) {

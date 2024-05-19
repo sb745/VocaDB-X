@@ -8,6 +8,7 @@ import 'package:vocadb_app/src/features/albums/presentation/albums_list/albums_l
 import 'package:vocadb_app/src/features/releaseEvents/presentation/release_events_list_screen/release_events_list_screen.dart';
 import 'package:vocadb_app/src/features/songs/presentation/songs_list_screen/songs_list_filter_screen.dart';
 import 'package:vocadb_app/src/features/songs/presentation/songs_list_screen/songs_list_screen.dart';
+import 'package:vocadb_app/src/features/tags/presentation/tag_list_screen/tags_list_screen.dart';
 import 'package:vocadb_app/src/features/users/presentation/user_albums_screen/user_albums_filter_screen.dart';
 import 'package:vocadb_app/src/features/users/presentation/user_albums_screen/user_albums_screen.dart';
 import 'package:vocadb_app/src/features/artists/presentation/artist_detail_screen/artist_detail_screen.dart';
@@ -49,6 +50,7 @@ enum AppRoute {
   artistsList,
   artistsListFilter,
   tagDetail,
+  tagsList,
   releaseEventList,
   releaseEventDetail,
   entriesSearch,
@@ -183,14 +185,27 @@ final goRouterProvider = Provider.autoDispose<GoRouter>(
             ),
 
             //// Tags
+
             GoRoute(
-              path: 'T/:id',
-              name: AppRoute.tagDetail.name,
+              path: 'T',
+              name: AppRoute.tagsList.name,
               builder: (context, state) {
-                final tagId = state.pathParameters['id']!;
-                return TagDetailScreen(tagId: tagId);
+                return TagsListScreen(onSelectTag: (tag) {
+                  context.goTagDetail(tag);
+                });
               },
+              routes: [
+                GoRoute(
+                  path: 'T/:id',
+                  name: AppRoute.tagDetail.name,
+                  builder: (context, state) {
+                    final tagId = state.pathParameters['id']!;
+                    return TagDetailScreen(tagId: tagId);
+                  },
+                ),
+              ],
             ),
+
 
             //// Release events
                         GoRoute(

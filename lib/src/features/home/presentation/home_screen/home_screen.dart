@@ -55,7 +55,9 @@ class HomeScreen extends StatelessWidget {
                   ShortcutMenuButton(
                     title: 'Tags', 
                     iconData: Icons.label, 
-                    onPressed: () {},
+                    onPressed: () {
+                      context.goTagSearchScreen();
+                    },
                   ),
                   ShortcutMenuButton(
                     title: 'Events', 

@@ -21,6 +21,10 @@ class Tag with _$Tag {
   }) = _Tag;
 
   factory Tag.fromJson(Map<String, dynamic> json) => _$TagFromJson(json);
+
+  static List<Tag> fromJsonToList(List<dynamic> source) {
+    return source.map((e) => Tag.fromJson(e)).toList();
+  }
 }
 
 extension TagExtended on Tag {
