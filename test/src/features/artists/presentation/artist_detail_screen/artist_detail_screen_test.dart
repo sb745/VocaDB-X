@@ -30,6 +30,9 @@ void main() {
     await r.expectInfoButtonVisible();
 
     await r.expectTagsVisible(true);
+
+    await r.scrollDown();
+
     await r.expectLatestSongsListVisible(true);
     await r.expectPopularSongsListVisible(true);
     await r.expectLatestAlbumsListVisible(true);

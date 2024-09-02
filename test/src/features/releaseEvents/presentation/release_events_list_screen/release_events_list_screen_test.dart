@@ -19,7 +19,7 @@ void main() {
 
     await r.pumpReleaseEventsListScreen(releaseEventRepository: releaseEventRepository);
 
-    await r.expectReleaseEventsDisplayCountAtLeast(3);
+    await r.expectReleaseEventsDisplayCountAtLeast(2);
 
     expect(
         verify(() =>

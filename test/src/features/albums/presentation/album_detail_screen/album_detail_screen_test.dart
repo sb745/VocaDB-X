@@ -56,9 +56,11 @@ void main() {
     await r.expectAverageRatingVisible();
 
     await r.expectTagsVisible(true);
+    
+    await r.scrollDown();
+
     await r.expectArtistsVisible(true);
 
-    await r.scrollDown();
 
     await r.expectTracksListVisible(true);
     await r.expectPVsVisible(true);
@@ -100,9 +102,11 @@ void main() {
     await r.expectAverageRatingVisible();
 
     await r.expectTagsVisible(true);
-    await r.expectArtistsVisible(true);
 
     await r.scrollDown();
+
+    await r.expectArtistsVisible(true);
+
 
     await r.expectTracksListVisible(true);
     await r.expectPVsVisible(true);

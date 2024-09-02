@@ -24,7 +24,7 @@ class AlbumRatingInfo extends StatelessWidget {
             gapH4,
             Text(
               'Total Ratings',
-              style: Theme.of(context).textTheme.caption,
+              style: Theme.of(context).textTheme.bodySmall,
             ),
           ],
         ),
@@ -35,7 +35,7 @@ class AlbumRatingInfo extends StatelessWidget {
             gapH4,
             Text(
               'Average Rating',
-              style: Theme.of(context).textTheme.caption,
+              style: Theme.of(context).textTheme.bodySmall,
             ),
           ],
         ),

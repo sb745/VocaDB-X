@@ -10,7 +10,7 @@ class AccountInfo extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final style = Theme.of(context).textTheme.subtitle2!;
+    final style = Theme.of(context).textTheme.titleSmall!;
     final user = ref.watch(authStateChangesProvider).value;
 
     if (user == null) return Container();
@@ -34,7 +34,7 @@ class AccountInfo extends ConsumerWidget {
         gapH16,
         Text(
           user.name,
-          style: Theme.of(context).textTheme.headline6,
+          style: Theme.of(context).textTheme.titleLarge,
         ),
       ],
     );

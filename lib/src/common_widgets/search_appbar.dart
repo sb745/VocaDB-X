@@ -72,7 +72,7 @@ class _SearchAppBarState extends State<SearchAppBar> {
                 }
               },
               autofocus: true,
-              style: Theme.of(context).primaryTextTheme.headline6,
+              style: Theme.of(context).primaryTextTheme.titleLarge,
               decoration: const InputDecoration(
                 border: InputBorder.none,
                 hintText: 'Search',

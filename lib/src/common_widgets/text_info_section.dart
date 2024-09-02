@@ -32,7 +32,7 @@ class TextInfoSection extends StatelessWidget {
         children: <Widget>[
           Text(
             title,
-            style: Theme.of(context).textTheme.caption,
+            style: Theme.of(context).textTheme.bodySmall,
           ),
           Text(text),
           divider ?? Container()

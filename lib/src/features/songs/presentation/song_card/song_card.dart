@@ -35,7 +35,7 @@ class SongCard extends StatelessWidget {
               Container(
                 alignment: Alignment.centerLeft,
                 child: Text(song.name ?? '<None>',
-                    style: Theme.of(context).textTheme.bodyText1,
+                    style: Theme.of(context).textTheme.bodyLarge,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis),
               ),
@@ -43,7 +43,7 @@ class SongCard extends StatelessWidget {
               Container(
                 alignment: Alignment.centerLeft,
                 child: Text(song.artistString ?? '<None>',
-                    style: Theme.of(context).textTheme.caption,
+                    style: Theme.of(context).textTheme.bodySmall,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis),
               ),

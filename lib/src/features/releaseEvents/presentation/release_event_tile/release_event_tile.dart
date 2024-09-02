@@ -77,7 +77,7 @@ class ReleaseEventTile extends StatelessWidget {
                       children: [
                         Text(
                           releaseEvent.category ?? 'None',
-                          style: Theme.of(context).textTheme.caption,
+                          style: Theme.of(context).textTheme.bodySmall,
                         ),
                         (releaseEvent.venueName == null)
                             ? Container()
@@ -92,7 +92,7 @@ class ReleaseEventTile extends StatelessWidget {
                                   ),
                                   Text(
                                     releaseEvent.venueName ?? ' ',
-                                    style: Theme.of(context).textTheme.caption,
+                                    style: Theme.of(context).textTheme.bodySmall,
                                   )
                                 ],
                               )
@@ -101,7 +101,7 @@ class ReleaseEventTile extends StatelessWidget {
                     gapH4,
                     Text(
                       releaseEvent.name ?? '<None>',
-                      style: Theme.of(context).textTheme.subtitle1,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                     gapH4,
                   ],

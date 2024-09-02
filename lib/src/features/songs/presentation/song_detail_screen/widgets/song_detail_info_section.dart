@@ -15,7 +15,7 @@ class SongDetailInfoSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(song.name ?? '<Song name>',
-              style: Theme.of(context).textTheme.headline6),
+              style: Theme.of(context).textTheme.titleLarge),
           (song.additionalNames != null && song.additionalNames!.isNotEmpty)
               ? Text(song.additionalNames!)
               : Container(),

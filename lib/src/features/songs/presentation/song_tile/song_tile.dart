@@ -64,7 +64,7 @@ class SongTile extends StatelessWidget {
                     Text(song.artistString!,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
-                        style: Theme.of(context).textTheme.caption),
+                        style: Theme.of(context).textTheme.bodySmall),
                     const SpaceDivider(Sizes.p8),
                     Row(
                       children: <Widget>[

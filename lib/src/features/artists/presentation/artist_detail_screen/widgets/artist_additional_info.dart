@@ -14,7 +14,7 @@ class ArtistAdditionalInfo extends StatelessWidget {
         const Divider(),
         ListTile(
           title: Text('Information',
-              style: Theme.of(context).textTheme.headline6!),
+              style: Theme.of(context).textTheme.titleLarge!),
         ),
         Visibility(
           visible: artist.additionalNames != null,

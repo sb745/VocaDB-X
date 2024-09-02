@@ -32,6 +32,12 @@ class ReleaseEventsListScreenRobot {
     await tester.pump();
   }
 
+
+  Future<void> scrollDown({double offset = -800}) async {
+    await tester.drag(find.byType(ListView), Offset(0, offset));
+    await tester.pump();
+  }
+
   Future<void> expectReleaseEventsDisplayCountAtLeast(int count) async {
     final finder = find.byType(ReleaseEventTile);
     expect(finder, findsAtLeastNWidgets(count));

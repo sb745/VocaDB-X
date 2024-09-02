@@ -32,7 +32,7 @@ class ArtistDetailDesc extends StatelessWidget {
           artist.description!,
           maxLines: 4,
           overflow: TextOverflow.fade,
-          style: Theme.of(context).textTheme.bodyText2,
+          style: Theme.of(context).textTheme.bodyMedium,
         ),
       ),
     );

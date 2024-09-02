@@ -28,7 +28,7 @@ class AlbumBasicInfo extends StatelessWidget {
             children: [
               Text(
                 '${(album.discType ?? '<None>')} • ${(album.releaseDate?.formatted ?? '<Unknown release data>')}',
-                style: Theme.of(context).textTheme.caption,
+                style: Theme.of(context).textTheme.bodySmall,
               )
             ],
           )

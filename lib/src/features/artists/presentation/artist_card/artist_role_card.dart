@@ -27,7 +27,7 @@ class ArtistRoleCard extends StatelessWidget {
           gapH4,
           Text(
             artistRole.artistRole ?? '<None>',
-            style: Theme.of(context).textTheme.caption,
+            style: Theme.of(context).textTheme.bodySmall,
           ),
         ],
       ),
