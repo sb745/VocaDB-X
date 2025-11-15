@@ -1,29 +1,16 @@
-[![Download](https://img.shields.io/github/v/release/VocaDB/VocaDB-App)](https://github.com/VocaDB/VocaDB-App/releases)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+# vocadb_app
 
-# VocaDB App
-VocaDB mobile version with [Flutter framework](https://flutter.dev/). Also this source code is shared with TouhouDB app too.
+A new Flutter project.
 
-![Screenshot](/assets/store/VocaDB/android/vocadb_demo.gif)
+## Getting Started
 
-## Download
+This project is a starting point for a Flutter application.
 
-### VocaDB
-- [Playstore for Android](https://play.google.com/store/apps/details?id=com.coolappz.Vocadb)
-- [Playstore (Alpha/Beta)](https://play.google.com/apps/testing/com.coolappz.Vocadb)
-- [App Store for iOS](https://itunes.apple.com/us/app/vocadb/id907510673)
+A few resources to get you started if this is your first Flutter project:
 
-### TouhouDB
-- [Playstore for Android](https://play.google.com/store/apps/details?id=com.touhoudb.app)
+- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-## Setup for development
-- [Flutter SDK](https://flutter.dev/docs/get-started/install)
-
-## Editor (Optional)
-- [Visual Studio Code](https://code.visualstudio.com/)
-- [Android Studio](https://developer.android.com/studio)
-- [IntelliJ](https://www.jetbrains.com/idea/download/)
-
-## Translation
-
-Translation files in _assets/i18n_. If anyone would like to update or add more language, You can add/edit and pull request to me.
+For help getting started with Flutter development, view the
+[online documentation](https://docs.flutter.dev/), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.
