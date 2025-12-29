@@ -13,27 +13,27 @@ class RadioButtonGroup extends StatelessWidget {
   final List<RadioButtonItem> items;
 
   /// A callback on value changed
-  final Function(String) onChanged;
+  final Function(String)? onChanged;
 
-  const RadioButtonGroup({this.label, this.value, this.items, this.onChanged});
+  const RadioButtonGroup({super.key, required this.label, required this.value, required this.items, required this.onChanged});
 
   @override
   Widget build(BuildContext context) {
     List<Widget> radioItems = [];
 
     radioItems.add(ListTile(
-      title: Text(this.label),
+      title: Text(label),
     ));
 
-    radioItems.addAll(this
-        .items
+    radioItems.addAll(items
         .map((e) => ListTile(
-              title: Text(e.label),
-              leading: Radio(
-                value: e.value,
-                groupValue: this.value,
-                onChanged: onChanged,
+              title: Text(e.label ?? 'Unknown'),
+              leading: Radio<String>(
+                value: e.value ?? 'Unknown',
+                groupValue: value,
+                onChanged: onChanged != null ? (String? value) => onChanged!(value!) : null,
               ),
+              onTap: onChanged != null ? () => onChanged!(e.value ?? 'Unknown') : null,
             ))
         .toList());
 

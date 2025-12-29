@@ -1,28 +1,27 @@
 import 'package:vocadb_app/models.dart';
-import 'package:vocadb_app/services.dart';
 import 'package:vocadb_app/src/repositories/base_repository.dart';
 
 class ArtistRepository extends RestApiRepository {
-  ArtistRepository({HttpService httpService}) : super(httpService: httpService);
+  ArtistRepository({required super.httpService});
 
   /// Find artists
   Future<List<ArtistModel>> findArtists(
       {String lang = 'Default',
-      String query,
-      String artistType,
-      String sort,
-      String tagIds,
+      String? query,
+      String? artistType,
+      String? sort,
+      String? tagIds,
       int start = 0,
       int maxResults = 50,
       String nameMatchMode = 'Auto'}) async {
     final String endpoint = '/api/artists';
-    final Map<String, String> params = Map();
-    params['query'] = query;
-    params['artistTypes'] = artistType;
+    final Map<String, String> params = {};
+    if (query != null && query.isNotEmpty) params['query'] = query;
+    if (artistType != null && artistType.isNotEmpty) params['artistTypes'] = artistType;
     params['fields'] = 'MainPicture';
     params['languagePreference'] = lang;
-    params['tagId'] = tagIds;
-    params['sort'] = sort;
+    if (tagIds != null && tagIds.isNotEmpty) params['tagId'] = tagIds;
+    if (sort != null && sort.isNotEmpty) params['sort'] = sort;
     params['start'] = start.toString();
     params['maxResults'] = maxResults.toString();
     params['nameMatchMode'] = nameMatchMode;
@@ -46,7 +45,13 @@ class ArtistRepository extends RestApiRepository {
 
   Future<List<ArtistModel>> getTopArtistsByTagId(int tagId,
       {String lang = 'Default'}) async {
-    return this
-        .findArtists(lang: lang, tagIds: tagId.toString(), sort: 'RatingScore');
+    return findArtists(lang: lang, tagIds: tagId.toString(), sort: 'RatingScore');
+  }
+
+  Future<List<CommentModel>> getComments(int artistId) async {
+    final String endpoint = '/api/artists/$artistId/comments';
+    return super
+        .getList(endpoint, {})
+        .then((items) => CommentModel.jsonToList(items));
   }
 }

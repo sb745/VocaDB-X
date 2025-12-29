@@ -5,7 +5,7 @@ class IconSite {
 
   IconSite(this.urlPattern, this.assetName);
 
-  RegExp get urlPatternRegExp => new RegExp(urlPattern, caseSensitive: false);
+  RegExp get urlPatternRegExp => RegExp(urlPattern, caseSensitive: false);
 
   bool hasMatch(String input) {
     return urlPatternRegExp.hasMatch(input);
@@ -14,7 +14,7 @@ class IconSite {
 
 /// A wrapper class of [IconSite] for manipulate list.
 class IconSiteList {
-  static List<IconSite> _icons = [
+  static final List<IconSite> _icons = [
     IconSite('youtube', 'assets/images/icon_youtube.png'),
     IconSite('soundcloud', 'assets/images/icon_soundcloud.png'),
     IconSite('piapro', 'assets/images/icon_piapro.png'),
@@ -27,6 +27,11 @@ class IconSiteList {
     IconSite('bandcamp', 'assets/images/icon_bandcamp.png'),
   ];
 
-  static IconSite findIconAsset(String input) =>
-      _icons.firstWhere((i) => i.hasMatch(input), orElse: () => null);
+  static IconSite? findIconAsset(String input) {
+    try {
+      return _icons.firstWhere((i) => i.hasMatch(input));
+    } catch (e) {
+      return null;
+    }
+  }
 }

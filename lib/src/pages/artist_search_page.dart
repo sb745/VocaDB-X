@@ -12,10 +12,10 @@ class ArtistSearchPage extends GetView<ArtistSearchController> {
 
   final bool enableFilter;
 
-  ArtistSearchPage({this.selectionMode = false, this.enableFilter = true});
+  const ArtistSearchPage({super.key, this.selectionMode = false, this.enableFilter = true});
 
   void _onSelectArtist(ArtistModel artist) {
-    if (!(Get.arguments is ArtistSearchArgs)) {
+    if (Get.arguments is! ArtistSearchArgs) {
       return AppPages.toArtistDetailPage(artist);
     }
 
@@ -34,8 +34,8 @@ class ArtistSearchPage extends GetView<ArtistSearchController> {
         Expanded(
           child: TextField(
             controller: controller.textSearchController,
-            onChanged: controller.query,
-            style: Theme.of(context).primaryTextTheme.headline6,
+            onChanged: controller.query.call,
+            style: Theme.of(context).primaryTextTheme.headlineMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
             autofocus: true,
             decoration: InputDecoration(
                 border: InputBorder.none, hintText: 'search'.tr),
@@ -70,7 +70,7 @@ class ArtistSearchPage extends GetView<ArtistSearchController> {
     return Scaffold(
         appBar: AppBar(title: _buildTitle(context), actions: <Widget>[
           _buildSearchAction(context),
-          (this.enableFilter)
+          (enableFilter)
               ? IconButton(
                   icon: Icon(Icons.tune),
                   onPressed: () => Get.to(ArtistSearchFilterPage()))
@@ -83,7 +83,7 @@ class ArtistSearchPage extends GetView<ArtistSearchController> {
                   ? CenterText(controller.errorMessage.string)
                   : ArtistListView(
                       artists: controller.results.toList(),
-                      onSelect: this._onSelectArtist,
+                      onSelect: _onSelectArtist,
                       onReachLastItem: controller.onReachLastItem,
                       emptyWidget: CenterText('searchResultNotMatched'.tr)),
         ));

@@ -4,15 +4,14 @@ import 'package:vocadb_app/widgets.dart';
 
 /// A widget for display list of songs as vertical or horizontal
 class SongListView extends StatelessWidget {
-  SongListView(
-      {Key key,
-      this.songs,
+  const SongListView(
+      {super.key,
+      required this.songs,
       this.scrollDirection = Axis.vertical,
-      this.onSelect,
-      this.onReachLastItem,
+      required this.onSelect,
+      required this.onReachLastItem,
       this.emptyWidget,
-      this.displayPlaceholder = false})
-      : super(key: key);
+      this.displayPlaceholder = false});
 
   /// List of songs to display.
   final List<SongModel> songs;
@@ -30,44 +29,46 @@ class SongListView extends StatelessWidget {
   final bool displayPlaceholder;
 
   /// A widget that display when songs is empty
-  final Widget emptyWidget;
+  final Widget? emptyWidget;
 
   /// Height of list content widget if set as horizontal.
   static const double _rowHeight = 180;
 
   /// Return item for display in vertical list
   Widget _verticalItemBuilder(BuildContext context, int index) => SongTile.song(
-        this.songs[index],
-        onTap: () => this.onSelect(this.songs[index]),
+        songs[index],
+        onTap: () => onSelect(songs[index]),
+        leading: null,
+        heroTag: '',
       );
 
   /// Return item for display in horizontal list
   Widget _horizontalItemBuilder(BuildContext context, int index) =>
-      SongCard.song(this.songs[index],
-          onTap: () => this.onSelect(this.songs[index]));
+      SongCard.song(songs[index],
+          onTap: () => onSelect(songs[index]));
 
   @override
   Widget build(BuildContext context) {
-    if (this.songs.isEmpty && this.emptyWidget != null) {
-      return emptyWidget;
+    if (songs.isEmpty && emptyWidget != null) {
+      return emptyWidget!;
     }
 
-    if (this.scrollDirection == Axis.vertical) {
+    if (scrollDirection == Axis.vertical) {
       return InfiniteListView(
-        itemCount: this.songs.length,
+        itemCount: songs.length,
         itemBuilder: _verticalItemBuilder,
-        onReachLastItem: this.onReachLastItem,
+        onReachLastItem: onReachLastItem,
       );
     }
 
-    if (this.displayPlaceholder) {
+    if (displayPlaceholder) {
       return SongPlaceholderListView();
     }
 
     return SizedBox(
         height: _rowHeight,
         child: ListView.builder(
-            itemCount: this.songs.length,
+            itemCount: songs.length,
             scrollDirection: Axis.horizontal,
             itemBuilder: _horizontalItemBuilder));
   }

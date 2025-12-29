@@ -10,7 +10,7 @@ class TagSearchController extends SearchPageController<TagModel> {
 
   final TagRepository tagRepository;
 
-  TagSearchController({this.tagRepository});
+  TagSearchController({required this.tagRepository});
 
   @override
   void onInit() {
@@ -18,17 +18,21 @@ class TagSearchController extends SearchPageController<TagModel> {
     super.onInit();
   }
 
-  initArgs() {
+  void initArgs() {
     final TagSearchArgs args = Get.arguments;
     category(args.category);
   }
 
-  Future<List<TagModel>> fetchApi({int start}) => tagRepository
+  @override
+  Future<List<TagModel>> fetchApi({int? start}) => tagRepository
       .findTags(
           start: (start == null) ? 0 : start,
           lang: SharedPreferenceService.lang,
           maxResults: maxResults,
           query: query.string,
           categoryName: category.string)
-      .catchError(super.onError);
+      .catchError((error) {
+        super.onError(error);
+        return <TagModel>[];
+      });
 }

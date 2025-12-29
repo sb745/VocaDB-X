@@ -7,14 +7,14 @@ class LyricContent extends StatefulWidget {
 
   final GestureTapCallback onTapClose;
 
-  LyricContent({Key key, this.onTapClose, this.lyrics}) : super(key: key);
+  const LyricContent({super.key, required this.onTapClose, required this.lyrics});
 
   @override
   _LyricContentState createState() => _LyricContentState();
 }
 
 class _LyricContentState extends State<LyricContent> {
-  LyricModel selectedLyric;
+  LyricModel? selectedLyric;
 
   @override
   void initState() {
@@ -25,13 +25,13 @@ class _LyricContentState extends State<LyricContent> {
 
   void _changeTranslation(LyricModel lyricModel) {
     setState(() {
-      this.selectedLyric = lyricModel;
+      selectedLyric = lyricModel;
     });
   }
 
   String _translationLabel(LyricModel lyricModel) {
-    return lyricModel.translationType +
-        ((lyricModel.cultureCode == null || lyricModel.cultureCode.isEmpty)
+    return lyricModel.translationType! +
+        ((lyricModel.cultureCode == null || lyricModel.cultureCode!.isEmpty)
             ? ''
             : ' (${lyricModel.cultureCode})');
   }
@@ -42,7 +42,7 @@ class _LyricContentState extends State<LyricContent> {
       child: Column(
         children: <Widget>[
           InkWell(
-            onTap: this.widget.onTapClose,
+            onTap: widget.onTapClose,
             child: Container(
               height: 36,
               alignment: Alignment.center,
@@ -51,7 +51,7 @@ class _LyricContentState extends State<LyricContent> {
           ),
           Padding(
             padding: EdgeInsets.only(right: 8.0, left: 8.0),
-            child: Container(
+            child: SizedBox(
               height: 76,
               child: ListView(
                   scrollDirection: Axis.horizontal,
@@ -60,10 +60,10 @@ class _LyricContentState extends State<LyricContent> {
                             margin: EdgeInsets.only(right: 4.0),
                             child: InputChip(
                               backgroundColor: (lyric.translationType ==
-                                      selectedLyric.translationType)
+                                      selectedLyric?.translationType)
                                   ? Theme.of(context).chipTheme.selectedColor
                                   : Theme.of(context).chipTheme.backgroundColor,
-                              onPressed: () => this._changeTranslation(lyric),
+                              onPressed: () => _changeTranslation(lyric),
                               label: Text(_translationLabel(lyric)),
                             ),
                           ))
@@ -73,7 +73,7 @@ class _LyricContentState extends State<LyricContent> {
           Expanded(
             child: SingleChildScrollView(
                 padding: EdgeInsets.only(bottom: 16.0, right: 8.0, left: 8.0),
-                child: Text(selectedLyric.value)),
+                child: Text(selectedLyric?.value ?? '')),
           ),
         ],
       ),

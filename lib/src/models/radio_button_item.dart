@@ -1,7 +1,7 @@
 class RadioButtonItem {
-  final String label;
+  final String? label;
 
-  final String value;
+  final String? value;
 
   const RadioButtonItem({this.label, this.value});
 }

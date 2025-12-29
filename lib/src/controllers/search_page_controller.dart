@@ -20,7 +20,7 @@ abstract class SearchPageController<T> extends AppPageController {
   /// Fetch api when controller init if set to [True]
   final enableInitial = true;
 
-  TextEditingController textSearchController;
+  TextEditingController? textSearchController;
 
   @override
   void onInit() {
@@ -37,24 +37,25 @@ abstract class SearchPageController<T> extends AppPageController {
     Future.value(noFetchMore(false))
         .then((_) => fetchApi())
         .then(verifyShouldFetchMore)
-        .then(results)
+        .then(results.call)
         .then(initialLoadingDone);
   }
 
   void clearQuery() {
     query('');
-    textSearchController.clear();
+    textSearchController?.clear();
   }
 
   Future<List<T>> fetchApi({int start});
 
   List<T> verifyShouldFetchMore(List<T> items) {
-    if (items == null || items.isEmpty || items.length < maxResults)
+    if (items.isEmpty || items.length < maxResults) {
       noFetchMore(true);
+    }
     return items;
   }
 
-  onReachLastItem() {
+  void onReachLastItem() {
     if (noFetchMore.value) return;
     fetchApi(start: results.length + 1)
         .then(verifyShouldFetchMore)

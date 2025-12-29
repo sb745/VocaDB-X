@@ -5,30 +5,28 @@ import 'package:get/get.dart';
 
 /// A full-width widget for user select date range. Used on filter page such as [ReleaseEventSearchFilterPage].
 class DateRangeInput extends StatefulWidget {
-  final DateTime fromDateValue;
+  final DateTime? fromDateValue;
 
-  final DateTime toDateValue;
+  final DateTime? toDateValue;
 
-  final ValueChanged onFromDateChanged;
+  final ValueChanged<DateTime?> onFromDateChanged;
 
-  final ValueChanged onToDateChanged;
+  final ValueChanged<DateTime?> onToDateChanged;
 
   const DateRangeInput(
-      {@required this.onFromDateChanged,
-      @required this.onToDateChanged,
+      {super.key, required this.onFromDateChanged,
+      required this.onToDateChanged,
       this.fromDateValue,
-      this.toDateValue})
-      : assert(onFromDateChanged != null),
-        assert(onToDateChanged != null);
+      this.toDateValue});
 
   @override
   _DateRangeInputState createState() => _DateRangeInputState();
 }
 
 class _DateRangeInputState extends State<DateRangeInput> {
-  DateTime fromDate;
+  DateTime? fromDate;
 
-  DateTime toDate;
+  DateTime? toDate;
 
   @override
   void initState() {
@@ -37,20 +35,24 @@ class _DateRangeInputState extends State<DateRangeInput> {
     super.initState();
   }
 
-  void _updateFromDate(DateTime value) {
-    setState(() => this.fromDate = value);
-    widget.onFromDateChanged(value);
+  void _updateFromDate(DateTime? value) {
+    if (value != null) {
+      setState(() => fromDate = value);
+      widget.onFromDateChanged(value);
+    }
   }
 
-  void _updateToDate(DateTime value) {
-    setState(() => this.toDate = value);
-    widget.onToDateChanged(value);
+  void _updateToDate(DateTime? value) {
+    if (value != null) {
+      setState(() => toDate = value);
+      widget.onToDateChanged(value);
+    }
   }
 
   void _onPressFromDate() {
     showDatePicker(
-            context: this.context,
-            initialDate: (fromDate == null) ? DateTime.now() : fromDate,
+            context: context,
+            initialDate: (fromDate == null) ? DateTime.now() : fromDate!,
             firstDate: DateTime(2005),
             lastDate: DateTime(2030))
         .then(_updateFromDate);
@@ -58,8 +60,8 @@ class _DateRangeInputState extends State<DateRangeInput> {
 
   void _onPressToDate() {
     showDatePicker(
-            context: this.context,
-            initialDate: (toDate == null) ? DateTime.now() : toDate,
+            context: context,
+            initialDate: (toDate == null) ? DateTime.now() : toDate!,
             firstDate: DateTime(2005),
             lastDate: DateTime(2030))
         .then((_updateToDate));
@@ -79,8 +81,10 @@ class _DateRangeInputState extends State<DateRangeInput> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Expanded(
-                  child: RaisedButton.icon(
-                      color: Theme.of(context).cardColor,
+                  child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context).cardColor,
+                      ),
                       icon: Icon(Icons.calendar_today),
                       label: Text((fromDate == null)
                           ? 'from'.tr
@@ -92,8 +96,10 @@ class _DateRangeInputState extends State<DateRangeInput> {
                   child: Text('-'),
                 ),
                 Expanded(
-                  child: RaisedButton.icon(
-                      color: Theme.of(context).cardColor,
+                  child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context).cardColor,
+                      ),
                       icon: Icon(Icons.calendar_today),
                       label: Text((toDate == null)
                           ? 'to'.tr

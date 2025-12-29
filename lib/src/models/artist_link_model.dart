@@ -2,21 +2,21 @@ import 'package:vocadb_app/models.dart';
 import "package:collection/collection.dart";
 
 class ArtistLinkModel {
-  String linkType;
-  ArtistModel artist;
+  String? linkType;
+  ArtistModel? artist;
 
   ArtistLinkModel({this.linkType, this.artist});
 
   ArtistLinkModel.fromJson(Map<String, dynamic> json)
       : linkType = json['linkType'],
-        artist = (json.containsKey('artist') && !(json['artist'] is int))
+        artist = (json.containsKey('artist') && json['artist'] is! int)
             ? ArtistModel.fromJson(json['artist'])
             : null;
 
-  int get artistId => (this.artist == null) ? null : this.artist.id;
+  int? get artistId => (artist == null) ? null : artist?.id;
 
-  String get artistImageUrl =>
-      (this.artist == null) ? null : this.artist.imageUrl;
+  String? get artistImageUrl =>
+      (artist == null) ? null : artist?.imageUrl;
 }
 
 class ArtistLinkList {
@@ -26,6 +26,6 @@ class ArtistLinkList {
 
   Map<String, dynamic> get groupByLinkType =>
       groupBy(artistLinks, (ArtistLinkModel l) {
-        return l.linkType;
+        return l.linkType ?? 'Unknown';
       });
 }

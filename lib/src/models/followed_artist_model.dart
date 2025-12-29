@@ -1,7 +1,7 @@
 import 'package:vocadb_app/models.dart';
 
 class FollowedArtistModel {
-  ArtistModel artist;
+  ArtistModel? artist;
 
   FollowedArtistModel.fromJson(Map<String, dynamic> json)
       : artist = json.containsKey('artist')

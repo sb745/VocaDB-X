@@ -16,16 +16,19 @@ class AlbumSearchController extends SearchPageController<AlbumModel> {
 
   final AlbumRepository albumRepository;
 
-  AlbumSearchController({this.albumRepository});
+  AlbumSearchController({required this.albumRepository});
 
   @override
   void onInit() {
-    [discType, sort, artists, tags]
-        .forEach((element) => ever(element, (_) => initialFetch()));
+    ever(discType, (_) => initialFetch());
+    ever(sort, (_) => initialFetch());
+    ever(artists, (_) => initialFetch());
+    ever(tags, (_) => initialFetch());
     super.onInit();
   }
 
-  Future<List<AlbumModel>> fetchApi({int start}) => albumRepository
+  @override
+  Future<List<AlbumModel>> fetchApi({int? start}) => albumRepository
       .findAlbums(
         start: (start == null) ? 0 : start,
         lang: SharedPreferenceService.lang,
@@ -36,5 +39,8 @@ class AlbumSearchController extends SearchPageController<AlbumModel> {
         artistIds: artists.toList().map((e) => e.id).join(','),
         tagIds: tags.toList().map((e) => e.id).join(','),
       )
-      .catchError(super.onError);
+      .catchError((error, stackTrace) {
+        super.onError(error);
+        return <AlbumModel>[];
+      });
 }

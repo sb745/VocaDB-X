@@ -5,6 +5,8 @@ import 'package:vocadb_app/controllers.dart';
 import 'package:vocadb_app/widgets.dart';
 
 class FavoriteArtistFilterPage extends GetView<FavoriteArtistController> {
+  const FavoriteArtistFilterPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,7 +22,7 @@ class FavoriteArtistFilterPage extends GetView<FavoriteArtistController> {
                       emptyItem: {'name': 'notSpecified'.tr, 'value': ''}),
                   label: 'artistType'.tr,
                   value: controller.artistType.string,
-                  onChanged: controller.artistType,
+                  onChanged: controller.artistType.call,
                 ),
               ),
               Divider(),

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vocadb_app/arguments.dart';
 import 'package:vocadb_app/controllers.dart';
-import 'package:vocadb_app/loggers.dart';
 import 'package:vocadb_app/models.dart';
 import 'package:vocadb_app/pages.dart';
 import 'package:vocadb_app/repositories.dart';
@@ -13,7 +12,9 @@ import 'package:vocadb_app/services.dart';
 import 'package:vocadb_app/widgets.dart';
 
 class ReleaseEventSeriesDetailPage extends StatelessWidget {
-  initController() {
+  const ReleaseEventSeriesDetailPage({super.key});
+
+  ReleaseEventSeriesDetailController initController() {
     final httpService = Get.find<HttpService>();
     return ReleaseEventSeriesDetailController(
         eventSeriesRepository:
@@ -24,8 +25,7 @@ class ReleaseEventSeriesDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final ReleaseEventSeriesDetailController controller = initController();
     final ReleaseEventSeriesDetailArgs args = Get.arguments;
-    final String id = Get.parameters['id'];
-    Get.find<AnalyticLog>().logViewReleaseEventDetail(args.id);
+    final String? id = Get.parameters['id'];
 
     return PageBuilder<ReleaseEventSeriesDetailController>(
       tag: "event_series_$id",
@@ -41,7 +41,7 @@ class ReleaseEventSeriesDetailPageView extends StatelessWidget {
 
   final ReleaseEventSeriesDetailArgs args;
 
-  const ReleaseEventSeriesDetailPageView({this.controller, this.args});
+  const ReleaseEventSeriesDetailPageView({super.key, required this.controller, required this.args});
 
   void _onTapShareButton() => Share.share(controller.eventSeries().originUrl);
 
@@ -53,109 +53,115 @@ class ReleaseEventSeriesDetailPageView extends StatelessWidget {
 
   void _onSelectTag(TagModel tag) => AppPages.toTagDetailPage(tag);
 
+  void _onTapEvent(ReleaseEventModel event) => AppPages.toReleaseEventDetailPage(event);
+
   Widget buildData() {
-    return CustomScrollView(
-      slivers: <Widget>[
-        SliverAppBar(
-          expandedHeight: 200.0,
-          pinned: true,
-          actions: [
-            IconButton(
-              icon: Icon(Icons.search),
-              onPressed: this._onTapEntrySearch,
-            ),
-            IconButton(
-              icon: Icon(Icons.home),
-              onPressed: this._onTapHome,
-            )
-          ],
-          flexibleSpace: FlexibleSpaceBar(
-            title: Text(controller.eventSeries().name),
-            background: (controller.eventSeries().imageUrl == null)
-                ? Container()
-                : CustomNetworkImage(controller.eventSeries().imageUrl),
-          ),
-        ),
-        SliverList(
-          delegate: SliverChildListDelegate.fixed([
-            SpaceDivider.small(),
-            ButtonBar(
-              alignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                FlatButton(
-                  onPressed: this._onTapShareButton,
-                  child: Column(
-                    children: [Icon(Icons.share), Text('share'.tr)],
-                  ),
+    return OrientationBuilder(
+      builder: (context, orientation) {
+        final expandedHeight = orientation == Orientation.landscape ? 120.0 : 200.0;
+        
+        return CustomScrollView(
+          slivers: <Widget>[
+            SliverAppBar(
+              expandedHeight: expandedHeight,
+              pinned: true,
+              actions: [
+                IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: _onTapEntrySearch,
                 ),
-                FlatButton(
-                  onPressed: this._onTapInfoButton,
-                  child: Column(
-                    children: [Icon(Icons.info), Text('info'.tr)],
-                  ),
+                IconButton(
+                  icon: Icon(Icons.home),
+                  onPressed: _onTapHome,
                 )
               ],
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  TagGroupView(
-                    onPressed: this._onSelectTag,
-                    tags: controller
-                            .eventSeries()
-                            ?.tagGroups
-                            ?.map((t) => t.tag)
-                            ?.toList() ??
-                        [],
-                  ),
-                  TextInfoSection(
-                    title: 'name'.tr,
-                    text: controller.eventSeries().name,
-                  ),
-                  TextInfoSection(
-                    title: 'category'.tr,
-                    text:
-                        'eventCategory.${controller.eventSeries().category}'.tr,
-                  ),
-                  TextInfoSection(
-                    title: 'description'.tr,
-                    text: controller.eventSeries().description,
-                  ),
-                ],
+              flexibleSpace: FlexibleSpaceBar(
+                title: Text(controller.eventSeries().name.toString()),
+                background: (controller.eventSeries().imageUrl == null)
+                    ? Container()
+                    : CustomNetworkImage(controller.eventSeries().imageUrl),
               ),
             ),
-            Section(
-              title: 'references'.tr,
-              child: Column(
-                children: controller
-                    .eventSeries()
-                    .webLinks
-                    .map((e) => WebLinkTile(
-                          title: e.description,
-                          url: e.url,
-                        ))
-                    .toList(),
-              ),
-            ),
-            Section(
-              title: 'events'.tr,
-              child: Column(
-                children: controller
-                    .eventSeries()
-                    .events
-                    .map((e) => ListTile(
-                          leading: Icon(Icons.event),
-                          title: Text(e.name ?? '<unknown>'),
-                          subtitle: Text(e.dateFormatted ?? ''),
-                        ))
-                    .toList(),
-              ),
-            ),
-          ]),
-        )
-      ],
+            SliverList(
+              delegate: SliverChildListDelegate.fixed([
+                SpaceDivider.small(),
+                OverflowBar(
+                  alignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    TextButton(
+                      onPressed: _onTapShareButton,
+                      child: Column(
+                        children: [Icon(Icons.share), Text('share'.tr)],
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: _onTapInfoButton,
+                      child: Column(
+                        children: [Icon(Icons.info), Text('info'.tr)],
+                      ),
+                    )
+                  ],
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      TagGroupView(
+                        onPressed: _onSelectTag,
+                        tags: controller
+                                .eventSeries()
+                                .tagGroups
+                                ?.map((t) => t.tag)
+                                .whereType<TagModel>()
+                                .toList() ??
+                            [],
+                      ),
+                      TextInfoSection(
+                        title: 'name'.tr,
+                        text: controller.eventSeries().name,
+                      ),
+                      TextInfoSection(
+                        title: 'category'.tr,
+                        text:
+                            'eventCategory.${controller.eventSeries().category}'.tr,
+                      ),
+                      TextInfoSection(
+                        title: 'description'.tr,
+                        text: controller.eventSeries().description,
+                      ),
+                    ],
+                  ),
+                ),
+                Section(
+                  title: 'references'.tr,
+                  child: Column(
+                    children: (controller.eventSeries().webLinks ?? [])
+                        .map((e) => WebLinkTile(
+                              title: e.description ?? 'Unknown Link',
+                              url: e.url ?? '',
+                            ))
+                        .toList(),
+                  ),
+                ),
+                Section(
+                  title: 'events'.tr,
+                  child: Column(
+                    children: (controller.eventSeries().events ?? [])
+                        .map((e) => ListTile(
+                              leading: Icon(Icons.event),
+                              title: Text(e.name ?? '<unknown>'),
+                              subtitle: Text(e.dateFormatted ?? ''),
+                              onTap: (e.id != null) ? () => _onTapEvent(e) : null,
+                            ))
+                        .toList(),
+                  ),
+                ),
+              ]),
+            )
+          ],
+        );
+      },
     );
   }
 

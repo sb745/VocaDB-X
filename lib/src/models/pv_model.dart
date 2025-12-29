@@ -1,10 +1,10 @@
 class PVModel {
-  int id;
-  String name;
-  String service;
-  String url;
-  String pvType;
-  int length;
+  int? id;
+  String? name;
+  String? service;
+  String? url;
+  String? pvType;
+  int? length;
 
   PVModel(
       {this.id, this.name, this.service, this.url, this.pvType, this.length});
@@ -28,6 +28,7 @@ class PVModel {
     };
   }
 
+  @override
   String toString() {
     return toJson().toString();
   }
@@ -39,9 +40,7 @@ class PVList {
   PVList(this.pvs);
 
   bool get isContainsYoutube =>
-      pvs.firstWhere((pv) => pv.service.toLowerCase() == "youtube",
-          orElse: () => null) !=
-      null;
+      pvs.any((pv) => pv.service != null && pv.service!.toLowerCase() == "youtube");
 
   List<PVModel> get originalPVs =>
       pvs.where((pv) => pv.pvType == 'Original').toList();

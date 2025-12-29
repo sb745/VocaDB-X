@@ -3,6 +3,7 @@ class Routes {
   static const MAIN = '/main';
   static const SONGS = '/songs/';
   static const SONGS_DETAIL = '/songs/:id';
+  static const COMMENTS = '/comments';
   static const ARTISTS = '/artists';
   static const ARTISTS_SELECTOR = '/artists/selector';
   static const ARTISTS_DETAIL = '/artists/:id';

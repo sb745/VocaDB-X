@@ -13,15 +13,15 @@ class ArtistLinkListView extends StatelessWidget {
   final bool reverse;
 
   const ArtistLinkListView(
-      {@required this.artistLinks, this.onSelect, this.reverse = false});
+      {super.key, required this.artistLinks, required this.onSelect, this.reverse = false});
 
   List<Widget> _generateItems() {
     List<Widget> items = [];
 
-    ArtistLinkList(this.artistLinks)
+    ArtistLinkList(artistLinks)
         .groupByLinkType
         .forEach((linkType, artistLinkList) {
-      String label = (this.reverse)
+      String label = (reverse)
           ? 'artistReverseRole.$linkType'
           : 'artistRole.$linkType';
       items.add(_buildHeader(label.tr));
@@ -39,9 +39,9 @@ class ArtistLinkListView extends StatelessWidget {
 
   ArtistTile _mapArtistLinkTile(ArtistLinkModel model) {
     return ArtistTile(
-      name: model.artist.name,
-      imageUrl: model.artist.imageUrl,
-      onTap: () => this.onSelect(model),
+      name: model.artist?.name,
+      imageUrl: model.artist?.imageUrl,
+      onTap: () => onSelect(model),
     );
   }
 

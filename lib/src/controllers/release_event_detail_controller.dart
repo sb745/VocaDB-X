@@ -13,7 +13,7 @@ class ReleaseEventDetailController extends GetxController {
 
   final ReleaseEventRepository eventRepository;
 
-  ReleaseEventDetailController({this.eventRepository});
+  ReleaseEventDetailController({required this.eventRepository});
 
   @override
   void onInit() {
@@ -22,7 +22,7 @@ class ReleaseEventDetailController extends GetxController {
     super.onInit();
   }
 
-  initArgs() {
+  void initArgs() {
     ReleaseEventDetailArgs args = Get.arguments;
 
     if (args.event != null) {
@@ -32,10 +32,13 @@ class ReleaseEventDetailController extends GetxController {
     }
   }
 
-  fetchApis() {
+  void fetchApis() {
     String lang = SharedPreferenceService.lang;
-    eventRepository.getById(event().id, lang: lang).then(event);
-    eventRepository.getAlbums(event().id, lang: lang).then(albums);
-    eventRepository.getPublishedSongs(event().id, lang: lang).then(songs);
+    int? eventId = event().id;
+    if (eventId != null) {
+      eventRepository.getById(eventId, lang: lang).then(event.call);
+      eventRepository.getAlbums(eventId, lang: lang).then(albums.call);
+      eventRepository.getPublishedSongs(eventId, lang: lang).then(songs.call);
+    }
   }
 }

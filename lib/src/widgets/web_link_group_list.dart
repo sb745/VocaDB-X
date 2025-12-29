@@ -5,16 +5,16 @@ import 'package:get/get.dart';
 
 /// A widget display list of pvs grouping by category
 class WebLinkGroupList extends StatelessWidget {
-  final List<WebLinkModel> webLinks;
+  final List<WebLinkModel>? webLinks;
 
-  final Function(WebLinkModel) onTap;
+  final Function(WebLinkModel)? onTap;
 
-  const WebLinkGroupList({@required this.webLinks, this.onTap});
+  const WebLinkGroupList({super.key, this.webLinks, this.onTap});
 
   List<Widget> _generateItems() {
     List<Widget> items = [];
 
-    WebLinkList webLinkList = WebLinkList(webLinks);
+    WebLinkList webLinkList = WebLinkList(webLinks!);
 
     List<WebLinkModel> officialLinks = webLinkList.officialLinks;
     List<WebLinkModel> unofficialLinks = webLinkList.unofficialLinks;
@@ -38,14 +38,14 @@ class WebLinkGroupList extends StatelessWidget {
 
   WebLinkTile _mapWebLinkTile(WebLinkModel model) {
     return WebLinkTile(
-      title: model.description,
-      url: model.url,
+      title: model.description ?? 'Unknown Link',
+      url: model.url ?? '',
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    if (this.webLinks == null || this.webLinks.isEmpty) return Container();
+    if (webLinks == null || webLinks!.isEmpty) return Container();
 
     return Column(
       children: _generateItems(),

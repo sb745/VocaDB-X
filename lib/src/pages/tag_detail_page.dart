@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vocadb_app/arguments.dart';
-import 'package:vocadb_app/loggers.dart';
 import 'package:vocadb_app/models.dart';
 import 'package:vocadb_app/pages.dart';
 import 'package:vocadb_app/repositories.dart';
@@ -13,7 +12,9 @@ import 'package:vocadb_app/src/controllers/tag_detail_controller.dart';
 import 'package:vocadb_app/widgets.dart';
 
 class TagDetailPage extends StatelessWidget {
-  initController() {
+  const TagDetailPage({super.key});
+
+  TagDetailController initController() {
     final httpService = Get.find<HttpService>();
     return TagDetailController(
         tagRepository: TagRepository(httpService: httpService),
@@ -26,8 +27,7 @@ class TagDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final TagDetailController controller = initController();
     final TagDetailArgs args = Get.arguments;
-    final String id = Get.parameters['id'];
-    Get.find<AnalyticLog>().logViewTagDetail(args.id);
+    final String? id = Get.parameters['id'];
 
     return PageBuilder<TagDetailController>(
       tag: "t_$id",
@@ -42,7 +42,7 @@ class TagDetailPageView extends StatelessWidget {
 
   final TagDetailArgs args;
 
-  const TagDetailPageView({this.controller, this.args});
+  const TagDetailPageView({super.key, required this.controller, required this.args});
 
   void _onSelectTag(TagModel tag) => AppPages.toTagDetailPage(tag);
 
@@ -101,8 +101,8 @@ class TagDetailPageView extends StatelessWidget {
           () => SliverList(
               delegate: SliverChildListDelegate([
             _TagDetailButtonBar(
-              onTapInfoButton: this._onTapInfoButton,
-              onTapShareButton: this._onTapShareButton,
+              onTapInfoButton: _onTapInfoButton,
+              onTapShareButton: _onTapShareButton,
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -122,7 +122,7 @@ class TagDetailPageView extends StatelessWidget {
                     title: 'parent'.tr,
                     child: Tag(
                       label: controller.tag().parent?.name,
-                      onPressed: () => this._onSelectTag(controller.tag()),
+                      onPressed: () => _onSelectTag(controller.tag()),
                     )),
                 SpaceDivider.small(),
                 TextInfoSection(
@@ -132,43 +132,47 @@ class TagDetailPageView extends StatelessWidget {
                 Divider(),
                 Section(
                   title: 'recentSongsPVs'.tr,
-                  visible: controller.latestSongs().length > 0,
+                  visible: controller.latestSongs().isNotEmpty,
+                  divider: Divider(),
                   child: SongListView(
                     displayPlaceholder: controller.latestSongs.isEmpty,
                     scrollDirection: Axis.horizontal,
-                    onSelect: this._onTapSong,
+                    onSelect: _onTapSong,
                     songs: controller.latestSongs(),
+                    onReachLastItem: () {},
                   ),
-                  divider: Divider(),
                 ),
                 Section(
                   title: 'topArtists'.tr,
-                  visible: controller.topArtists().length > 0,
+                  visible: controller.topArtists().isNotEmpty,
+                  divider: Divider(),
                   child: ArtistColumnView(
-                    onSelect: this._onTapArtist,
+                    onSelect: _onTapArtist,
                     artists: controller.topArtists(),
                   ),
-                  divider: Divider(),
                 ),
                 Section(
                   title: 'topSongs'.tr,
-                  visible: controller.topSongs().length > 0,
+                  visible: controller.topSongs().isNotEmpty,
+                  divider: Divider(),
                   child: SongListView(
                     scrollDirection: Axis.horizontal,
-                    onSelect: this._onTapSong,
+                    onSelect: _onTapSong,
                     songs: controller.topSongs(),
+                    onReachLastItem: () {},
                   ),
-                  divider: Divider(),
                 ),
                 Section(
                   title: 'topAlbums'.tr,
-                  visible: controller.topAlbums().length > 0,
+                  visible: controller.topAlbums().isNotEmpty,
+                  divider: Divider(),
                   child: AlbumListView(
-                    onSelect: this._onTapAlbum,
+                    onSelect: _onTapAlbum,
                     scrollDirection: Axis.horizontal,
                     albums: controller.topAlbums(),
+                    onReachLastItem: () {},
+                    emptyWidget: SizedBox.shrink(),
                   ),
-                  divider: Divider(),
                 ),
                 WebLinkGroupList(webLinks: controller.tag().webLinks)
               ],
@@ -185,7 +189,7 @@ class _TagDetailButtonBar extends StatelessWidget {
 
   final VoidCallback onTapInfoButton;
 
-  const _TagDetailButtonBar({this.onTapShareButton, this.onTapInfoButton});
+  const _TagDetailButtonBar({required this.onTapShareButton, required this.onTapInfoButton});
 
   @override
   Widget build(BuildContext context) {
@@ -195,16 +199,16 @@ class _TagDetailButtonBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Expanded(
-            child: FlatButton(
-              onPressed: this.onTapShareButton,
+            child: TextButton(
+              onPressed: onTapShareButton,
               child: Column(
                 children: [Icon(Icons.share), Text('share'.tr)],
               ),
             ),
           ),
           Expanded(
-            child: FlatButton(
-              onPressed: this.onTapInfoButton,
+            child: TextButton(
+              onPressed: onTapInfoButton,
               child: Column(
                 children: [Icon(Icons.info), Text('info'.tr)],
               ),

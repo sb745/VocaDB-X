@@ -14,7 +14,7 @@ class ReleaseEventSeriesDetailController extends AppPageController {
 
   final ReleaseEventSeriesRepository eventSeriesRepository;
 
-  ReleaseEventSeriesDetailController({this.eventSeriesRepository});
+  ReleaseEventSeriesDetailController({required this.eventSeriesRepository});
 
   @override
   void onInit() {
@@ -23,7 +23,7 @@ class ReleaseEventSeriesDetailController extends AppPageController {
     super.onInit();
   }
 
-  initArgs() {
+  void initArgs() {
     ReleaseEventSeriesDetailArgs args = Get.arguments;
 
     if (args.eventSeries != null) {
@@ -33,11 +33,11 @@ class ReleaseEventSeriesDetailController extends AppPageController {
     }
   }
 
-  fetchApis() {
+  void fetchApis() {
     String lang = SharedPreferenceService.lang;
     eventSeriesRepository
-        .getById(eventSeries().id, lang: lang)
-        .then(eventSeries)
+        .getById(eventSeries().id!, lang: lang)
+        .then(eventSeries.call)
         .then(super.initialLoadingDone)
         .catchError(super.onError);
   }

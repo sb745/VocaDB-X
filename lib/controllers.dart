@@ -1,9 +1,10 @@
-library controllers;
+library;
 
 export 'src/controllers/album_detail_controller.dart';
 export 'src/controllers/album_search_controller.dart';
 export 'src/controllers/app_page_controller.dart';
 export 'src/controllers/artist_detail_controller.dart';
+export 'src/controllers/comments_controller.dart';
 export 'src/controllers/artist_search_controller.dart';
 export 'src/controllers/entry_search_controller.dart';
 export 'src/controllers/favorite_album_controller.dart';

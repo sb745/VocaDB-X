@@ -7,14 +7,16 @@ import 'package:vocadb_app/routes.dart';
 import 'package:vocadb_app/widgets.dart';
 
 class RankingPage extends StatefulWidget {
+  const RankingPage({super.key});
+
   @override
   _RankingPageState createState() => _RankingPageState();
 }
 
 class _RankingPageState extends State<RankingPage>
     with SingleTickerProviderStateMixin {
-  TabController _tabController;
-  RankingController _rankingController;
+  TabController? _tabController;
+  RankingController? _rankingController;
 
   @override
   void initState() {
@@ -28,7 +30,7 @@ class _RankingPageState extends State<RankingPage>
 
   @override
   void dispose() {
-    _tabController.dispose();
+    _tabController?.dispose();
     super.dispose();
   }
 
@@ -59,37 +61,37 @@ class _RankingPageState extends State<RankingPage>
 
     if (constRankings.contains('daily')) {
       contents.add(Obx(() => RankingSongsContent(
-            songs: _rankingController.daily.toList(),
-            onSelect: (s) => this._onTabSong(s),
+            songs: _rankingController!.daily.toList(),
+            onSelect: (s) => _onTabSong(s),
           )));
     }
 
     if (constRankings.contains('weekly')) {
       contents.add(Obx(() => RankingSongsContent(
-            songs: _rankingController.weekly.toList(),
-            onSelect: (s) => this._onTabSong(s),
+            songs: _rankingController!.weekly.toList(),
+            onSelect: (s) => _onTabSong(s),
           )));
     }
 
     if (constRankings.contains('monthly')) {
       contents.add(Obx(() => RankingSongsContent(
-            songs: _rankingController.monthly.toList(),
-            onSelect: (s) => this._onTabSong(s),
+            songs: _rankingController!.monthly.toList(),
+            onSelect: (s) => _onTabSong(s),
           )));
     }
 
     if (constRankings.contains('overall')) {
       contents.add(Obx(() => RankingSongsContent(
-            songs: _rankingController.overall.toList(),
-            onSelect: (s) => this._onTabSong(s),
+            songs: _rankingController!.overall.toList(),
+            onSelect: (s) => _onTabSong(s),
           )));
     }
 
     return contents;
   }
 
-  _onTapPlaylist() {
-    int currentIndex = _tabController.index;
+  void _onTapPlaylist() {
+    int currentIndex = _tabController!.index;
 
     String selected = constRankings[currentIndex];
 
@@ -98,19 +100,19 @@ class _RankingPageState extends State<RankingPage>
     switch (selected) {
       case 'daily':
         title = 'ranking.daily'.tr;
-        songs = _rankingController.daily();
+        songs = _rankingController!.daily();
         break;
       case 'weekly':
         title = 'ranking.weekly'.tr;
-        songs = _rankingController.weekly();
+        songs = _rankingController!.weekly();
         break;
       case 'monthly':
         title = 'ranking.monthly'.tr;
-        songs = _rankingController.monthly();
+        songs = _rankingController!.monthly();
         break;
       case 'overall':
         title = 'ranking.overall'.tr;
-        songs = _rankingController.overall();
+        songs = _rankingController!.overall();
         break;
     }
 
@@ -122,20 +124,21 @@ class _RankingPageState extends State<RankingPage>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
     return SafeArea(
       child: Scaffold(
         appBar: TabBar(
           controller: _tabController,
           tabs: _generateTabs(),
-          labelColor: theme.textSelectionColor,
-          unselectedLabelColor: theme.textTheme.headline6.color,
+          labelColor: isDarkMode ? Colors.white : theme.primaryColor,
+          unselectedLabelColor: theme.textTheme.headlineMedium!.color,
         ),
         body: TabBarView(
           controller: _tabController,
           children: _generateRankingContent(),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () => this._onTapPlaylist(),
+          onPressed: () => _onTapPlaylist(),
           child: Icon(Icons.play_arrow),
         ),
       ),
@@ -148,20 +151,20 @@ class RankingSongsContent extends StatelessWidget {
 
   final Function(SongModel) onSelect;
 
-  const RankingSongsContent({Key key, this.songs, this.onSelect})
-      : super(key: key);
+  const RankingSongsContent({super.key, required this.songs, required this.onSelect});
 
   @override
   Widget build(BuildContext context) {
-    if (songs.length == 0) return CenterLoading();
+    if (songs.isEmpty) return CenterLoading();
 
     return ListView.builder(
       itemCount: songs.length,
       itemBuilder: (context, index) {
         return SongTile.song(
           songs[index],
+          heroTag: 'ranking_song_$index',
           leading: Text((index + 1).toString()),
-          onTap: () => this.onSelect(songs[index]),
+          onTap: () => onSelect(songs[index]),
         );
       },
     );

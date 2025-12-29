@@ -1,5 +1,5 @@
 class TagSearchArgs {
-  final String category;
+  final String? category;
 
   final bool selectionMode;
 

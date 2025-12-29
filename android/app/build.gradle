@@ -1,14 +1,15 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'dev.flutter.flutter-gradle-plugin'
+}
+
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
 if (localPropertiesFile.exists()) {
     localPropertiesFile.withReader('UTF-8') { reader ->
         localProperties.load(reader)
     }
-}
-
-def flutterRoot = localProperties.getProperty('flutter.sdk')
-if (flutterRoot == null) {
-    throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
 }
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
@@ -21,10 +22,6 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
-
 def keystoreProperties = new Properties()
 def keystorePropertiesFile = rootProject.file('key.properties')
 if (keystorePropertiesFile.exists()) {
@@ -32,10 +29,15 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    compileSdkVersion 29
+    namespace 'com.sb745.Vocadb'
+    compileSdkVersion 36
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
     }
 
     lintOptions {
@@ -44,11 +46,11 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.coolappz.Vocadb"
-        minSdkVersion 17
-        targetSdkVersion 29
-        versionName "3.1.0-beta.1"
-        versionCode flutterVersionCode.toInteger()
+        applicationId "com.sb745.Vocadb"
+        minSdkVersion flutter.minSdkVersion
+        targetSdkVersion 36
+        versionName "4.0.0"
+        versionCode 1
     }
 
     signingConfigs {
@@ -72,7 +74,6 @@ flutter {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    // Kotlin stdlib is brought by the Kotlin Gradle plugin; keep an explicit dependency only if you need it.
+    // implementation "org.jetbrains.kotlin:kotlin-stdlib"
 }
-
-apply plugin: 'com.google.gms.google-services'

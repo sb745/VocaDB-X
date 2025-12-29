@@ -6,15 +6,15 @@ class ReleaseEventSeriesTile extends StatelessWidget {
 
   final GestureTapCallback onTap;
 
-  const ReleaseEventSeriesTile({this.name, this.onTap});
+  const ReleaseEventSeriesTile({super.key, required this.name, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    if (this.name == null || this.name.isEmpty) return Container();
+    if (name.isEmpty) return Container();
 
     return ListTile(
-        onTap: this.onTap,
+        onTap: onTap,
         leading: Icon(Icons.calendar_today),
-        title: Text(this.name));
+        title: Text(name));
   }
 }

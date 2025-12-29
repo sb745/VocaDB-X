@@ -1,49 +1,39 @@
-[![Download](https://img.shields.io/github/v/release/VocaDB/VocaDB-App)](https://github.com/VocaDB/VocaDB-App/releases)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Download](https://img.shields.io/github/v/release/sb745/VocaDB-X)](https://github.com/sb745/VocaDB-X/releases)
+![Maintenance](https://img.shields.io/maintenance/yes/2025)
 
-# VocaDB App
-VocaDB mobile version with [Flutter framework](https://flutter.dev/). Also this source code is shared with TouhouDB app too.
+# VocaDB X
+Fork of the original [VocaDB mobile app](https://github.com/VocaDB/VocaDB-App). Runs on Android 5.0 and above.
 
-![Screenshot](/assets/store/VocaDB/android/vocadb_demo.gif)
+![Screenshot](/assets/store/VocaDB/android/vocadb_x_demo.gif)
+
+## What's changed in the fork
+ - Updated from Flutter 2 to 3
+ - Updated all dependencies
+ - Updated target SDK version
+ - Properly implemented login
+ - Added comments page
+ - Many other small fixes and improvements
 
 ## Download
 
-### VocaDB
-- [Playstore for Android](https://play.google.com/store/apps/details?id=com.coolappz.Vocadb)
-- [Playstore (Alpha/Beta)](https://play.google.com/apps/testing/com.coolappz.Vocadb)
-- [App Store for iOS](https://itunes.apple.com/us/app/vocadb/id907510673)
+You can find the latest version on the [release page](https://github.com/sb745/VocaDB-X/releases).
 
-### TouhouDB
-- [Playstore for Android](https://play.google.com/store/apps/details?id=com.touhoudb.app)
-
-## Setup for development
+## Build
+### Setup for development
 - [Flutter SDK](https://flutter.dev/docs/get-started/install)
-
-## Editor (Optional)
-- [Visual Studio Code](https://code.visualstudio.com/)
 - [Android Studio](https://developer.android.com/studio)
-- [IntelliJ](https://www.jetbrains.com/idea/download/)
-
-## API Documentation
-Use [dartdoc](https://dart.dev/tools/dartdoc) for generate documentation.
-
-
-### Installing dartdoc
-
-Run `pub global activate dartdoc` to install the latest version of dartdoc compatible with your SDK.
+```shell
+flutter pub get
+flutter build apk --release
 ```
-$ pub global activate dartdoc
-```
-Then run `dartdoc` command to generate document.
-
-```
-$ dartdoc
-```
-
-Document generated result to {current_dir}/doc/api and can open index.html to view it in browser.
 
 ## UI Translation
 
-Translation files in _lib/src/i18n_. File should be named with `{language code}.dart` or `{language_code}_{country_code}.dart`.
+Translation files in are located `lib/src/i18n`. File should be named `{language code}.dart` or `{language_code}_{country_code}.dart`.
 
-If anyone would like to update or add more language, You can add/edit and pull request to me.
+Feel free to pull request more languages if you'd like to contribute!
+
+## License
+Code is licensed under the [MIT License](LICENSE). Assets are licensed under [CC-BY 4.0](LICENSE-ASSETS).
+
+Please check the [VocaDB Wiki](https://wiki.vocadb.net/docs/license) for more info regarding licensing.

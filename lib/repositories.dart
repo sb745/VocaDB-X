@@ -1,4 +1,4 @@
-library repositories;
+library;
 
 export 'src/repositories/album_repository.dart';
 export 'src/repositories/artist_repository.dart';

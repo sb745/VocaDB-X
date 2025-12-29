@@ -12,8 +12,7 @@ class PVGroupList extends StatelessWidget {
 
   final Function(PVModel) onTap;
 
-  const PVGroupList({@required this.pvs, this.onTap, this.searchQuery})
-      : assert(pvs != null);
+  const PVGroupList({super.key, required this.pvs, required this.onTap, this.searchQuery});
 
   List<Widget> _generateItems() {
     List<Widget> items = [];
@@ -55,11 +54,11 @@ class PVGroupList extends StatelessWidget {
 
   PVTile _mapPVTile(PVModel model) {
     return PVTile(
-      name: model.name,
-      service: model.service,
-      url: model.url,
-      pvType: model.pvType,
-      onTap: () => this.onTap(model),
+      name: model.name ?? '',
+      service: model.service ?? '',
+      url: model.url ?? '',
+      pvType: model.pvType ?? '',
+      onTap: () => onTap(model),
     );
   }
 

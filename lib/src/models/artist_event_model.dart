@@ -6,7 +6,7 @@ class ArtistEventModel {
   String roles;
   String effectiveRoles;
   String categories;
-  ArtistModel artist;
+  ArtistModel? artist;
 
   ArtistEventModel.fromJson(Map<String, dynamic> json)
       : id = json['id'],
@@ -18,23 +18,23 @@ class ArtistEventModel {
             ? ArtistModel.fromJson(json['artist'])
             : null;
 
-  int get artistId => (this.artist == null) ? id : this.artist.id;
+  int? get artistId => (artist == null) ? id : artist?.id;
 
-  String get artistName => (this.artist == null) ? this.name : this.artist.name;
+  String? get artistName => (artist == null) ? name : artist?.name;
 
-  String get artistImageUrl =>
-      (this.artist == null) ? null : this.artist.imageUrl;
+  String? get artistImageUrl =>
+      (artist == null) ? null : artist?.imageUrl;
 
-  String get artistRole => (this.effectiveRoles != 'Default' &&
-          !this.isProducer &&
-          !this.isVocalist &&
-          !this.isLabel)
-      ? this.effectiveRoles
-      : this.categories;
+  String get artistRole => (effectiveRoles != 'Default' &&
+          !isProducer &&
+          !isVocalist &&
+          !isLabel)
+      ? effectiveRoles
+      : categories;
 
-  bool get isProducer => (this.categories == 'Producer');
+  bool get isProducer => (categories == 'Producer');
 
-  bool get isVocalist => (this.categories == 'Vocalist');
+  bool get isVocalist => (categories == 'Vocalist');
 
-  bool get isLabel => (this.categories == 'Label');
+  bool get isLabel => (categories == 'Label');
 }

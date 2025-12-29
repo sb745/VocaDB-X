@@ -1,30 +1,29 @@
 import 'package:vocadb_app/models.dart';
-import 'package:vocadb_app/services.dart';
 import 'package:vocadb_app/src/repositories/base_repository.dart';
 
 class AlbumRepository extends RestApiRepository {
-  AlbumRepository({HttpService httpService}) : super(httpService: httpService);
+  AlbumRepository({required super.httpService});
 
   /// Find albums
   Future<List<AlbumModel>> findAlbums(
       {String lang = 'Default',
-      String query,
-      String discType,
-      String sort,
-      String artistIds,
-      String tagIds,
+      String? query,
+      String? discType,
+      String? sort,
+      String? artistIds,
+      String? tagIds,
       int start = 0,
       int maxResults = 50,
       String nameMatchMode = 'Auto'}) async {
     final String endpoint = '/api/albums';
-    final Map<String, String> params = Map();
-    params['query'] = query;
-    params['discTypes'] = discType;
+    final Map<String, String> params = {};
+    if (query != null && query.isNotEmpty) params['query'] = query;
+    if (discType != null && discType.isNotEmpty) params['discTypes'] = discType;
     params['fields'] = 'MainPicture';
     params['lang'] = lang;
-    params['tagId'] = tagIds;
-    params['artistId'] = artistIds;
-    params['sort'] = sort;
+    if (tagIds != null && tagIds.isNotEmpty) params['tagId'] = tagIds;
+    if (artistIds != null && artistIds.isNotEmpty) params['artistId'] = artistIds;
+    if (sort != null && sort.isNotEmpty) params['sort'] = sort;
     params['start'] = start.toString();
     params['maxResults'] = maxResults.toString();
     params['nameMatchMode'] = nameMatchMode;
@@ -35,7 +34,7 @@ class AlbumRepository extends RestApiRepository {
 
   /// Gets a album by Id.
   Future<AlbumModel> getById(int id, {String lang = 'Default'}) {
-    final Map<String, String> params = Map();
+    final Map<String, String> params = {};
     params['fields'] =
         'Tags,MainPicture,Tracks,AdditionalNames,Artists,Description,WebLinks,PVs';
     params['songFields'] = 'MainPicture,PVs,ThumbUrl';
@@ -48,7 +47,7 @@ class AlbumRepository extends RestApiRepository {
   /// Gets list of upcoming or recent albums, same as front page.
   Future<List<AlbumModel>> getNew({String lang = 'Default'}) async {
     final String endpoint = '/api/albums/new';
-    final Map<String, String> params = Map();
+    final Map<String, String> params = {};
     params['fields'] = 'MainPicture';
     params['languagePreference'] = lang;
     return super
@@ -59,7 +58,7 @@ class AlbumRepository extends RestApiRepository {
   /// Gets list of top rated albums, same as front page.
   Future<List<AlbumModel>> getTop({String lang = 'Default'}) async {
     final String endpoint = '/api/albums/top';
-    final Map<String, String> params = Map();
+    final Map<String, String> params = {};
     params['fields'] = 'MainPicture';
     params['languagePreference'] = lang;
     return super
@@ -69,7 +68,13 @@ class AlbumRepository extends RestApiRepository {
 
   Future<List<AlbumModel>> getTopAlbumsByTagId(int tagId,
       {String lang = 'Default'}) async {
-    return this
-        .findAlbums(lang: lang, tagIds: tagId.toString(), sort: 'RatingScore');
+    return findAlbums(lang: lang, tagIds: tagId.toString(), sort: 'RatingScore');
+  }
+
+  Future<List<CommentModel>> getComments(int albumId) async {
+    final String endpoint = '/api/albums/$albumId/comments';
+    return super
+        .getList(endpoint, {})
+        .then((items) => CommentModel.jsonToList(items));
   }
 }

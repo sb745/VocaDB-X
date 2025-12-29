@@ -13,9 +13,9 @@ class ReleaseEventSearchController
 
   final sort = 'Name'.obs;
 
-  final fromDate = Rx<DateTime>();
+  final fromDate = Rx<DateTime?>(null);
 
-  final toDate = Rx<DateTime>();
+  final toDate = Rx<DateTime?>(null);
 
   final artists = <ArtistModel>[].obs;
 
@@ -23,18 +23,24 @@ class ReleaseEventSearchController
 
   final ReleaseEventRepository releaseEventRepository;
 
-  TextEditingController textSearchController;
+  @override
+  TextEditingController? textSearchController;
 
-  ReleaseEventSearchController({this.releaseEventRepository});
+  ReleaseEventSearchController({required this.releaseEventRepository});
 
   @override
   void onInit() {
-    [category, sort, artists, tags, fromDate, toDate]
-        .forEach((element) => ever(element, (_) => initialFetch()));
+    ever(category, (_) => initialFetch());
+    ever(sort, (_) => initialFetch());
+    ever(artists, (_) => initialFetch());
+    ever(tags, (_) => initialFetch());
+    ever(fromDate, (_) => initialFetch());
+    ever(toDate, (_) => initialFetch());
     super.onInit();
   }
 
-  Future<List<ReleaseEventModel>> fetchApi({int start}) =>
+  @override
+  Future<List<ReleaseEventModel>> fetchApi({int? start}) =>
       releaseEventRepository
           .findReleaseEvents(
             start: (start == null) ? 0 : start,
@@ -48,5 +54,8 @@ class ReleaseEventSearchController
             beforeDate: DateTimeUtils.toUtcDateString(toDate.value),
             afterDate: DateTimeUtils.toUtcDateString(fromDate.value),
           )
-          .catchError(super.onError);
+          .catchError((error) {
+            super.onError(error);
+            return <ReleaseEventModel>[];
+          });
 }

@@ -1,4 +1,4 @@
-package com.coolappz.Vocadb
+package com.sb745.Vocadb
 
 import io.flutter.embedding.android.FlutterActivity
 

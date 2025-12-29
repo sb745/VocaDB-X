@@ -1,11 +1,9 @@
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_analytics/observer.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:vocadb_app/bindings.dart';
 import 'package:vocadb_app/config.dart';
-import 'package:vocadb_app/loggers.dart';
 import 'package:vocadb_app/pages.dart';
 import 'package:vocadb_app/services.dart';
 import 'package:vocadb_app/routes.dart';
@@ -20,12 +18,8 @@ Future<void> main() async {
 Future<void> initServices() async {
   print('starting services ...');
   final appDirectory = AppDirectory();
-  final httpService = HttpService(appDirectory: appDirectory);
-  final FirebaseAnalytics analytics = FirebaseAnalytics();
-  final FirebaseAnalyticsObserver analyticsObserver =
-      FirebaseAnalyticsObserver(analytics: analytics);
-  final AnalyticLog analyticLog =
-      AnalyticLog(analytics: analytics, enable: false);
+  final dio = Dio();
+  final httpService = HttpService(dio: dio, appDirectory: appDirectory);
 
   await Get.putAsync(() => appDirectory.init());
   await Get.putAsync(() => httpService.init());
@@ -40,13 +34,12 @@ Future<void> initServices() async {
         ..init(),
       permanent: true);
 
-  Get.put(analyticLog);
-  Get.put(analyticsObserver);
-
   print('All services started...');
 }
 
 class VocaDBApp extends StatelessWidget {
+  const VocaDBApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -55,9 +48,6 @@ class VocaDBApp extends StatelessWidget {
         locale: Get.locale,
         fallbackLocale: AppTranslation.fallbackLocale,
         theme: Get.theme,
-        navigatorObservers: <NavigatorObserver>[
-          Get.find<FirebaseAnalyticsObserver>()
-        ],
         defaultTransition: Transition.fade,
         initialBinding: MainPageBinding(),
         initialRoute: Routes.INITIAL,

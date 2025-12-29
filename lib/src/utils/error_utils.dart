@@ -3,16 +3,16 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 
 class ErrorUtils {
-  static String read(Object err) {
-    if (err is DioError) {
+  static String? read(Object err) {
+    if (err is DioException) {
       return readDioError(err);
     }
 
     return err.toString();
   }
 
-  static String readDioError(DioError err) {
-    if (err.type == DioErrorType.DEFAULT) {
+  static String? readDioError(DioException err) {
+    if (err.type == DioExceptionType.unknown) {
       return readDynamicError(err.error);
     }
 

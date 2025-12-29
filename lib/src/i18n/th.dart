@@ -75,6 +75,7 @@ const Map<String, String> th = {
   "searchYoutube": "ค้นหาบน Youtube",
   "showAll": "แสดงทั้งหมด",
   "developerContact": "ติดต่อผู้พัฒนา",
+  "maintainerContact": "Maintainer contacts",
   "favoriteSongs": "เพลงโปรด",
   "favoriteAlbums": "อัลบั้มคอลเลคชั่น",
   "favoriteArtists": "ศิลปินคนโปรด",

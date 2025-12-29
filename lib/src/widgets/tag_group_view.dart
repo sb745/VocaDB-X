@@ -17,11 +17,10 @@ class TagGroupView extends StatefulWidget {
   final int minimumDisplayCount;
 
   const TagGroupView(
-      {this.tags,
-      this.onPressed,
+      {super.key, required this.tags,
+      required this.onPressed,
       this.margin = 16.0,
-      this.minimumDisplayCount = 5})
-      : assert(tags != null);
+      this.minimumDisplayCount = 5});
 
   @override
   _TagGroupViewState createState() => _TagGroupViewState();
@@ -32,15 +31,15 @@ class _TagGroupViewState extends State<TagGroupView> {
 
   void _onMorePressed() {
     setState(() {
-      this.displayAll = true;
+      displayAll = true;
     });
   }
 
   Widget _mapTagWidget(TagModel tagModel) {
-    return new Tag(
+    return Tag(
         label: tagModel.name,
-        onPressed: () => (this.widget.onPressed != null)
-            ? this.widget.onPressed(tagModel)
+        onPressed: () => (widget.onPressed != null)
+            ? widget.onPressed(tagModel)
             : null);
   }
 
@@ -52,19 +51,19 @@ class _TagGroupViewState extends State<TagGroupView> {
         !displayAll &&
         widget.tags.length > widget.minimumDisplayCount) {
       items = widget.tags
-          .take(this.widget.minimumDisplayCount)
-          .map(this._mapTagWidget)
+          .take(widget.minimumDisplayCount)
+          .map(_mapTagWidget)
           .toList();
       items.add(InputChip(
-        label: Text('More (${this.widget.tags.length})'),
-        onPressed: this._onMorePressed,
+        label: Text('More (${widget.tags.length})'),
+        onPressed: _onMorePressed,
       ));
     } else {
-      items = widget.tags.map(this._mapTagWidget).toList();
+      items = widget.tags.map(_mapTagWidget).toList();
     }
 
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: this.widget.margin),
+      margin: EdgeInsets.symmetric(horizontal: widget.margin),
       child: Wrap(
         children: items,
       ),

@@ -6,7 +6,42 @@ import 'package:vocadb_app/routes.dart';
 import 'package:vocadb_app/src/pages/entry_search_filter_page.dart';
 import 'package:vocadb_app/widgets.dart';
 
-class EntrySearchPage extends GetView<EntrySearchController> {
+void _showKeyboard(FocusNode focusNode) {
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    focusNode.requestFocus();
+  });
+}
+
+class EntrySearchPage extends StatefulWidget {
+  const EntrySearchPage({super.key});
+
+  @override
+  State<EntrySearchPage> createState() => _EntrySearchPageState();
+}
+
+class _EntrySearchPageState extends State<EntrySearchPage> {
+  late FocusNode _searchFocusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchFocusNode = FocusNode();
+    
+    // Listen to openQuery changes to show keyboard
+    final controller = Get.find<EntrySearchController>();
+    ever(controller.openQuery, (isOpen) {
+      if (isOpen) {
+        _showKeyboard(_searchFocusNode);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchFocusNode.dispose();
+    super.dispose();
+  }
+
   void _onSelect(EntryModel entryModel) {
     switch (entryModel.entryType) {
       case EntryType.Song:
@@ -35,15 +70,22 @@ class EntrySearchPage extends GetView<EntrySearchController> {
     }
   }
 
-  Widget _buildTextInput(BuildContext context) {
+  Widget _buildTextInput(BuildContext context, EntrySearchController controller) {
+    // Delay to ensure widget is built before requesting focus
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _searchFocusNode.requestFocus();
+    });
+    
     return Row(
       children: <Widget>[
         Expanded(
           child: TextField(
             controller: controller.textSearchController,
-            onChanged: controller.query,
-            style: Theme.of(context).primaryTextTheme.headline6,
+            focusNode: _searchFocusNode,
+            onChanged: controller.query.call,
+            style: Theme.of(context).primaryTextTheme.headlineMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
             autofocus: true,
+            textInputAction: TextInputAction.search,
             decoration: InputDecoration(
                 border: InputBorder.none, hintText: 'search'.tr),
           ),
@@ -52,18 +94,21 @@ class EntrySearchPage extends GetView<EntrySearchController> {
     );
   }
 
-  Widget _buildTitle(BuildContext context) {
+  Widget _buildTitle(BuildContext context, EntrySearchController controller) {
     return AnimatedSwitcher(
       duration: Duration(milliseconds: 100),
-      child: Obx(() => (controller.openQuery.value)
-          ? _buildTextInput(context)
-          : Text('search'.tr)),
+      child: Obx(() => controller.openQuery.value
+          ? _buildTextInput(context, controller)
+          : GestureDetector(
+              onTap: () => controller.openQuery(true),
+              child: Text('search'.tr),
+            )),
     );
   }
 
-  Widget _buildSearchAction(BuildContext context) {
+  Widget _buildSearchAction(BuildContext context, EntrySearchController controller) {
     return Obx(
-      () => (controller.openQuery.value)
+      () => controller.openQuery.value
           ? IconButton(
               icon: Icon(Icons.clear), onPressed: () => controller.clearQuery())
           : IconButton(
@@ -74,9 +119,11 @@ class EntrySearchPage extends GetView<EntrySearchController> {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<EntrySearchController>();
+    
     return Scaffold(
-        appBar: AppBar(title: _buildTitle(context), actions: <Widget>[
-          _buildSearchAction(context),
+        appBar: AppBar(title: _buildTitle(context, controller), actions: <Widget>[
+          _buildSearchAction(context, controller),
           IconButton(
               icon: Icon(Icons.tune),
               onPressed: () => Get.to(EntrySearchFilterPage())),
@@ -88,7 +135,7 @@ class EntrySearchPage extends GetView<EntrySearchController> {
                   ? CenterText(controller.errorMessage.string)
                   : EntryListView(
                       entries: controller.results.toList(),
-                      onSelect: this._onSelect,
+                      onSelect: (entry) => entry != null ? _onSelect(entry) : null,
                       emptyWidget: CenterText('searchResultNotMatched'.tr)),
         ));
   }

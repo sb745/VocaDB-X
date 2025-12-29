@@ -1,4 +1,4 @@
-library models;
+library;
 
 export 'src/models/album_disc_model.dart';
 export 'src/models/album_model.dart';
@@ -11,6 +11,7 @@ export 'src/models/artist_relations_model.dart';
 export 'src/models/artist_role_model.dart';
 export 'src/models/artist_song_model.dart';
 export 'src/models/base_model.dart';
+export 'src/models/comment_model.dart';
 export 'src/models/entry_model.dart';
 export 'src/models/followed_artist_model.dart';
 export 'src/models/lyric_model.dart';

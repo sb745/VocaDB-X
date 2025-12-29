@@ -7,6 +7,8 @@ import 'package:vocadb_app/routes.dart';
 import 'package:vocadb_app/widgets.dart';
 
 class ReleaseEventSearchPage extends GetView<ReleaseEventSearchController> {
+  const ReleaseEventSearchPage({super.key});
+
   void _onTapReleaseEvent(ReleaseEventModel releaseEventModel) =>
       AppPages.toReleaseEventDetailPage(releaseEventModel);
 
@@ -16,8 +18,8 @@ class ReleaseEventSearchPage extends GetView<ReleaseEventSearchController> {
         Expanded(
           child: TextField(
             controller: controller.textSearchController,
-            onChanged: controller.query,
-            style: Theme.of(context).primaryTextTheme.headline6,
+            onChanged: controller.query.call,
+            style: Theme.of(context).primaryTextTheme.headlineMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
             autofocus: true,
             decoration: InputDecoration(
                 border: InputBorder.none, hintText: 'search'.tr),
@@ -63,7 +65,7 @@ class ReleaseEventSearchPage extends GetView<ReleaseEventSearchController> {
                   ? CenterText(controller.errorMessage.string)
                   : ReleaseEventListView(
                       events: controller.results.toList(),
-                      onSelect: this._onTapReleaseEvent,
+                      onSelect: _onTapReleaseEvent,
                       onReachLastItem: controller.onReachLastItem,
                       emptyWidget: CenterText('searchResultNotMatched'.tr)),
         ));

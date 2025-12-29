@@ -1,33 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:vocadb_app/models.dart';
-import 'package:vocadb_app/src/widgets/custom_network_image.dart';
 import 'package:vocadb_app/widgets.dart';
 
 /// A widget for display song information in vertical list
 class SongTile extends StatelessWidget {
   /// Name of song that will display as title in card
-  final String name;
+  final String? name;
 
   /// Name of artist that will display on second line
-  final String artistName;
+  final String? artistName;
 
   /// Type of song. It will display as mini symbol in card base on type of song
-  final String songType;
+  final String? songType;
 
   /// Song's thumbnail url for display in card
-  final String thumbUrl;
+  final String? thumbUrl;
 
   /// If this value is true, Video icon will display on bottom of card.
-  final bool hasPV;
+  final bool? hasPV;
 
   /// Callback when tap
-  final GestureTapCallback onTap;
+  final GestureTapCallback? onTap;
 
   /// A widget that display on leftmost side
-  final Widget leading;
+  final Widget? leading;
 
   /// A string unique value give to hero widget. Use [imageUrl] instead if is Null.
-  final String heroTag;
+  final String? heroTag;
 
   /// The height of widget
   static const double height = 100;
@@ -36,9 +35,9 @@ class SongTile extends StatelessWidget {
   static const double thumbnailWidth = 120;
 
   const SongTile(
-      {this.name,
+      {super.key, this.name,
       this.artistName,
-      this.songType,
+      required this.songType,
       this.thumbUrl,
       this.hasPV = false,
       this.leading,
@@ -46,37 +45,37 @@ class SongTile extends StatelessWidget {
       this.heroTag});
 
   /// Create SongTile widget by SongModel
-  SongTile.song(SongModel song, {this.onTap, this.leading, this.heroTag})
-      : this.name = song.name,
-        this.artistName = song.artistString,
-        this.songType = song.songType,
-        this.thumbUrl = song.imageUrl,
-        this.hasPV = song.youtubePV != null;
+  SongTile.song(SongModel song, {super.key, required this.onTap, required this.leading, required this.heroTag})
+      : name = song.name,
+        artistName = song.artistString,
+        songType = song.songType,
+        thumbUrl = song.imageUrl,
+        hasPV = song.youtubePV != null;
 
   /// Create SongTile widget by EntryModel
   SongTile.fromEntry(EntryModel entryModel,
-      {this.onTap, this.leading, this.heroTag})
-      : this.name = entryModel.name,
-        this.artistName = entryModel.artistString,
-        this.songType = entryModel.songType,
-        this.thumbUrl = entryModel.imageUrl,
-        this.hasPV = false;
+      {super.key, required this.onTap, required this.leading, required this.heroTag})
+      : name = entryModel.name,
+        artistName = entryModel.artistString,
+        songType = entryModel.songType,
+        thumbUrl = entryModel.imageUrl,
+        hasPV = false;
 
   Widget _leadingBuilder() {
-    if (this.leading == null) {
+    if (leading == null) {
       return Container();
     }
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: this.leading,
+      child: leading,
     );
   }
 
   Widget _thumbnailBuilder() {
-    Widget thumbnail = (this.thumbUrl != null && this.thumbUrl.isNotEmpty)
+    Widget thumbnail = (thumbUrl != null && thumbUrl!.isNotEmpty)
         ? CustomNetworkImage(
-            this.thumbUrl,
+            thumbUrl!,
             fit: BoxFit.cover,
           )
         : Icon(Icons.music_note);
@@ -97,18 +96,18 @@ class SongTile extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            Text(this.name ?? '<Unknown>', overflow: TextOverflow.ellipsis),
-            Text(this.artistName ?? '<Unknown>',
+            Text(name ?? '<Unknown>', overflow: TextOverflow.ellipsis),
+            Text(artistName ?? '<Unknown>',
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
-                style: Theme.of(context).textTheme.caption),
+                style: Theme.of(context).textTheme.labelMedium),
             SpaceDivider(8.0),
             Row(
               children: <Widget>[
                 SongTypeSymbol(
-                  songType: this.songType,
+                  songType: songType ?? 'Unknown',
                 ),
-                (this.hasPV) ? Icon(Icons.local_movies) : Container()
+                (hasPV == true) ? Icon(Icons.local_movies) : Container()
               ],
             )
           ],
@@ -120,8 +119,8 @@ class SongTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: this.onTap,
-      child: Container(
+      onTap: onTap,
+      child: SizedBox(
         height: height,
         child: Row(
           children: <Widget>[

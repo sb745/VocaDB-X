@@ -9,7 +9,7 @@ class PVPlayListController extends GetxController {
 
   final currentIndex = 0.obs;
 
-  YoutubePlayerController youtubeController;
+  late YoutubePlayerController youtubeController;
 
   PVPlayListController();
 
@@ -22,36 +22,42 @@ class PVPlayListController extends GetxController {
 
   @override
   void onClose() {
-    if (youtubeController != null) {
-      youtubeController.dispose();
-    }
+    youtubeController.dispose();
     super.onClose();
   }
 
-  initYoutubeController() {
+  void initYoutubeController() {
     currentIndex(SongList(songs()).getFirstWithYoutubePVIndex(0));
+    String? url = songs()[currentIndex()].youtubePV?.url;
+    
+    // Use a placeholder video ID if no URL is available
+    String videoId = (url != null) ? (YoutubePlayer.convertUrlToId(url) ?? '') : '';
 
     youtubeController = YoutubePlayerController(
-      initialVideoId: YoutubePlayer.convertUrlToId(
-          songs()[currentIndex.toInt()].youtubePV.url),
+      initialVideoId: videoId,
       flags: YoutubePlayerFlags(
-        autoPlay: SharedPreferenceService.autoPlayValue,
+        autoPlay: (url != null) && SharedPreferenceService.autoPlayValue,
       ),
     );
   }
 
-  initArgs() {
+  void initArgs() {
     PVPlayListArgs args = Get.arguments;
     songs(args.songs);
   }
 
-  onEnded() {
-    this.next();
-    youtubeController.load(YoutubePlayer.convertUrlToId(
-        songs()[currentIndex.toInt()].youtubePV.url));
+  void onEnded() {
+    next();
+    PVModel? pv = songs()[currentIndex()].youtubePV;
+    if (pv != null && pv.url != null) {
+      String? videoId = YoutubePlayer.convertUrlToId(pv.url!);
+      if (videoId != null) {
+        youtubeController.load(videoId);
+      }
+    }
   }
 
-  next() {
+  void next() {
     int newIndex = currentIndex() + 1;
 
     if (newIndex >= songs().length) {
@@ -68,9 +74,14 @@ class PVPlayListController extends GetxController {
     currentIndex(newIndex);
   }
 
-  onSelect(int index) {
+  void onSelect(int index) {
     currentIndex(index);
-    youtubeController
-        .load(YoutubePlayer.convertUrlToId(songs()[index].youtubePV.url));
+    PVModel? pv = songs()[index].youtubePV;
+    if (pv != null && pv.url != null) {
+      String? videoId = YoutubePlayer.convertUrlToId(pv.url!);
+      if (videoId != null) {
+        youtubeController.load(videoId);
+      }
+    }
   }
 }

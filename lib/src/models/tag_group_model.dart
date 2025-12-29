@@ -1,8 +1,8 @@
 import 'package:vocadb_app/models.dart';
 
 class TagGroupModel {
-  int count;
-  TagModel tag;
+  int? count;
+  TagModel? tag;
 
   TagGroupModel.fromJson(Map<String, dynamic> json)
       : count = json['count'],

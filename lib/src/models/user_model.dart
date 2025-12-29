@@ -2,9 +2,9 @@ import 'package:equatable/equatable.dart';
 import 'package:vocadb_app/models.dart';
 
 class UserModel extends Equatable {
-  int id;
-  String name;
-  MainPictureModel mainPicture;
+  int? id;
+  String? name;
+  MainPictureModel? mainPicture;
 
   UserModel();
 
@@ -19,12 +19,12 @@ class UserModel extends Equatable {
     return items.map((i) => UserModel.fromJson(i)).toList();
   }
 
-  get imageUrl => (mainPicture != null && mainPicture.urlThumb != null)
-      ? mainPicture.urlThumb.replaceAll('-t.', '.')
+  String? get imageUrl => (mainPicture != null && mainPicture?.urlThumb != null)
+      ? mainPicture!.urlThumb?.replaceAll('-t.', '.')
       : null;
 
   @override
-  List<Object> get props => [id, name];
+  List<Object?> get props => [id, name];
 
   @override
   String toString() => 'UserModel { id: $id, name: $name }';

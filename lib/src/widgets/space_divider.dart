@@ -5,18 +5,18 @@ class SpaceDivider extends StatelessWidget {
   /// The height of space
   final double height;
 
-  const SpaceDivider(this.height) : assert(height != null);
+  const SpaceDivider(this.height, {super.key});
 
-  const SpaceDivider.micro({this.height = 4.0});
+  const SpaceDivider.micro({super.key, this.height = 4.0});
 
-  const SpaceDivider.small({this.height = 16.0});
+  const SpaceDivider.small({super.key, this.height = 16.0});
 
-  const SpaceDivider.medium({this.height = 32.0});
+  const SpaceDivider.medium({super.key, this.height = 32.0});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: this.height,
+      height: height,
       width: double.infinity,
     );
   }

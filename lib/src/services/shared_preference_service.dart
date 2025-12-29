@@ -8,7 +8,7 @@ import 'package:vocadb_app/themes.dart';
 class SharedPreferenceService extends GetxService {
   static final String container = 'pref';
 
-  final GetStorage box;
+  final GetStorage? box;
 
   final uiLang = ReadWriteValue('uiLang', 'en');
 
@@ -34,22 +34,22 @@ class SharedPreferenceService extends GetxService {
   }
 
   void initUILang() {
-    uiLang.val = box.read('uiLang');
+    uiLang.val = (box?.read('uiLang') as String?) ?? 'en';
     AppTranslation().changeLocale(uiLang.val);
     print('current locale ${Get.locale}');
   }
 
-  updateUiLang(String value) {
-    box.write('uiLang', value);
+  void updateUiLang(String value) {
+    box?.write('uiLang', value);
     uiLang.val = value;
     AppTranslation().changeLocale(value);
     print('current locale ${Get.locale}');
   }
 
-  void initContentLang() => contentLang(box.read('contentLang'));
+  void initContentLang() => contentLang((box?.read('contentLang') as String?) ?? 'Default');
 
-  updateContentLang(String value) {
-    box.write('contentLang', value);
+  void updateContentLang(String value) {
+    box?.write('contentLang', value);
     contentLang(value);
     Get.find<HomePageController>().fetchApi();
     Get.find<RankingController>().fetchApi();
@@ -57,22 +57,22 @@ class SharedPreferenceService extends GetxService {
 
   void initTheme() {
     print('init theme ${theme.string}');
-    theme(box.read('theme'));
+    theme((box?.read('theme') as String?) ?? 'light');
     Themes.changeTheme(theme.string);
   }
 
-  updateTheme(String value) {
-    box.write('theme', value);
+  void updateTheme(String value) {
+    box?.write('theme', value);
     theme(value);
     Themes.changeTheme(value);
   }
 
   void initAutoPlay() {
-    autoPlay(box.read<bool>('autoPlay'));
+    autoPlay(box?.read<bool>('autoPlay') ?? true);
   }
 
-  updateAutoPlay(bool value) {
-    box.write('autoPlay', value);
+  void updateAutoPlay(bool value) {
+    box?.write('autoPlay', value);
     autoPlay(value);
   }
 }

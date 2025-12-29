@@ -14,17 +14,18 @@ class ArtistSearchController extends SearchPageController<ArtistModel> {
 
   final ArtistRepository artistRepository;
 
-  ArtistSearchController({this.artistRepository});
+  ArtistSearchController({required this.artistRepository});
 
   @override
   void onInit() {
-    [artistType, sort, tags]
-        .forEach((element) => ever(element, (_) => initialFetch()));
+    ever(artistType, (_) => initialFetch());
+    ever(sort, (_) => initialFetch());
+    ever(tags, (_) => initialFetch());
     super.onInit();
   }
 
   @override
-  Future<List<ArtistModel>> fetchApi({int start}) => artistRepository
+  Future<List<ArtistModel>> fetchApi({int? start}) => artistRepository
       .findArtists(
         start: (start == null) ? 0 : start,
         lang: SharedPreferenceService.lang,
@@ -34,5 +35,8 @@ class ArtistSearchController extends SearchPageController<ArtistModel> {
         sort: sort.string,
         tagIds: tags.toList().map((e) => e.id).join(','),
       )
-      .catchError(super.onError);
+      .catchError((error, stackTrace) {
+        super.onError(error);
+        return <ArtistModel>[];
+      });
 }

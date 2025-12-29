@@ -1,4 +1,4 @@
-const String APP_NAME = 'TouhouDB';
+const String APP_NAME = 'TouhouDB X';
 const String HOST = 'https://touhoudb.com';
 const String AUTHORITY = 'touhoudb.com';
 
@@ -18,6 +18,11 @@ const List<Map<String, String>> contactDeveloperSites = [
   {"title": "Twitter", "url": "https://twitter.com/up2codio"},
   {"title": "VocaDB", "url": "https://vocadb.net/Profile/up2up"},
   {"title": "Github", "url": "https://github.com/VocaDB/VocaDB-App"},
+];
+
+const List<Map<String, String>> contactMaintainerSites = [
+  {"title": "Github", "url": "https://github.com/sb745/VocaDB-X"},
+  {"title": "Website", "url": "https://catgirls.mov"},
 ];
 
 const bool constShowFilterRank = false;

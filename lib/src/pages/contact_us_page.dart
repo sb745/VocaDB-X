@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 class ContactUsPage extends StatelessWidget {
   static const String routeName = '/contactUs';
 
+  const ContactUsPage({super.key});
+
   static void navigate(BuildContext context) {
     Navigator.pushNamed(context, ContactUsPage.routeName);
   }
@@ -19,7 +21,7 @@ class ContactUsPage extends StatelessWidget {
       body: ListView(
         children: <Widget>[
           ListTile(
-            title: Text(appName),
+            title: Text(siteName),
           ),
           Column(
             children: contactSites
@@ -35,6 +37,18 @@ class ContactUsPage extends StatelessWidget {
           ),
           Column(
             children: contactDeveloperSites
+                .map((site) => SiteTile(
+                      title: site['title'],
+                      url: site['url'],
+                    ))
+                .toList(),
+          ),
+          Divider(),
+          ListTile(
+            title: Text('maintainerContact'.tr),
+          ),
+          Column(
+            children: contactMaintainerSites
                 .map((site) => SiteTile(
                       title: site['title'],
                       url: site['url'],

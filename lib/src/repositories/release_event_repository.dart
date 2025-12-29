@@ -1,34 +1,32 @@
 import 'package:vocadb_app/models.dart';
-import 'package:vocadb_app/services.dart';
 import 'package:vocadb_app/src/repositories/base_repository.dart';
 
 class ReleaseEventRepository extends RestApiRepository {
-  ReleaseEventRepository({HttpService httpService})
-      : super(httpService: httpService);
+  ReleaseEventRepository({required super.httpService});
 
   Future<List<ReleaseEventModel>> findReleaseEvents(
       {String lang = 'Default',
-      String query,
-      String sort,
-      String category,
-      String afterDate,
-      String beforeDate,
-      String artistIds,
-      String tagIds,
+      String? query,
+      String? sort,
+      String? category,
+      String? afterDate,
+      String? beforeDate,
+      String? artistIds,
+      String? tagIds,
       int start = 0,
       int maxResults = 50,
       String nameMatchMode = 'Auto'}) async {
     final String endpoint = '/api/releaseEvents';
-    final Map<String, String> params = Map();
-    params['fields'] = ' MainPicture,Series';
+    final Map<String, String> params = {};
+    params['fields'] = 'MainPicture,Series';
     params['lang'] = lang;
-    params['query'] = query;
-    params['sort'] = sort;
-    params['category'] = category;
-    params['tagId'] = tagIds;
-    params['artistId'] = artistIds;
-    params['afterDate'] = afterDate;
-    params['beforeDate'] = beforeDate;
+    if (query != null && query.isNotEmpty) params['query'] = query;
+    if (sort != null && sort.isNotEmpty) params['sort'] = sort;
+    if (category != null && category.isNotEmpty) params['category'] = category;
+    if (tagIds != null && tagIds.isNotEmpty) params['tagId'] = tagIds;
+    if (artistIds != null && artistIds.isNotEmpty) params['artistId'] = artistIds;
+    if (afterDate != null && afterDate.isNotEmpty) params['afterDate'] = afterDate;
+    if (beforeDate != null && beforeDate.isNotEmpty) params['beforeDate'] = beforeDate;
     params['start'] = start.toString();
     params['maxResults'] = maxResults.toString();
     params['nameMatchMode'] = nameMatchMode;
@@ -39,7 +37,7 @@ class ReleaseEventRepository extends RestApiRepository {
 
   /// Gets list of top rated albums, same as front page.
   Future<List<ReleaseEventModel>> getRecently({String lang = 'Default'}) async {
-    return this.findReleaseEvents(
+    return findReleaseEvents(
         lang: lang,
         sort: 'Date',
         afterDate: DateTime.now().subtract(Duration(days: 3)).toString(),
@@ -60,7 +58,7 @@ class ReleaseEventRepository extends RestApiRepository {
 
   /// Gets a list of albums for a specific event
   Future<List<AlbumModel>> getAlbums(int id, {String lang = 'Default'}) async {
-    final Map<String, String> params = Map();
+    final Map<String, String> params = {};
     params['fields'] = ' MainPicture';
     params['lang'] = lang;
     return super
@@ -71,7 +69,7 @@ class ReleaseEventRepository extends RestApiRepository {
   /// Gets a list of songs for a specific event
   Future<List<SongModel>> getPublishedSongs(int id,
       {String lang = 'Default'}) async {
-    final Map<String, String> params = Map();
+    final Map<String, String> params = {};
     params['fields'] = ' MainPicture,PVs,ThumbUrl';
     params['lang'] = lang;
     return super

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
 class AlbumCardPlaceholder extends StatelessWidget {
+  const AlbumCardPlaceholder({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(

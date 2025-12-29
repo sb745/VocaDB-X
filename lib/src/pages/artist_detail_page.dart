@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vocadb_app/arguments.dart';
 import 'package:vocadb_app/controllers.dart';
-import 'package:vocadb_app/loggers.dart';
 import 'package:vocadb_app/models.dart';
 import 'package:vocadb_app/pages.dart';
 import 'package:vocadb_app/repositories.dart';
@@ -13,6 +12,8 @@ import 'package:vocadb_app/services.dart';
 import 'package:vocadb_app/widgets.dart';
 
 class ArtistDetailPage extends StatelessWidget {
+  const ArtistDetailPage({super.key});
+
   ArtistDetailController initController() {
     final httpService = Get.find<HttpService>();
     final authService = Get.find<AuthService>();
@@ -26,8 +27,7 @@ class ArtistDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final ArtistDetailController controller = initController();
     final ArtistDetailArgs args = Get.arguments;
-    final String id = Get.parameters['id'];
-    Get.find<AnalyticLog>().logViewArtistDetail(args.id);
+    final String? id = Get.parameters['id'];
 
     return PageBuilder<ArtistDetailController>(
       tag: "a_$id",
@@ -42,11 +42,15 @@ class ArtistDetailPageView extends StatelessWidget {
 
   final ArtistDetailArgs args;
 
-  const ArtistDetailPageView({this.controller, this.args});
+  const ArtistDetailPageView({super.key, required this.controller, required this.args});
 
   void _onSelectTag(TagModel tag) => AppPages.toTagDetailPage(tag);
 
-  void _onTapLikeButton() {}
+  void _onTapLikeButton() {
+    print('Like button tapped. Current state: ${controller.liked.value}');
+    controller.liked.toggle();
+    print('New state: ${controller.liked.value}');
+  }
 
   void _onTapShareButton() => Share.share(controller.artist().originUrl);
 
@@ -62,34 +66,52 @@ class ArtistDetailPageView extends StatelessWidget {
 
   void _onTapEntrySearch() => Get.toNamed(Routes.ENTRIES);
 
-  Widget _buttonBarBuilder() {
+  Widget _buildLikeButton(BuildContext context) {
+    final authService = Get.find<AuthService>();
+    final likeButtonLabel = controller.liked.value ? 'Liked' : 'like'.tr;
+    final activeColor = Theme.of(context).primaryColor;
+    final inactiveColor = Theme.of(context).colorScheme.onSurface;
+    
+    return ActiveFlatButton(
+      icon: Icon(
+        Icons.favorite,
+        color: controller.liked.value ? activeColor : inactiveColor,
+      ),
+      label: likeButtonLabel,
+      active: controller.liked.value,
+      activeColor: activeColor,
+      inactiveColor: inactiveColor,
+      onPressed: (authService.currentUser.value.id != null) ? _onTapLikeButton : null,
+    );
+  }
+
+  Widget _buttonBarBuilder(BuildContext context) {
     final authService = Get.find<AuthService>();
 
     List<Widget> buttons = [];
 
-    buttons.add(ActiveFlatButton(
-      icon: Icon(Icons.favorite),
-      label: 'like'.tr,
-      active: controller.liked.value,
-      onPressed:
-          (authService.currentUser().id == null) ? null : this._onTapLikeButton,
-    ));
+    buttons.add(
+      SizedBox(
+        width: 80.0,
+        child: Obx(() => _buildLikeButton(context)),
+      ),
+    );
 
-    buttons.add(FlatButton(
-      onPressed: this._onTapShareButton,
+    buttons.add(FilledButton(
+      onPressed: _onTapShareButton,
       child: Column(
         children: [Icon(Icons.share), Text('share'.tr)],
       ),
     ));
 
-    buttons.add(FlatButton(
-      onPressed: this._onTapInfoButton,
+    buttons.add(FilledButton(
+      onPressed: _onTapInfoButton,
       child: Column(
         children: [Icon(Icons.info), Text('info'.tr)],
       ),
     ));
 
-    return ButtonBar(
+    return OverflowBar(
       alignment: MainAxisAlignment.spaceEvenly,
       children: buttons,
     );
@@ -114,7 +136,7 @@ class ArtistDetailPageView extends StatelessWidget {
               )
             ],
             flexibleSpace: FlexibleSpaceBar(
-              title: Text(controller.artist().name),
+              title: Text(controller.artist().name.toString()),
               background: SafeArea(
                 child: Opacity(
                   opacity: 0.7,
@@ -126,7 +148,7 @@ class ArtistDetailPageView extends StatelessWidget {
             )),
         SliverList(
             delegate: SliverChildListDelegate([
-          _buttonBarBuilder(),
+          _buttonBarBuilder(context),
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -138,8 +160,8 @@ class ArtistDetailPageView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        controller.artist().name,
-                        style: Theme.of(context).textTheme.headline6,
+                        controller.artist().name.toString(),
+                        style: Theme.of(context).textTheme.headlineMedium,
                       ),
                       Visibility(
                           visible: controller.artist().additionalNames != null,
@@ -154,7 +176,7 @@ class ArtistDetailPageView extends StatelessWidget {
               SpaceDivider.small(),
               Obx(
                 () => TagGroupView(
-                  onPressed: this._onSelectTag,
+                  onPressed: _onSelectTag,
                   tags: controller.artist().tags,
                 ),
               ),
@@ -195,22 +217,22 @@ class ArtistDetailPageView extends StatelessWidget {
                         SpaceDivider.small(),
                         Visibility(
                           visible: controller.artist().artistLinks != null &&
-                              controller.artist().artistLinks.isNotEmpty,
+                              controller.artist().artistLinks!.isNotEmpty,
                           child: ArtistLinkListView(
-                              artistLinks: controller.artist().artistLinks,
+                              artistLinks: controller.artist().artistLinks ?? [],
                               onSelect: (artistLinkModel) =>
-                                  this._onTapArtist(artistLinkModel.artist)),
+                                  artistLinkModel.artist != null ? _onTapArtist(artistLinkModel.artist!) : null),
                         ),
                         Visibility(
                           visible: controller.artist().artistLinksReverse !=
                                   null &&
-                              controller.artist().artistLinksReverse.isNotEmpty,
+                              controller.artist().artistLinksReverse!.isNotEmpty,
                           child: ArtistLinkListView(
                               reverse: true,
                               artistLinks:
-                                  controller.artist().artistLinksReverse,
+                                  controller.artist().artistLinksReverse ?? [],
                               onSelect: (artistLinkModel) =>
-                                  this._onTapArtist(artistLinkModel.artist)),
+                                  artistLinkModel.artist != null ? _onTapArtist(artistLinkModel.artist!) : null),
                         )
                       ],
                     ),
@@ -221,15 +243,16 @@ class ArtistDetailPageView extends StatelessWidget {
               Obx(
                 () => Visibility(
                   visible: controller.artist().relations != null &&
-                      controller.artist().relations.latestSongs.isNotEmpty,
+                      (controller.artist().relations?.latestSongs.isNotEmpty ?? false),
                   child: Column(
                     children: [
                       Section(
                         title: 'recentSongsPVs'.tr,
                         child: SongListView(
                           scrollDirection: Axis.horizontal,
-                          songs: controller.artist().relations?.latestSongs,
-                          onSelect: (s) => this._onTapSong(s),
+                          songs: controller.artist().relations?.latestSongs ?? [],
+                          onSelect: (s) => _onTapSong(s),
+                          onReachLastItem: () {},
                         ),
                       ),
                       Divider(),
@@ -240,15 +263,16 @@ class ArtistDetailPageView extends StatelessWidget {
               Obx(
                 () => Visibility(
                   visible: controller.artist().relations != null &&
-                      controller.artist().relations.popularSongs.isNotEmpty,
+                      (controller.artist().relations?.popularSongs.isNotEmpty ?? false),
                   child: Column(
                     children: [
                       Section(
                         title: 'popularSongs'.tr,
                         child: SongListView(
                           scrollDirection: Axis.horizontal,
-                          onSelect: (s) => this._onTapSong(s),
-                          songs: controller.artist().relations?.popularSongs,
+                          onSelect: (s) => _onTapSong(s),
+                          songs: controller.artist().relations?.popularSongs ?? [],
+                          onReachLastItem: () {},
                         ),
                       ),
                       Divider(),
@@ -259,15 +283,17 @@ class ArtistDetailPageView extends StatelessWidget {
               Obx(
                 () => Visibility(
                   visible: controller.artist().relations != null &&
-                      controller.artist().relations.latestAlbums.isNotEmpty,
+                      (controller.artist().relations?.latestAlbums.isNotEmpty ?? false),
                   child: Column(
                     children: [
                       Section(
                         title: 'recentAlbums'.tr,
                         child: AlbumListView(
                           scrollDirection: Axis.horizontal,
-                          albums: controller.artist().relations?.latestAlbums,
-                          onSelect: (al) => this._onTapAlbum(al),
+                          albums: controller.artist().relations?.latestAlbums ?? [],
+                          onSelect: (al) => _onTapAlbum(al),
+                          onReachLastItem: () {},
+                          emptyWidget: Container(),
                         ),
                       ),
                       Divider(),
@@ -278,15 +304,17 @@ class ArtistDetailPageView extends StatelessWidget {
               Obx(
                 () => Visibility(
                   visible: controller.artist().relations != null &&
-                      controller.artist().relations.popularAlbums.isNotEmpty,
+                      (controller.artist().relations?.popularAlbums.isNotEmpty ?? false),
                   child: Column(
                     children: [
                       Section(
                         title: 'popularAlbums'.tr,
                         child: AlbumListView(
                           scrollDirection: Axis.horizontal,
-                          albums: controller.artist().relations?.popularAlbums,
-                          onSelect: (al) => this._onTapAlbum(al),
+                          albums: controller.artist().relations?.popularAlbums ?? [],
+                          onSelect: (al) => _onTapAlbum(al),
+                          onReachLastItem: () {},
+                          emptyWidget: Container(),
                         ),
                       ),
                       Divider(),
@@ -297,14 +325,107 @@ class ArtistDetailPageView extends StatelessWidget {
               Obx(
                 () => Visibility(
                     visible: controller.artist().webLinks != null &&
-                        controller.artist().webLinks.isNotEmpty,
+                        controller.artist().webLinks!.isNotEmpty,
                     child: WebLinkGroupList(
                         webLinks: controller.artist().webLinks ?? [])),
-              )
+              ),
+              Obx(() => (controller.comments.isNotEmpty)
+                  ? Column(
+                      children: [
+                        Divider(),
+                        _buildCommentsSection(context),
+                      ],
+                    )
+                  : SizedBox.shrink()),
             ],
           )
         ]))
       ],
     ));
+  }
+
+  Widget _buildCommentsSection(BuildContext context) {
+    final recentComments = controller.comments.take(5).toList();
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('comments'.tr, style: Theme.of(context).textTheme.titleMedium),
+          GestureDetector(
+            onTap: () => AppPages.toCommentsPage(CommentsArgs(
+              entityType: 'artist',
+              entityId: controller.artist().id!,
+              entityName: controller.artist().name ?? 'Artist',
+            )),
+            child: Text(
+              'viewAllComments'.tr,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).primaryColor,
+                  ),
+            ),
+          ),
+          SpaceDivider.small(),
+          ...recentComments.map((comment) => _buildCommentTile(comment)).toList(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCommentTile(CommentModel comment) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12.0),
+      child: LimitedBox(
+        maxWidth: double.infinity,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                  image: NetworkImage(comment.authorImageUrl),
+                  fit: BoxFit.cover,
+                  onError: (exception, stackTrace) {},
+                ),
+              ),
+            ),
+            SizedBox(width: 12),
+            Flexible(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Flexible(
+                        child: Text(
+                          comment.authorName ?? 'Unknown',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      Text(
+                        comment.createdFormatted ?? '',
+                        style: TextStyle(fontSize: 12, color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    comment.message ?? '',
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: 13),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

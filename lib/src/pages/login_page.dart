@@ -7,7 +7,9 @@ import 'package:vocadb_app/src/controllers/login_page_controller.dart';
 import 'package:vocadb_app/src/widgets/space_divider.dart';
 
 class LoginPage extends GetView<LoginPageController> {
-  void _onTapRegister() => launch("$baseUrl/User/Create");
+  const LoginPage({super.key});
+
+  void _onTapRegister() => launchUrl(Uri.parse("$baseUrl/User/Create"));
 
   void _onTapLogin() => controller.login();
 
@@ -35,14 +37,14 @@ class LoginPage extends GetView<LoginPageController> {
             SpaceDivider.medium(),
             TextField(
               enabled: controller.processing.value == false,
-              onChanged: controller.username,
+              onChanged: controller.username.call,
               decoration: InputDecoration(
                   border: OutlineInputBorder(), labelText: 'username'.tr),
             ),
             SpaceDivider.medium(),
             TextField(
               enabled: controller.processing.value == false,
-              onChanged: controller.password,
+              onChanged: controller.password.call,
               obscureText: true,
               decoration: InputDecoration(
                   border: OutlineInputBorder(), labelText: 'password'.tr),
@@ -59,20 +61,20 @@ class LoginPage extends GetView<LoginPageController> {
                   children: [
                     SizedBox(
                       width: double.infinity,
-                      child: RaisedButton(
-                          onPressed: this._onTapLogin, child: Text('login'.tr)),
+                      child: ElevatedButton(
+                          onPressed: _onTapLogin, child: Text('login'.tr)),
                     ),
                     SizedBox(
                       width: double.infinity,
-                      child: RaisedButton(
-                          onPressed: this._onTapRegister,
+                      child: ElevatedButton(
+                          onPressed: _onTapRegister,
                           child: Text('register'.tr)),
                     ),
                     SpaceDivider.small(),
                     SizedBox(
                       width: double.infinity,
-                      child: FlatButton(
-                          onPressed: this._onTapSkip, child: Text('skip'.tr)),
+                      child: ElevatedButton(
+                          onPressed: _onTapSkip, child: Text('skip'.tr)),
                     )
                   ],
                 )),

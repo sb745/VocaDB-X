@@ -1,4 +1,4 @@
-library i18n;
+library;
 
 /// All translation files will locate here. File name must be language code.
 

@@ -9,7 +9,7 @@ class TrackListView extends StatelessWidget {
 
   final Function(TrackModel) onSelect;
 
-  const TrackListView({this.tracks, this.onSelect});
+  const TrackListView({super.key, required this.tracks, required this.onSelect});
 
   Widget _mapTrackModel(TrackModel t) {
     if (t.song == null) {
@@ -18,19 +18,19 @@ class TrackListView extends StatelessWidget {
 
     return TrackTile.fromTrackModel(
       t,
-      onTap: () => this.onSelect(t),
+      onTap: () => onSelect(t),
     );
   }
 
-  _buildHasData(BuildContext context, List<TrackModel> tracks) {
-    List<Widget> widgets = List();
+  Column _buildHasData(BuildContext context, List<TrackModel> tracks) {
+    List<Widget> widgets = [];
 
-    Map<String, List<TrackModel>> tracksByDisc = TrackList(tracks).groupByDisc;
+    Map<String, List<TrackModel>> tracksByDisc = TrackList(tracks).groupByDisc as Map<String, List<TrackModel>>;
 
     if (tracksByDisc.length > 1) {
       tracksByDisc.forEach((key, value) {
         widgets.add(ListTile(
-          title: Text('disc'.tr + ' $key'),
+          title: Text('${'disc'.tr} $key'),
         ));
 
         widgets.addAll(value.map<Widget>(_mapTrackModel).toList());
@@ -38,21 +38,13 @@ class TrackListView extends StatelessWidget {
     } else {
       widgets.addAll(tracks.map<Widget>(_mapTrackModel).toList());
     }
-    return Container(
-      child: Column(
-        children: widgets,
-      ),
+    return Column(
+      children: widgets,
     );
-  }
-
-  _buildDefault() {
-    return Container();
   }
 
   @override
   Widget build(BuildContext context) {
-    return (this.tracks != null)
-        ? _buildHasData(context, tracks)
-        : _buildDefault();
+    return _buildHasData(context, tracks);
   }
 }
