@@ -10,18 +10,18 @@ class WebLinkTile extends StatelessWidget {
 
   final double iconSize;
 
-  const WebLinkTile({this.title, this.url, this.iconSize = 32});
+  const WebLinkTile({super.key, required this.title, required this.url, this.iconSize = 32});
 
   Widget buildLeading() {
-    IconSite ic = IconSiteList.findIconAsset(this.title);
+    IconSite? ic = IconSiteList.findIconAsset(title);
 
     return (ic == null) ? Icon(Icons.web) : buildImageIcon(ic.assetName);
   }
 
   Widget buildImageIcon(String assetName) {
     return SizedBox(
-      width: this.iconSize,
-      height: this.iconSize,
+      width: iconSize,
+      height: iconSize,
       child: FittedBox(
         fit: BoxFit.contain,
         child: Image.asset(assetName),
@@ -32,8 +32,9 @@ class WebLinkTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SiteTile(
-      title: this.title,
-      url: this.url,
+      title: title,
+      url: url, 
+      subtitle: '',
     );
   }
 }

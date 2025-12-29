@@ -1,5 +1,5 @@
 /// Collection of widgets
-library widgets;
+library;
 
 export 'src/widgets/album_card.dart';
 export 'src/widgets/album_card_placeholder.dart';
@@ -46,9 +46,7 @@ export 'src/widgets/text_info_section.dart';
 export 'src/widgets/track_list_view.dart';
 export 'src/widgets/track_tile.dart';
 export 'src/widgets/tag_input.dart';
-export 'src/widgets/tag_category_list_view.dart';
 export 'src/widgets/tag_group_view.dart';
-export 'src/widgets/tag_input.dart';
 export 'src/widgets/tag_list_view.dart';
 export 'src/widgets/web_link_group_list.dart';
 export 'src/widgets/web_link_tile.dart';

@@ -6,7 +6,7 @@ class SongTypeSymbol extends StatelessWidget {
   final String songType;
 
   /// Song type map list
-  static const Map _types = const {
+  static const Map _types = {
     'Original': {'text': 'O', 'backgroundColor': Colors.lightBlue},
     'Remaster': {'text': 'R', 'backgroundColor': Colors.lightBlue},
     'Remix': {'text': 'R', 'backgroundColor': Colors.grey},
@@ -18,17 +18,17 @@ class SongTypeSymbol extends StatelessWidget {
     'Arrangement': {'text': 'A', 'backgroundColor': Colors.grey},
   };
 
-  const SongTypeSymbol({Key key, this.songType}) : super(key: key);
+  const SongTypeSymbol({super.key, required this.songType});
 
   @override
   Widget build(BuildContext context) {
     Map st =
-        _types[this.songType] ?? {'text': 'O', 'backgroundColor': Colors.grey};
+        _types[songType] ?? {'text': 'O', 'backgroundColor': Colors.grey};
 
     return Container(
-      child: Text(st['text'], style: TextStyle(color: Colors.white)),
       color: st['backgroundColor'],
       padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+      child: Text(st['text'], style: TextStyle(color: Colors.white)),
     );
   }
 }

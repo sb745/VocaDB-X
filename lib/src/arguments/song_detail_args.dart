@@ -5,7 +5,7 @@ class SongDetailArgs {
   final int id;
 
   /// Optional song data for pre-display before fetch.
-  final SongModel song;
+  final SongModel? song;
 
-  const SongDetailArgs({this.id, this.song});
+  const SongDetailArgs({required this.id, this.song});
 }

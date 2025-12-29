@@ -7,10 +7,10 @@ import 'package:vocadb_app/routes.dart';
 import 'package:vocadb_app/widgets.dart';
 
 class TagSearchPage extends GetView<TagSearchController> {
-  const TagSearchPage();
+  const TagSearchPage({super.key});
 
   void _onSelectTag(TagModel tag) {
-    if (!(Get.arguments is TagSearchArgs)) {
+    if (Get.arguments is! TagSearchArgs) {
       return AppPages.toTagDetailPage(tag);
     }
 
@@ -29,8 +29,8 @@ class TagSearchPage extends GetView<TagSearchController> {
         Expanded(
           child: TextField(
             controller: controller.textSearchController,
-            onChanged: controller.query,
-            style: Theme.of(context).primaryTextTheme.headline6,
+            onChanged: controller.query.call,
+            style: Theme.of(context).primaryTextTheme.headlineMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
             autofocus: true,
             decoration: InputDecoration(
                 border: InputBorder.none, hintText: 'search'.tr),
@@ -73,7 +73,7 @@ class TagSearchPage extends GetView<TagSearchController> {
               ? CenterLoading()
               : TagListView(
                   tags: controller.results.toList(),
-                  onSelect: this._onSelectTag,
+                  onSelect: _onSelectTag,
                   onReachLastItem: controller.onReachLastItem,
                 ),
         ));

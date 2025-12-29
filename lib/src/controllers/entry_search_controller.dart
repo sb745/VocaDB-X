@@ -16,24 +16,29 @@ class EntrySearchController extends SearchPageController<EntryModel> {
 
   final EntryRepository entryRepository;
 
+  @override
   final enableInitial = false;
 
-  EntrySearchController({this.entryRepository});
+  EntrySearchController({required this.entryRepository});
 
   @override
   void onInit() {
-    [entryType, sort, tags]
-        .forEach((element) => ever(element, (_) => fetchApi()));
+    ever(entryType, (_) => fetchApi());
+    ever(sort, (_) => fetchApi());
+    ever(tags, (_) => fetchApi());
     super.onInit();
   }
 
   @override
-  Future<List<EntryModel>> fetchApi({int start}) => entryRepository
+  Future<List<EntryModel>> fetchApi({int? start}) => entryRepository
       .findEntries(
           query: query.string,
           entryType: entryType.string,
           lang: SharedPreferenceService.lang,
           sort: sort.string,
           tagIds: tags.toList().map((e) => e.id).join(','))
-      .catchError(super.onError);
+      .catchError((error) {
+        super.onError(error);
+        return <EntryModel>[];
+      });
 }

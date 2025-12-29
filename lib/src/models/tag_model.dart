@@ -3,39 +3,43 @@ import 'package:vocadb_app/models.dart';
 import 'package:vocadb_app/utils.dart';
 
 class TagModel extends EntryModel {
-  String categoryName;
-  String additionalNames;
-  String description;
-  String urlSlug;
-  TagModel parent;
-  List<TagModel> relatedTags;
+  String? categoryName;
+  @override
+  String? additionalNames;
+  String? description;
+  String? urlSlug;
+  TagModel? parent;
+  List<TagModel?> relatedTags;
 
-  TagModel({int id, String name})
-      : super(id: id, name: name, entryType: EntryType.Tag);
+  TagModel({super.id, super.name})
+      : relatedTags = [],
+        super(entryType: EntryType.Tag);
 
   TagModel.fromEntry(EntryModel entryModel)
-      : super(
+      : relatedTags = [],
+        super(
             id: entryModel.id, name: entryModel.name, entryType: EntryType.Tag);
 
-  TagModel.fromJson(Map<String, dynamic> json)
-      : parent = json.containsKey('parent')
+  TagModel.fromJson(super.json)
+      : parent = (json.containsKey('parent') && json['parent'] != null)
             ? TagModel.fromJson(json['parent'])
             : null,
         description = json['description'],
         categoryName = json['categoryName'],
         urlSlug = json['urlSlug'],
         additionalNames = json['additionalNames'],
-        relatedTags = JSONUtils.mapJsonArray<TagModel>(
-            json['relatedTags'], (v) => TagModel.fromJson(v)),
-        super.fromJson(json, entryType: EntryType.Tag);
+        relatedTags = (json['relatedTags'] != null && json['relatedTags'] is List)
+            ? (JSONUtils.mapJsonArray<TagModel>(
+                json['relatedTags'], (v) => TagModel.fromJson(v)).where((e) => e != null).toList() ?? [])
+            : [],
+        super.fromJson(entryType: EntryType.Tag);
 
   static List<TagModel> jsonToList(List items) {
     return items.map((i) => TagModel.fromJson(i)).toList();
   }
 
-  get imageUrl => (mainPicture != null && mainPicture.urlThumb != null)
-      ? mainPicture.urlThumb.replaceAll('-t.', '.')
-      : null;
+  @override
+  String get imageUrl => mainPicture?.urlThumb?.replaceAll('-t.', '.') ?? super.imageUrl;
 
-  String get originUrl => '$baseUrl/T/${this.id}';
+  String get originUrl => '$baseUrl/T/$id';
 }

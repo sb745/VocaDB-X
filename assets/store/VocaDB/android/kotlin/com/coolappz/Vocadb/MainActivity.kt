@@ -1,4 +1,4 @@
-package com.coolappz.Vocadb
+package com.sb745.Vocadb
 
 import android.os.Bundle
 

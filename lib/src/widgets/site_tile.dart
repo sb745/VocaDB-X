@@ -4,12 +4,11 @@ import 'package:url_launcher/url_launcher.dart';
 
 /// A widget for display redirect website as list tile and automatic display icon base on domain site.
 class SiteTile extends StatelessWidget {
-  final String title;
-  final String subtitle;
-  final String url;
+  final String? title;
+  final String? subtitle;
+  final String? url;
 
-  const SiteTile({Key key, this.title, this.subtitle, this.url})
-      : super(key: key);
+  const SiteTile({super.key, this.title, this.subtitle, this.url});
 
   IconData getIconFromUrl(String url) {
     final List<Map<String, dynamic>> siteIcons = [
@@ -36,21 +35,23 @@ class SiteTile extends StatelessWidget {
       {"pattern": "discord", "icon": FontAwesomeIcons.discord},
     ];
 
-    Map<String, dynamic> iconWebsite = siteIcons
-        .firstWhere((s) => url.contains(s['pattern']), orElse: () => null);
-
-    if (iconWebsite == null) return Icons.web;
+    Map<String, dynamic>? iconWebsite;
+    try {
+      iconWebsite = siteIcons.firstWhere((s) => url.contains(s['pattern']));
+    } catch (e) {
+      return Icons.web;
+    }
 
     return iconWebsite['icon'];
   }
 
   void openUrl(BuildContext context) async {
-    String encodedUrl = Uri.encodeFull(url);
+    String encodedUrl = Uri.encodeFull(url!);
 
     if (await canLaunch(encodedUrl)) {
       launch(encodedUrl);
     } else {
-      Scaffold.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('Unable to open url $encodedUrl'),
       ));
     }
@@ -60,16 +61,16 @@ class SiteTile extends StatelessWidget {
   Widget build(BuildContext context) {
     if (subtitle != null) {
       return ListTile(
-        leading: Icon(getIconFromUrl(url)),
-        title: Text(title),
-        subtitle: Text(subtitle),
+        leading: Icon(getIconFromUrl(url!)),
+        title: Text(title!),
+        subtitle: Text(subtitle!),
         onTap: () => openUrl(context),
       );
     }
 
     return ListTile(
-      leading: Icon(getIconFromUrl(url)),
-      title: Text(title),
+      leading: Icon(getIconFromUrl(url!)),
+      title: Text(title!),
       onTap: () => openUrl(context),
     );
   }

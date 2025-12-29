@@ -5,6 +5,8 @@ import 'package:vocadb_app/services.dart';
 import 'package:vocadb_app/widgets.dart';
 
 class SettingsPage extends StatelessWidget {
+  const SettingsPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     final SharedPreferenceService pref = Get.find();

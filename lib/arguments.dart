@@ -1,7 +1,8 @@
-library arguments;
+library;
 
 export 'src/arguments/album_detail_args.dart';
 export 'src/arguments/artist_detail_args.dart';
+export 'src/arguments/comments_args.dart';
 export 'src/arguments/artist_search_args.dart';
 export 'src/arguments/pv_playlist_args.dart';
 export 'src/arguments/release_event_detail_args.dart';

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:get/get.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vocadb_app/arguments.dart';
 import 'package:vocadb_app/controllers.dart';
-import 'package:vocadb_app/loggers.dart';
 import 'package:vocadb_app/models.dart';
 import 'package:vocadb_app/pages.dart';
 import 'package:vocadb_app/repositories.dart';
@@ -14,7 +12,9 @@ import 'package:vocadb_app/services.dart';
 import 'package:vocadb_app/widgets.dart';
 
 class ReleaseEventDetailPage extends StatelessWidget {
-  initController() {
+  const ReleaseEventDetailPage({super.key});
+
+  ReleaseEventDetailController initController() {
     final httpService = Get.find<HttpService>();
     return ReleaseEventDetailController(
         eventRepository: ReleaseEventRepository(httpService: httpService));
@@ -24,8 +24,7 @@ class ReleaseEventDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final ReleaseEventDetailController controller = initController();
     final ReleaseEventDetailArgs args = Get.arguments;
-    final String id = Get.parameters['id'];
-    Get.find<AnalyticLog>().logViewReleaseEventDetail(args.id);
+    final String? id = Get.parameters['id'];
 
     return PageBuilder<ReleaseEventDetailController>(
       tag: "event_$id",
@@ -40,7 +39,7 @@ class ReleaseEventDetailPageView extends StatelessWidget {
 
   final ReleaseEventDetailArgs args;
 
-  const ReleaseEventDetailPageView({this.controller, this.args});
+  const ReleaseEventDetailPageView({super.key, required this.controller, required this.args});
 
   void _onSelectTag(TagModel tag) => AppPages.toTagDetailPage(tag);
 
@@ -63,43 +62,45 @@ class ReleaseEventDetailPageView extends StatelessWidget {
   void _onTapEntrySearch() => Get.toNamed(Routes.ENTRIES);
 
   void _onTapMapButton() {
-    String q = controller.event().venueName;
+    String q = controller.event().venueName ?? '';
     String uri = Uri.encodeFull('geo:0,0?q=$q');
     canLaunch(uri).then((can) => (can)
         ? launch(uri)
         : launch(Uri.encodeFull('https://maps.apple.com/?q=$q')));
   }
 
-  void _onTapEventSeries() =>
-      AppPages.toReleaseEventSeriesDetailPage(controller.event().series);
+  void _onTapEventSeries() {
+    final series = controller.event().series;
+    if (series != null) {
+      AppPages.toReleaseEventSeriesDetailPage(series);
+    }
+  }
 
   Widget _buttonBarBuilder() {
     List<Widget> buttons = [];
 
-    buttons.add(FlatButton(
-      onPressed: this._onTapShareButton,
+    buttons.add(TextButton(
+      onPressed: _onTapShareButton,
       child: Column(
         children: [Icon(Icons.share), Text('share'.tr)],
       ),
     ));
 
-    if (controller.event().venueName != null) {
-      buttons.add(FlatButton(
-        onPressed: this._onTapMapButton,
-        child: Column(
-          children: [Icon(Icons.place), Text('map'.tr)],
-        ),
-      ));
-    }
+    buttons.add(TextButton(
+      onPressed: null,
+      child: Column(
+        children: [Icon(Icons.place), Text('map'.tr)],
+      ),
+    ));
 
-    buttons.add(FlatButton(
-      onPressed: this._onTapInfoButton,
+    buttons.add(TextButton(
+      onPressed: _onTapInfoButton,
       child: Column(
         children: [Icon(Icons.info), Text('info'.tr)],
       ),
     ));
 
-    return ButtonBar(
+    return OverflowBar(
       alignment: MainAxisAlignment.spaceEvenly,
       children: buttons,
     );
@@ -125,7 +126,7 @@ class ReleaseEventDetailPageView extends StatelessWidget {
             ],
             flexibleSpace: FlexibleSpaceBar(
               title: Text(
-                controller.event().name,
+                controller.event().name ?? '',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -152,12 +153,13 @@ class ReleaseEventDetailPageView extends StatelessWidget {
               children: [
                 SpaceDivider.small(),
                 TagGroupView(
-                  onPressed: this._onSelectTag,
+                  onPressed: _onSelectTag,
                   tags: controller
                           .event()
-                          ?.tagGroups
+                          .tagGroups
                           ?.map((t) => t.tag)
-                          ?.toList() ??
+                          .whereType<TagModel>()
+                          .toList() ??
                       [],
                 ),
                 SpaceDivider.small(),
@@ -182,54 +184,57 @@ class ReleaseEventDetailPageView extends StatelessWidget {
                   text: controller.event().venueName,
                   divider: SpaceDivider.small(),
                 ),
-                if (controller.event().description != null)
+                if (controller.event().description != null &&
+                    controller.event().description!.isNotEmpty)
                   InfoSection(
                     title: 'description'.tr,
-                    visible: !controller.event().description.isNullOrBlank,
-                    child: MarkdownBody(
-                      data: controller.event().description,
-                      selectable: true,
+                    visible: true,
+                    child: SelectableText(
+                      controller.event().description!,
                     ),
                   ),
                 Divider(),
                 Section(
                   title: 'participatingArtists'.tr,
                   visible: controller.event().artists?.isNotEmpty,
+                  divider: Divider(),
                   child: ArtistGroupByRoleList.fromArtistEventModel(
                     artistEvents: controller.event().artists ?? [],
-                    onTap: this._onTapArtist,
+                    onTap: _onTapArtist,
                     displayRole: false,
                   ),
-                  divider: Divider(),
                 ),
                 Section(
                   title: 'songs'.tr,
-                  visible: controller.songs().length > 0,
+                  visible: controller.songs().isNotEmpty,
+                  divider: Divider(),
                   child: SongListView(
                     scrollDirection: Axis.horizontal,
-                    onSelect: this._onTapSong,
+                    onSelect: _onTapSong,
+                    onReachLastItem: () {},
                     songs: controller.songs(),
                   ),
-                  divider: Divider(),
                 ),
                 Section(
                   title: 'albums'.tr,
-                  visible: controller.albums().length > 0,
+                  visible: controller.albums().isNotEmpty,
+                  divider: Divider(),
                   child: AlbumListView(
                     scrollDirection: Axis.horizontal,
                     albums: controller.albums(),
-                    onSelect: this._onTapAlbum,
+                    onSelect: _onTapAlbum,
+                    onReachLastItem: () {},
+                    emptyWidget: SizedBox.shrink(),
                   ),
-                  divider: Divider(),
                 ),
                 Section(
                   title: 'series'.tr,
                   visible: controller.event().series != null,
-                  child: ReleaseEventSeriesTile(
-                    name: controller.event()?.series?.name,
-                    onTap: this._onTapEventSeries,
-                  ),
                   divider: Divider(),
+                  child: ReleaseEventSeriesTile(
+                    name: controller.event().series?.name ?? '',
+                    onTap: _onTapEventSeries,
+                  ),
                 ),
                 WebLinkGroupList(webLinks: controller.event().webLinks)
               ],

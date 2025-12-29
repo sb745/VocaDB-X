@@ -5,24 +5,23 @@ import 'package:get/get.dart';
 /// Used on any page that can be duplicated but with different id.
 /// Such as detail pages.
 class PageBuilder<T extends GetxController> extends StatelessWidget {
-  final GetxController controller;
+  final T? controller;
 
-  final Function(T) builder;
+  final Widget Function(T) builder;
 
   /// An unique string value for seperated state.
-  final String tag;
+  final String? tag;
 
-  const PageBuilder({Key key, this.controller, this.builder, this.tag})
-      : super(key: key);
+  const PageBuilder({super.key, this.controller, required this.builder, this.tag});
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<T>(
-      tag: this.tag,
+      tag: tag,
       global: false,
       init: controller,
-      dispose: (_) => controller.onClose(),
-      builder: builder,
+      dispose: (_) => controller?.onClose(),
+      builder: (controller) => builder(controller),
     );
   }
 }

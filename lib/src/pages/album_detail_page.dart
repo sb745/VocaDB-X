@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vocadb_app/arguments.dart';
 import 'package:vocadb_app/controllers.dart';
-import 'package:vocadb_app/loggers.dart';
 import 'package:vocadb_app/models.dart';
 import 'package:vocadb_app/pages.dart';
 import 'package:vocadb_app/repositories.dart';
@@ -13,7 +12,9 @@ import 'package:vocadb_app/services.dart';
 import 'package:vocadb_app/widgets.dart';
 
 class AlbumDetailPage extends StatelessWidget {
-  initController() {
+  const AlbumDetailPage({super.key});
+
+  AlbumDetailController initController() {
     final httpService = Get.find<HttpService>();
     final authService = Get.find<AuthService>();
     return AlbumDetailController(
@@ -26,8 +27,7 @@ class AlbumDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final AlbumDetailController controller = initController();
     final AlbumDetailArgs args = Get.arguments;
-    final String id = Get.parameters['id'];
-    Get.find<AnalyticLog>().logViewAlbumDetail(args.id);
+    final String? id = Get.parameters['id'];
 
     return PageBuilder<AlbumDetailController>(
       tag: "al_$id",
@@ -42,9 +42,9 @@ class AlbumDetailPageView extends StatelessWidget {
 
   final AlbumDetailArgs args;
 
-  const AlbumDetailPageView({this.controller, this.args});
+  const AlbumDetailPageView({super.key, required this.controller, required this.args});
 
-  void _onTapTrack(TrackModel track) => AppPages.toSongDetailPage(track.song);
+  void _onTapTrack(TrackModel track) => AppPages.toSongDetailPage(track.song!);
 
   void _onTapShareButton() => Share.share(controller.album().originUrl);
 
@@ -54,42 +54,48 @@ class AlbumDetailPageView extends StatelessWidget {
 
   void _onTapEntrySearch() => Get.toNamed(Routes.ENTRIES);
 
-  void _onTapArtist(ArtistRoleModel artistRoleModel) =>
-      Get.to(ArtistDetailPage());
+  void _onTapArtist(ArtistRoleModel artistRoleModel) {
+    if (artistRoleModel.id != null) {
+      Get.to(ArtistDetailPage(), 
+        arguments: ArtistDetailArgs(id: artistRoleModel.id!));
+    }
+  }
 
   void _onSelectTag(TagModel tag) => AppPages.toTagDetailPage(tag);
 
-  void _onTapCollectButton() {}
+  void _onTapCollectButton() {
+    controller.updateAlbumCollection();
+  }
 
   Widget _buttonBarBuilder() {
     final authService = Get.find<AuthService>();
 
     List<Widget> buttons = [];
 
-    buttons.add(ActiveFlatButton(
+    buttons.add(Obx(() => ActiveFlatButton(
       icon: Icon(Icons.favorite),
-      label: 'collect'.tr,
+      label: controller.collected.value ? 'Collected' : 'collect'.tr,
       active: controller.collected.value,
-      onPressed: (authService.currentUser().id == null)
-          ? null
-          : this._onTapCollectButton,
-    ));
+      onPressed: authService.currentUser().id == null
+          ? () {}
+          : _onTapCollectButton,
+    )));
 
-    buttons.add(FlatButton(
-      onPressed: this._onTapShareButton,
+    buttons.add(FilledButton(
+      onPressed: _onTapShareButton,
       child: Column(
         children: [Icon(Icons.share), Text('share'.tr)],
       ),
     ));
 
-    buttons.add(FlatButton(
-      onPressed: this._onTapInfoButton,
+    buttons.add(FilledButton(
+      onPressed: _onTapInfoButton,
       child: Column(
         children: [Icon(Icons.info), Text('info'.tr)],
       ),
     ));
 
-    return ButtonBar(
+    return OverflowBar(
       alignment: MainAxisAlignment.spaceEvenly,
       children: buttons,
     );
@@ -102,15 +108,15 @@ class AlbumDetailPageView extends StatelessWidget {
       slivers: [
         SliverAppBar(
           floating: true,
-          title: Text(controller.album().name),
+          title: Text(controller.album().name ?? ''),
           actions: [
             IconButton(
               icon: Icon(Icons.search),
-              onPressed: this._onTapEntrySearch,
+              onPressed: _onTapEntrySearch,
             ),
             IconButton(
               icon: Icon(Icons.home),
-              onPressed: this._onTapHome,
+              onPressed: _onTapHome,
             )
           ],
         ),
@@ -129,28 +135,30 @@ class AlbumDetailPageView extends StatelessWidget {
               children: [
                 Visibility(
                   visible: controller.album().ratingCount != null &&
-                      controller.album().ratingCount > 0,
+                      controller.album().ratingCount! > 0,
                   child: Text(
                       '${controller.album().ratingAverage} ★ (${controller.album().ratingCount})'),
                 ),
                 SpaceDivider.small(),
                 Text(
-                  controller.album().name,
-                  style: Theme.of(context).textTheme.headline6,
+                  controller.album().name.toString(),
+                  style: Theme.of(context).textTheme.headlineMedium,
                   maxLines: 2,
                   textAlign: TextAlign.center,
                 ),
                 SpaceDivider.small(),
-                Text(controller.album().artistString),
+                Text(controller.album().artistString.toString()),
                 SpaceDivider.micro(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      '${('discType.' + controller.album().discType).tr} • ${'discOnSaleDate'.trArgs([
-                        controller.album().releaseDateFormatted
-                      ])}',
-                      style: Theme.of(context).textTheme.caption,
+                      controller.album().releaseDateFormatted != null
+                          ? '${('discType.${controller.album().discType}').tr} • ${'discOnSaleDate'.trArgs([
+                              controller.album().releaseDateFormatted!
+                            ])}'
+                          : ('discType.${controller.album().discType}').tr,
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ],
                 )
@@ -159,8 +167,8 @@ class AlbumDetailPageView extends StatelessWidget {
             SpaceDivider.micro(),
             _buttonBarBuilder(),
             TagGroupView(
-              onPressed: this._onSelectTag,
-              tags: controller.album().tags ?? [],
+              onPressed: _onSelectTag,
+              tags: controller.album().tags.whereType<TagModel>().toList() ?? [],
             ),
             ExpandableContent(
               child: Column(
@@ -182,7 +190,7 @@ class AlbumDetailPageView extends StatelessWidget {
                   ),
                   Divider(),
                   ArtistGroupByRoleList.fromArtistAlbumModel(
-                    onTap: this._onTapArtist,
+                    onTap: _onTapArtist,
                     artistAlbums: controller.album().artists ?? [],
                     // prefixHeroTag: 'album_detail_${args.id}',
                   ),
@@ -191,15 +199,108 @@ class AlbumDetailPageView extends StatelessWidget {
             ),
             Divider(),
             TrackListView(
-              tracks: controller.album().tracks,
-              onSelect: this._onTapTrack,
+              tracks: controller.album().tracks ?? [],
+              onSelect: _onTapTrack,
             ),
             Divider(),
             WebLinkGroupList(webLinks: controller.album().webLinks ?? []),
+            Obx(() => (controller.comments.isNotEmpty)
+                ? Column(
+                    children: [
+                      Divider(),
+                      _buildCommentsSection(context),
+                    ],
+                  )
+                : SizedBox.shrink()),
             SpaceDivider.medium()
           ])),
         )
       ],
     ));
+  }
+
+  Widget _buildCommentsSection(BuildContext context) {
+    final recentComments = controller.comments.take(5).toList();
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('comments'.tr, style: Theme.of(context).textTheme.titleMedium),
+          GestureDetector(
+            onTap: () => AppPages.toCommentsPage(CommentsArgs(
+              entityType: 'album',
+              entityId: controller.album().id!,
+              entityName: controller.album().name ?? 'Album',
+            )),
+            child: Text(
+              'viewAllComments'.tr,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).primaryColor,
+                  ),
+            ),
+          ),
+          SpaceDivider.small(),
+          ...recentComments.map((comment) => _buildCommentTile(comment)).toList(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCommentTile(CommentModel comment) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12.0),
+      child: LimitedBox(
+        maxWidth: double.infinity,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                  image: NetworkImage(comment.authorImageUrl),
+                  fit: BoxFit.cover,
+                  onError: (exception, stackTrace) {},
+                ),
+              ),
+            ),
+            SizedBox(width: 12),
+            Flexible(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Flexible(
+                        child: Text(
+                          comment.authorName ?? 'Unknown',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      Text(
+                        comment.createdFormatted ?? '',
+                        style: TextStyle(fontSize: 12, color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    comment.message ?? '',
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: 13),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

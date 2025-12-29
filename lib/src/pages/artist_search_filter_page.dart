@@ -5,6 +5,8 @@ import 'package:vocadb_app/controllers.dart';
 import 'package:vocadb_app/widgets.dart';
 
 class ArtistSearchFilterPage extends GetView<ArtistSearchController> {
+  const ArtistSearchFilterPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +23,7 @@ class ArtistSearchFilterPage extends GetView<ArtistSearchController> {
                       emptyItem: {'name': 'notSpecified'.tr, 'value': ''}),
                   label: 'artistType'.tr,
                   value: controller.artistType.string,
-                  onChanged: controller.artistType,
+                  onChanged: controller.artistType.call,
                 ),
               ),
               Obx(
@@ -34,10 +36,10 @@ class ArtistSearchFilterPage extends GetView<ArtistSearchController> {
                     'SongCount',
                     'SongRating',
                     'FollowerCount',
-                  ], trPrefix: 'sort'),
+                  ], trPrefix: 'sort', emptyItem: {}),
                   label: 'sort'.tr,
                   value: controller.sort.string,
-                  onChanged: controller.sort,
+                  onChanged: controller.sort.call,
                 ),
               ),
               Divider(),

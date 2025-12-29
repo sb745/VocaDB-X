@@ -3,20 +3,20 @@ import 'package:vocadb_app/constants.dart';
 import 'package:vocadb_app/models.dart';
 
 class EntryModel extends BaseModel {
-  int id;
-  EntryType entryType;
-  String additionalNames;
-  String defaultName;
-  String name;
-  String artistString;
-  String artistType;
-  String songType;
-  String discType;
-  String eventCategory;
-  String activityDate;
-  MainPictureModel mainPicture;
-  List<TagGroupModel> tagGroups;
-  List<WebLinkModel> webLinks;
+  int? id;
+  EntryType? entryType;
+  String? additionalNames;
+  String? defaultName;
+  String? name;
+  String? artistString;
+  String? artistType;
+  String? songType;
+  String? discType;
+  String? eventCategory;
+  String? activityDate;
+  MainPictureModel? mainPicture;
+  List<TagGroupModel>? tagGroups;
+  List<WebLinkModel>? webLinks;
 
   EntryModel(
       {this.id,
@@ -34,7 +34,7 @@ class EntryModel extends BaseModel {
       this.tagGroups,
       this.webLinks});
 
-  EntryModel.fromJson(Map<String, dynamic> json, {EntryType entryType})
+  EntryModel.fromJson(Map<String, dynamic> json, {EntryType? entryType})
       : id = json['id'],
         name = json['name'],
         songType = json['songType'],
@@ -53,13 +53,13 @@ class EntryModel extends BaseModel {
             : null,
         tagGroups = (json.containsKey('tags'))
             ? (json['tags'] as List)
-                ?.map((d) => TagGroupModel.fromJson(d))
-                ?.toList()
+                .map((d) => TagGroupModel.fromJson(d))
+                .toList()
             : [],
         webLinks = (json.containsKey('webLinks'))
             ? (json['webLinks'] as List)
-                ?.map((d) => WebLinkModel.fromJson(d))
-                ?.toList()
+                .map((d) => WebLinkModel.fromJson(d))
+                .toList()
             : [];
 
   static List<EntryModel> jsonToList(List items) {
@@ -67,11 +67,12 @@ class EntryModel extends BaseModel {
   }
 
   String get imageUrl {
-    if (mainPicture != null) {
+    if (mainPicture != null && mainPicture!.urlThumb != null) {
+      final urlThumb = mainPicture!.urlThumb!;
       return (entryType == EntryType.ReleaseEvent ||
               entryType == EntryType.ReleaseEventSeries)
-          ? mainPicture.urlThumb.replaceAll('mainThumb', 'mainOrig')
-          : mainPicture.urlThumb;
+          ? urlThumb.replaceAll('mainThumb', 'mainOrig')
+          : urlThumb;
     }
 
     switch (entryType) {
@@ -80,11 +81,12 @@ class EntryModel extends BaseModel {
       case EntryType.Album:
         return '$baseUrl/Album/CoverPicture/$id';
       default:
-        return 'https://via.placeholder.com/150x150?text=no_image';
+        return '';
     }
   }
 
-  static EntryType entryTypeToEnum(String str) {
+  static EntryType entryTypeToEnum(String? str) {
+    if (str == null) return EntryType.Undefined;
     switch (str) {
       case 'Song':
         return EntryType.Song;
@@ -117,9 +119,9 @@ class EntryModel extends BaseModel {
     }
   }
 
-  String get activityDateFormatted => (activityDate == null)
+  String? get activityDateFormatted => (activityDate == null)
       ? null
-      : DateFormat('yyyy-MM-dd').format(DateTime.parse(activityDate));
+      : DateFormat('yyyy-MM-dd').format(DateTime.parse(activityDate!));
 
   @override
   String toString() {

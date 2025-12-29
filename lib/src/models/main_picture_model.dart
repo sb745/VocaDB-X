@@ -1,8 +1,8 @@
 class MainPictureModel {
-  String meme;
-  String urlSmallThumb;
-  String urlThumb;
-  String urlTinyThumb;
+  String? meme;
+  String? urlSmallThumb;
+  String? urlThumb;
+  String? urlTinyThumb;
 
   MainPictureModel({this.urlThumb});
 
@@ -21,6 +21,7 @@ class MainPictureModel {
     };
   }
 
+  @override
   String toString() {
     return toJson().toString();
   }

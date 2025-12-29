@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 import 'package:vocadb_app/constants.dart';
 import 'package:vocadb_app/controllers.dart';
-import 'package:vocadb_app/src/widgets/tag_input.dart';
 import 'package:vocadb_app/widgets.dart';
 
 class SongSearchFilterPage extends GetView<SongSearchController> {
+  const SongSearchFilterPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,7 +18,7 @@ class SongSearchFilterPage extends GetView<SongSearchController> {
               () => SimpleDropdownInput.fromJsonArray(
                 label: 'songType'.tr,
                 value: controller.songType.string,
-                onChanged: controller.songType,
+                onChanged: controller.songType.call,
                 json: SimpleDropdownInput.buildDropdownItems(constSongTypes,
                     trPrefix: 'songType',
                     emptyItem: {'name': 'notSpecified'.tr, 'value': ''}),
@@ -26,7 +28,7 @@ class SongSearchFilterPage extends GetView<SongSearchController> {
               () => SimpleDropdownInput.fromJsonArray(
                 label: 'sort'.tr,
                 value: controller.sort.string,
-                onChanged: controller.sort,
+                onChanged: controller.sort.call,
                 json: SimpleDropdownInput.buildDropdownItems([
                   'Name',
                   'AdditionDate',

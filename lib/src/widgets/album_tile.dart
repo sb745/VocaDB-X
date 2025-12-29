@@ -19,28 +19,27 @@ class AlbumTile extends StatelessWidget {
   /// Album image size both width and height
   static const double imageSize = 50;
 
-  const AlbumTile({Key key, this.name, this.artist, this.imageUrl, this.onTap})
-      : super(key: key);
+  const AlbumTile({super.key, required this.name, required this.artist, required this.imageUrl, required this.onTap});
 
-  AlbumTile.fromEntry(EntryModel entry, {this.onTap})
-      : this.name = entry.name,
-        this.imageUrl = entry.imageUrl,
-        this.artist = entry.artistString;
+  AlbumTile.fromEntry(EntryModel entry, {super.key, required this.onTap})
+      : name = entry.name ?? 'Unknown Album',
+        imageUrl = entry.imageUrl,
+        artist = entry.artistString ?? '';
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: this.onTap,
+      onTap: onTap,
       leading: SizedBox(
         width: imageSize,
         height: imageSize,
         child: CustomNetworkImage(
-          this.imageUrl,
+          imageUrl,
           fit: BoxFit.fill,
         ),
       ),
-      title: Text(this.name, overflow: TextOverflow.ellipsis),
-      subtitle: Text(this.artist, overflow: TextOverflow.ellipsis),
+      title: Text(name, overflow: TextOverflow.ellipsis),
+      subtitle: Text(artist, overflow: TextOverflow.ellipsis),
     );
   }
 }

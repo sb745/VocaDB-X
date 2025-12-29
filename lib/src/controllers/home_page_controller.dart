@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+
 import 'package:vocadb_app/models.dart';
 import 'package:vocadb_app/repositories.dart';
 import 'package:vocadb_app/services.dart';
@@ -12,33 +13,56 @@ class HomePageController extends GetxController {
   final SongRepository songRepository;
   final AlbumRepository albumRepository;
   final ReleaseEventRepository releaseEventRepository;
+  
+  bool _initialDataFetched = false;
 
   HomePageController(
-      {this.songRepository, this.albumRepository, this.releaseEventRepository});
+      {required this.songRepository, required this.albumRepository, required this.releaseEventRepository});
 
   @override
   void onInit() {
-    fetchApi();
+    // Defer initial fetch to avoid blocking tab switch - only fetch once
+    Future.delayed(Duration.zero, () {
+      if (!_initialDataFetched) {
+        _initialDataFetched = true;
+        fetchApi();
+      }
+    });
     super.onInit();
   }
 
-  fetchApi() {
+  void fetchApi() {
     String lang = SharedPreferenceService.lang;
     songRepository
         .getHighlighted(lang: lang)
-        .then(highlighted)
-        .catchError(onError);
-    albumRepository.getTop(lang: lang).then(randomAlbums).catchError(onError);
-    albumRepository.getNew(lang: lang).then(recentAlbums).catchError(onError);
+        .then(highlighted.call)
+        .catchError((err) {
+          onError(err);
+          highlighted.value = [];
+          return <SongModel>[];
+        });
+    albumRepository.getTop(lang: lang).then(randomAlbums.call).catchError((err) {
+      onError(err);
+      randomAlbums.value = [];
+      return <AlbumModel>[];
+    });
+    albumRepository.getNew(lang: lang).then(recentAlbums.call).catchError((err) {
+      onError(err);
+      recentAlbums.value = [];
+      return <AlbumModel>[];
+    });
     releaseEventRepository
         .getRecently(lang: lang)
         .then((result) => result.reversed.toList())
-        .then(recentReleaseEvents)
-        .catchError(onError);
+        .then(recentReleaseEvents.call)
+        .catchError((err) {
+          onError(err);
+          recentReleaseEvents.value = [];
+          return <ReleaseEventModel>[];
+        });
   }
 
-  onError(err) {
-    print(err);
-    Get.snackbar('error', err.toString());
+  void onError(err) {
+    print('Error: $err');
   }
 }

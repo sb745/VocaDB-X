@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:vocadb_app/pages.dart';
 import 'package:vocadb_app/routes.dart';
 import 'package:vocadb_app/services.dart';
 
 class MenuPage extends StatelessWidget {
+  const MenuPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     final AuthService authService = Get.find();
@@ -20,7 +22,7 @@ class MenuPage extends StatelessWidget {
                     backgroundImage: NetworkImage(authService
                             .currentUser()
                             .imageUrl ??
-                        'https://via.placeholder.com/150x150?text=no_image'),
+                        'https://vocadb.net/Content/unknown.png?s=150'),
                   ),
                   title: Text(authService.currentUser().name ?? 'Unknown'),
                 )),
@@ -72,9 +74,10 @@ class MenuPage extends StatelessWidget {
             builder: (context, snapshot) {
               String versionName = 'Unknown';
               if (snapshot.connectionState == ConnectionState.done) {
-                PackageInfo packageInfo = snapshot.data;
-                versionName =
-                    '${packageInfo.version}-${packageInfo.buildNumber}';
+                PackageInfo? packageInfo = snapshot.data;
+                if (packageInfo != null) {
+                  versionName = packageInfo.version;
+                }
               }
               return ListTile(
                 leading: Icon(Icons.info),

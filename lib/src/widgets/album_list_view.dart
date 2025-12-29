@@ -4,15 +4,14 @@ import 'package:vocadb_app/widgets.dart';
 
 /// A widget for display list of songs as vertical or horizontal
 class AlbumListView extends StatelessWidget {
-  AlbumListView(
-      {Key key,
-      this.albums,
-      this.onSelect,
-      this.onReachLastItem,
-      this.emptyWidget,
+  const AlbumListView(
+      {super.key,
+      required this.albums,
+      required this.onSelect,
+      required this.onReachLastItem,
+      required this.emptyWidget,
       this.scrollDirection = Axis.vertical,
-      this.displayPlaceholder = false})
-      : super(key: key);
+      this.displayPlaceholder = false});
 
   /// List of songs to display.
   final List<AlbumModel> albums;
@@ -38,37 +37,37 @@ class AlbumListView extends StatelessWidget {
   /// Return item for display in vertical list
   Widget _verticalItemBuilder(BuildContext context, int index) =>
       AlbumTile.fromEntry(
-        this.albums[index],
-        onTap: () => this.onSelect(this.albums[index]),
+        albums[index],
+        onTap: () => onSelect(albums[index]),
       );
 
   /// Return item for display in horizontal list
   Widget _horizontalItemBuilder(BuildContext context, int index) =>
-      AlbumCard.album(this.albums[index],
-          onTap: () => this.onSelect(this.albums[index]));
+      AlbumCard.album(albums[index],
+          onTap: () => onSelect(albums[index]));
 
   @override
   Widget build(BuildContext context) {
-    if (this.albums.isEmpty && this.emptyWidget != null) {
+    if (albums.isEmpty) {
       return emptyWidget;
     }
 
-    if (this.scrollDirection == Axis.vertical) {
+    if (scrollDirection == Axis.vertical) {
       return InfiniteListView(
-        itemCount: this.albums.length,
+        itemCount: albums.length,
         itemBuilder: _verticalItemBuilder,
-        onReachLastItem: this.onReachLastItem,
+        onReachLastItem: onReachLastItem,
       );
     }
 
-    if (this.displayPlaceholder) {
+    if (displayPlaceholder) {
       return AlbumPlaceholderListView();
     }
 
     return SizedBox(
         height: _rowHeight,
         child: ListView.builder(
-            itemCount: this.albums.length,
+            itemCount: albums.length,
             scrollDirection: Axis.horizontal,
             itemBuilder: _horizontalItemBuilder));
   }

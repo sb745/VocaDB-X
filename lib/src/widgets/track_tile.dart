@@ -2,31 +2,35 @@ import 'package:flutter/material.dart';
 import 'package:vocadb_app/models.dart';
 
 class TrackTile extends StatelessWidget {
-  final int trackNumber;
+  final int? trackNumber;
 
-  final String name;
+  final String? name;
 
-  final String artistName;
+  final String? artistName;
 
-  final GestureTapCallback onTap;
+  final GestureTapCallback? onTap;
 
-  const TrackTile(
-      {Key key, this.trackNumber, this.name, this.artistName, this.onTap})
-      : super(key: key);
+  const TrackTile({
+    super.key,
+    this.trackNumber,
+    this.name,
+    this.artistName,
+    this.onTap,
+  });
 
-  TrackTile.fromTrackModel(TrackModel trackModel, {this.onTap})
-      : this.trackNumber = trackModel.trackNumber,
-        this.name = trackModel.name,
-        this.artistName = trackModel.song?.artistString;
+  TrackTile.fromTrackModel(TrackModel trackModel, {super.key, this.onTap})
+      : trackNumber = trackModel.trackNumber,
+        name = trackModel.name,
+        artistName = trackModel.song?.artistString;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Text(trackNumber.toString()),
-      enabled: (this.onTap != null),
-      onTap: this.onTap,
-      title: Text(this.name, maxLines: 1, overflow: TextOverflow.ellipsis),
-      subtitle: Text(this.artistName ?? ' ',
+      leading: Text((trackNumber ?? 0).toString()),
+      enabled: (onTap != null),
+      onTap: onTap,
+      title: Text(name ?? 'Unknown Track', maxLines: 1, overflow: TextOverflow.ellipsis),
+      subtitle: Text(artistName ?? ' ',
           maxLines: 1, overflow: TextOverflow.ellipsis),
     );
   }

@@ -4,30 +4,33 @@ import 'package:vocadb_app/models.dart';
 import 'package:vocadb_app/utils.dart';
 
 class SongModel extends EntryModel {
-  String thumbUrl;
-  List<PVModel> pvs;
-  List<ArtistSongModel> artists;
-  List<AlbumModel> albums;
-  int originalVersionId;
-  String publishDate;
-  List<LyricModel> lyrics;
+  String? thumbUrl;
+  List<PVModel>? pvs;
+  List<ArtistSongModel>? artists;
+  List<AlbumModel>? albums;
+  int? originalVersionId;
+  String? publishDate;
+  List<LyricModel>? lyrics;
 
   SongModel(
-      {int id,
-      String name,
-      String songType,
-      String artistString,
+      {super.id,
+      super.name,
+      super.songType,
+      super.artistString,
       this.pvs,
       this.thumbUrl})
       : super(
-            id: id,
-            name: name,
-            artistString: artistString,
-            songType: songType,
             entryType: EntryType.Song);
 
   SongModel.fromEntry(EntryModel entry)
-      : super(
+      : thumbUrl = null,
+        pvs = null,
+        artists = null,
+        albums = null,
+        originalVersionId = null,
+        publishDate = null,
+        lyrics = null,
+        super(
             id: entry.id,
             name: entry.name,
             artistString: entry.artistString,
@@ -38,73 +41,90 @@ class SongModel extends EntryModel {
             artistType: entry.artistType,
             entryType: EntryType.Song);
 
-  SongModel.fromJson(Map<String, dynamic> json)
-      : thumbUrl = UrlUtils.toHttps(json['thumbUrl']),
+  SongModel.fromJson(super.json)
+      : thumbUrl = (json['thumbUrl'] != null) ? UrlUtils.toHttps(json['thumbUrl'] as String) : null,
         originalVersionId = json['originalVersionId'],
-        publishDate = json['publishDate'],
-        pvs = JSONUtils.mapJsonArray<PVModel>(
-            json['pvs'], (v) => (v is int) ? [] : PVModel.fromJson(v)),
-        artists = JSONUtils.mapJsonArray<ArtistSongModel>(json['artists'],
-            (v) => (v is int) ? [] : ArtistSongModel.fromJson(v)),
-        albums = JSONUtils.mapJsonArray<AlbumModel>(
-            json['albums'], (v) => (v is int) ? [] : AlbumModel.fromJson(v)),
-        lyrics = JSONUtils.mapJsonArray<LyricModel>(
-            json['lyrics'], (v) => (v is int) ? [] : LyricModel.fromJson(v)),
-        super.fromJson(json, entryType: EntryType.Song);
+        publishDate = json['publishDate'] as String?,
+        pvs = (json['pvs'] != null && json['pvs'] is List)
+            ? JSONUtils.mapJsonArray<PVModel>(
+                json['pvs'], (v) => (v is int) ? null : PVModel.fromJson(v)).where((e) => e != null).cast<PVModel>().toList()
+            : null,
+        artists = (json['artists'] != null && json['artists'] is List)
+            ? JSONUtils.mapJsonArray<ArtistSongModel>(json['artists'],
+                (v) => (v is int) ? null : ArtistSongModel.fromJson(v)).where((e) => e != null).cast<ArtistSongModel>().toList()
+            : null,
+        albums = (json['albums'] != null && json['albums'] is List)
+            ? JSONUtils.mapJsonArray<AlbumModel>(
+                json['albums'], (v) => (v is int) ? null : AlbumModel.fromJson(v)).where((e) => e != null).cast<AlbumModel>().toList()
+            : null,
+        lyrics = (json['lyrics'] != null && json['lyrics'] is List)
+            ? JSONUtils.mapJsonArray<LyricModel>(
+                json['lyrics'], (v) => (v is int) ? null : LyricModel.fromJson(v)).where((e) => e != null).cast<LyricModel>().toList()
+            : null,
+        super.fromJson(entryType: EntryType.Song);
 
   static List<SongModel> jsonToList(List items) {
-    return (items == null)
-        ? []
-        : items.map((i) => SongModel.fromJson(i)).toList();
+    if (items.isEmpty) {
+      return [];
+    }
+    return items.map((i) => SongModel.fromJson(i)).toList();
   }
 
-  PVModel get youtubePV {
-    return pvs?.firstWhere(
-        (pv) =>
-            pv.service.toLowerCase() == 'youtube' && pv.pvType == 'Original',
-        orElse: () => pvs?.firstWhere(
-            (pv) => pv.service.toLowerCase() == 'youtube',
-            orElse: () => null));
+  PVModel? get youtubePV {
+    if (pvs == null || pvs!.isEmpty) return null;
+    
+    try {
+      return pvs!.firstWhere(
+          (pv) => pv.service?.toLowerCase() == 'youtube' && pv.pvType == 'Original');
+    } catch (e) {
+      try {
+        return pvs!.firstWhere(
+            (pv) => pv.service?.toLowerCase() == 'youtube');
+      } catch (e) {
+        return null;
+      }
+    }
   }
 
   List<TagModel> get tags =>
-      (this.tagGroups != null) ? this.tagGroups.map((t) => t.tag).toList() : [];
+      (tagGroups != null) ? tagGroups!.where((t) => t.tag != null).map((t) => t.tag!).toList() : [];
 
   List<ArtistSongModel> get producers =>
-      this.artists.where((a) => a.isProducer).toList();
+      (artists ?? []).where((a) => a.isProducer).toList();
 
   List<ArtistSongModel> get vocalists =>
-      this.artists.where((a) => a.isVocalist).toList();
+      (artists ?? []).where((a) => a.isVocalist).toList();
 
   List<ArtistSongModel> get otherArtists =>
-      this.artists.where((a) => !a.isVocalist && !a.isProducer).toList();
+      (artists ?? []).where((a) => !a.isVocalist && !a.isProducer).toList();
 
   bool get hasOriginalVersion =>
-      (this.originalVersionId != null && this.originalVersionId > 0);
+      (originalVersionId != null && originalVersionId! > 0);
 
-  String get publishDateFormatted => (publishDate == null)
+  String? get publishDateFormatted => (publishDate == null)
       ? null
-      : DateFormat('yyyy-MM-dd').format(DateTime.parse(publishDate));
+      : DateFormat('yyyy-MM-dd').format(DateTime.parse(publishDate!));
 
-  DateTime get publishDateAsDateTime =>
-      (publishDate == null) ? null : DateTime.parse(publishDate);
+  DateTime? get publishDateAsDateTime =>
+      (publishDate == null) ? null : DateTime.parse(publishDate!);
 
-  bool get hasLyrics => lyrics != null && lyrics.length > 0;
+  bool get hasLyrics => lyrics != null && lyrics!.isNotEmpty;
 
-  String get originUrl => '$baseUrl/S/${this.id}';
+  String get originUrl => '$baseUrl/S/$id';
 
-  String get imageUrl => this.thumbUrl ?? super.imageUrl;
+  @override
+  String get imageUrl => thumbUrl ?? super.imageUrl;
 
-  String get pvSearchQuery => (this.pvs.isNotEmpty)
-      ? this.pvs[0].name
-      : '${this.artistString}+${this.defaultName}';
+  String get pvSearchQuery => ((pvs ?? []).isNotEmpty)
+      ? pvs![0].name ?? ''
+      : '${artistString ?? ""}+${defaultName ?? ""}';
 
   @override
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = super.toJson();
 
     if (pvs != null) {
-      json['pvs'] = pvs.map((pv) => pv.toJson()).toList();
+      json['pvs'] = pvs!.map((pv) => pv.toJson()).toList();
     }
 
     if (thumbUrl != null) {
@@ -120,26 +140,26 @@ class SongList {
 
   SongList(this.songs);
 
-  SongModel getFirstWithYoutubePV({int start = 0}) {
-    if (start == 0) {
-      return this
-          .songs
-          .firstWhere((s) => s.youtubePV != null, orElse: () => null);
+  SongModel? getFirstWithYoutubePV({int start = 0}) {
+    try {
+      if (start == 0) {
+        return songs.firstWhere((s) => s.youtubePV != null);
+      }
+      int index = songs.indexWhere((s) => s.youtubePV != null, start);
+      return (index == -1) ? null : songs[index];
+    } catch (e) {
+      return null;
     }
-
-    int index = this.songs.indexWhere((s) => s.youtubePV != null, start);
-
-    return (index == -1) ? null : this.songs[index];
   }
 
   int getFirstWithYoutubePVIndex(int start) {
-    int index = this.songs.indexWhere((s) => s.youtubePV != null, start);
+    int index = songs.indexWhere((s) => s.youtubePV != null, start);
 
     return index;
   }
 
   int getLastWithYoutubePVIndex(int start) {
-    int index = this.songs.lastIndexWhere((s) => s.youtubePV != null, start);
+    int index = songs.lastIndexWhere((s) => s.youtubePV != null, start);
 
     return index;
   }

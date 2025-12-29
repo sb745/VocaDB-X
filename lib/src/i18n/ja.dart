@@ -78,7 +78,8 @@ const Map<String, String> ja = {
   "relatedSongs": "Related songs",
   "searchYoutube": "Youtubeで検索",
   "showAll": "Show all",
-  "developerContact": "Developer contacts",
+  "developerContact": "Original developer contacts",
+  "maintainerContact": "Maintainer contacts",
   "favoriteSongs": "好きな曲",
   "favoriteAlbums": "コレクション",
   "favoriteArtists": "フォローしているアーティスト",
@@ -133,7 +134,7 @@ const Map<String, String> ja = {
   "viewDetail": "View detail",
   "username": "Username",
   "password": "Password",
-  "skip": "Skip",
+  "skip": "Cancel",
   "registerAccount": "Register",
   "login": "Login",
   "logout": "Logout",
@@ -141,6 +142,7 @@ const Map<String, String> ja = {
   "collect": "Collect",
   "autoPlay": "Auto play video",
   "register": "Register",
+  "comments": "コメント",
 
   // Song type
   "songType.Original": "オリジナル曲",

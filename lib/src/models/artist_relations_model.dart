@@ -7,24 +7,24 @@ class ArtistRelations {
   List<AlbumModel> popularAlbums;
 
   ArtistRelations.fromJson(Map<String, dynamic> json)
-      : latestSongs = (json.containsKey('latestSongs'))
-            ? (json['latestSongs'] as List)
-                ?.map((d) => (d is int) ? null : SongModel.fromJson(d))
-                ?.toList()
-            : [],
-        popularSongs = (json.containsKey('popularSongs'))
-            ? (json['popularSongs'] as List)
-                ?.map((d) => (d is int) ? null : SongModel.fromJson(d))
-                ?.toList()
-            : [],
-        latestAlbums = (json.containsKey('latestAlbums'))
-            ? (json['latestAlbums'] as List)
-                ?.map((d) => (d is int) ? null : AlbumModel.fromJson(d))
-                ?.toList()
-            : [],
-        popularAlbums = (json.containsKey('popularAlbums'))
-            ? (json['popularAlbums'] as List)
-                ?.map((d) => (d is int) ? null : AlbumModel.fromJson(d))
-                ?.toList()
-            : [];
+      : latestSongs = ((json['latestSongs'] as List?) ?? [])
+            .map((d) => (d is int) ? null : SongModel.fromJson(d))
+            .where((item) => item != null)
+            .cast<SongModel>()
+            .toList(),
+        popularSongs = ((json['popularSongs'] as List?) ?? [])
+            .map((d) => (d is int) ? null : SongModel.fromJson(d))
+            .where((item) => item != null)
+            .cast<SongModel>()
+            .toList(),
+        latestAlbums = ((json['latestAlbums'] as List?) ?? [])
+            .map((d) => (d is int) ? null : AlbumModel.fromJson(d))
+            .where((item) => item != null)
+            .cast<AlbumModel>()
+            .toList(),
+        popularAlbums = ((json['popularAlbums'] as List?) ?? [])
+            .map((d) => (d is int) ? null : AlbumModel.fromJson(d))
+            .where((item) => item != null)
+            .cast<AlbumModel>()
+            .toList();
 }

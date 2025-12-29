@@ -1,30 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:vocadb_app/models.dart';
-import 'package:vocadb_app/src/models/release_event_model.dart';
 import 'package:vocadb_app/utils.dart';
 import 'package:vocadb_app/widgets.dart';
 
 /// A widget to display release event information for horizontal list.
 class ReleaseEventTile extends StatelessWidget {
-  final String name;
+  final String? name;
 
-  final String venueName;
+  final String? venueName;
 
-  final String imageUrl;
+  final String? imageUrl;
 
-  final String category;
+  final String? category;
 
-  final DateTime startDate;
+  final DateTime? startDate;
 
-  final DateTime endDate;
+  final DateTime? endDate;
 
-  final GestureTapCallback onTap;
+  final GestureTapCallback? onTap;
 
   /// The height of image preview. Default is 180
   final double imageHeight;
 
-  ReleaseEventTile(
-      {this.name,
+  const ReleaseEventTile(
+      {super.key, this.name,
       this.venueName,
       this.imageUrl,
       this.category,
@@ -34,30 +33,30 @@ class ReleaseEventTile extends StatelessWidget {
       this.imageHeight = 180});
 
   ReleaseEventTile.releaseEvent(ReleaseEventModel releaseEventModel,
-      {this.imageHeight = 180, this.onTap})
-      : this.name = releaseEventModel.name,
-        this.venueName = releaseEventModel.venueName,
-        this.imageUrl = releaseEventModel.imageUrl,
-        this.category = releaseEventModel.displayCategory,
-        this.startDate = DateTime.now(),
-        this.endDate = null;
+      {super.key, this.imageHeight = 180, this.onTap})
+      : name = releaseEventModel.name,
+        venueName = releaseEventModel.venueName,
+        imageUrl = releaseEventModel.imageUrl,
+        category = releaseEventModel.displayCategory,
+        startDate = DateTime.now(),
+        endDate = null;
 
   ReleaseEventTile.fromEntry(EntryModel entryModel,
-      {this.imageHeight = 180, this.onTap})
-      : this.name = entryModel.name,
-        this.venueName = null,
-        this.imageUrl = entryModel.imageUrl,
-        this.category = entryModel.eventCategory,
-        this.startDate = null,
-        this.endDate = null;
+      {super.key, this.imageHeight = 180, this.onTap})
+      : name = entryModel.name ?? 'Unknown Event',
+        venueName = null,
+        imageUrl = entryModel.imageUrl,
+        category = entryModel.eventCategory,
+        startDate = null,
+        endDate = null;
 
   @override
   Widget build(BuildContext context) {
-    final String dateRange = (this.startDate == null)
+    final String? dateRange = (startDate == null)
         ? null
-        : (this.endDate == null)
-            ? DateTimeUtils.toSimpleFormat(this.startDate)
-            : '${DateTimeUtils.toSimpleFormat(this.startDate)} - ${DateTimeUtils.toSimpleFormat(this.endDate)}';
+        : (endDate == null)
+            ? DateTimeUtils.toSimpleFormat(startDate)
+            : '${DateTimeUtils.toSimpleFormat(startDate)} - ${DateTimeUtils.toSimpleFormat(endDate)}';
 
     return Container(
       margin: EdgeInsets.only(bottom: 16.0),
@@ -65,7 +64,7 @@ class ReleaseEventTile extends StatelessWidget {
         margin: EdgeInsets.symmetric(horizontal: 16.0),
         child: InkWell(
           splashColor: Colors.blue.withAlpha(30),
-          onTap: this.onTap,
+          onTap: onTap,
           child: Column(
             children: [
               SizedBox(
@@ -76,12 +75,14 @@ class ReleaseEventTile extends StatelessWidget {
                       color: Colors.black,
                     ),
                     Container(
-                        child: CustomNetworkImage(
-                      this.imageUrl,
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: double.infinity,
-                    )),
+                        child: (imageUrl != null)
+                            ? CustomNetworkImage(
+                          imageUrl!,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          height: double.infinity,
+                        )
+                            : Container(color: Colors.grey)),
                     (dateRange == null)
                         ? Container()
                         : Column(
@@ -94,8 +95,10 @@ class ReleaseEventTile extends StatelessWidget {
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
                                     dateRange,
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ),
                               )
@@ -114,10 +117,10 @@ class ReleaseEventTile extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          this.category ?? 'Unknown',
-                          style: Theme.of(context).textTheme.caption,
+                          category ?? 'Unknown',
+                          style: Theme.of(context).textTheme.labelMedium,
                         ),
-                        (this.venueName == null)
+                        (venueName == null)
                             ? Container()
                             : Row(
                                 children: [
@@ -129,8 +132,8 @@ class ReleaseEventTile extends StatelessWidget {
                                     ),
                                   ),
                                   Text(
-                                    this.venueName,
-                                    style: Theme.of(context).textTheme.caption,
+                                    venueName!,
+                                    style: Theme.of(context).textTheme.labelMedium,
                                   )
                                 ],
                               )
@@ -138,8 +141,8 @@ class ReleaseEventTile extends StatelessWidget {
                     ),
                     SpaceDivider.micro(),
                     Text(
-                      this.name,
-                      style: Theme.of(context).textTheme.subtitle1,
+                      name!,
+                      style: Theme.of(context).textTheme.headlineSmall,
                     ),
                     SpaceDivider.micro(),
                   ],

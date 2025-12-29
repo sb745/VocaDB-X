@@ -3,17 +3,17 @@ import 'package:vocadb_app/widgets.dart';
 
 /// A widget for display Icon, title and subtitle
 class InfoMessageView extends StatelessWidget {
-  final Widget icon;
+  final Widget? icon;
 
-  final String title;
+  final String? title;
 
-  final String subtitle;
+  final String? subtitle;
 
-  InfoMessageView({this.icon, @required this.title, this.subtitle})
+  const InfoMessageView({super.key, this.icon, required this.title, this.subtitle})
       : assert(title != null);
 
-  InfoMessageView.error({this.title, this.subtitle})
-      : this.icon = Icon(Icons.error, size: 48);
+  InfoMessageView.error({super.key, this.title, this.subtitle})
+      : icon = Icon(Icons.error, size: 48);
 
   @override
   Widget build(BuildContext context) {
@@ -23,13 +23,13 @@ class InfoMessageView extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            this.icon,
+            if (icon != null) icon!,
             SpaceDivider.small(),
-            Text(this.title, style: Theme.of(context).textTheme.headline4),
+            Text(title!, style: Theme.of(context).textTheme.headlineMedium),
             SpaceDivider.micro(),
-            (this.subtitle != null)
-                ? Text(this.subtitle,
-                    style: Theme.of(context).textTheme.caption,
+            (subtitle != null)
+                ? Text(subtitle!,
+                    style: Theme.of(context).textTheme.bodySmall,
                     textAlign: TextAlign.center)
                 : Container()
           ],

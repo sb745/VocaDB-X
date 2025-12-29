@@ -5,6 +5,8 @@ import 'package:vocadb_app/controllers.dart';
 import 'package:vocadb_app/widgets.dart';
 
 class AlbumSearchFilterPage extends GetView<AlbumSearchController> {
+  const AlbumSearchFilterPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +23,7 @@ class AlbumSearchFilterPage extends GetView<AlbumSearchController> {
                       emptyItem: {'name': 'notSpecified'.tr, 'value': ''}),
                   label: 'discType'.tr,
                   value: controller.discType.string,
-                  onChanged: controller.discType,
+                  onChanged: controller.discType.call,
                 ),
               ),
               Obx(
@@ -33,10 +35,10 @@ class AlbumSearchFilterPage extends GetView<AlbumSearchController> {
                     'RatingAverage',
                     'RatingTotal',
                     'CollectionCount'
-                  ], trPrefix: 'sort'),
+                  ], trPrefix: 'sort', emptyItem: {}),
                   label: 'sort'.tr,
                   value: controller.sort.string,
-                  onChanged: controller.sort,
+                  onChanged: controller.sort.call,
                 ),
               ),
               Divider(),

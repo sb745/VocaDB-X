@@ -3,6 +3,8 @@ import 'package:shimmer/shimmer.dart';
 
 /// A widget display placeholder for song
 class SongCardPlaceholder extends StatelessWidget {
+  const SongCardPlaceholder({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(

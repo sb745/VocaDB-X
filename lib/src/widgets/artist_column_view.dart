@@ -4,7 +4,7 @@ import 'package:vocadb_app/widgets.dart';
 
 /// A widget for display list of artists by using [Column] widget.
 class ArtistColumnView extends StatelessWidget {
-  ArtistColumnView({Key key, this.artists, this.onSelect}) : super(key: key);
+  const ArtistColumnView({super.key, required this.artists, required this.onSelect});
 
   /// List of artists to display.
   final List<ArtistModel> artists;
@@ -14,11 +14,10 @@ class ArtistColumnView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-        children: this
-            .artists
+        children: artists
             .map<Widget>((e) => ArtistTile.fromEntry(
                   e,
-                  onTap: () => this.onSelect(e),
+                  onTap: () => onSelect(e),
                 ))
             .toList());
   }

@@ -5,6 +5,8 @@ import 'package:vocadb_app/routes.dart';
 import 'package:vocadb_app/widgets.dart';
 
 class TagCategoryPage extends StatelessWidget {
+  const TagCategoryPage({super.key});
+
   void _onSelectCategory(String category) {
     Get.toNamed(Routes.TAGS, arguments: TagSearchArgs(category: category));
   }
@@ -17,7 +19,7 @@ class TagCategoryPage extends StatelessWidget {
               icon: Icon(Icons.search), onPressed: () => _onSelectCategory('')),
         ]),
         body: TagCategoryList(
-          onSelectCategory: this._onSelectCategory,
+          onSelectCategory: _onSelectCategory,
         ));
   }
 }

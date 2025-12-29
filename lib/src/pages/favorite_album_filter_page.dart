@@ -5,6 +5,8 @@ import 'package:vocadb_app/controllers.dart';
 import 'package:vocadb_app/widgets.dart';
 
 class FavoriteAlbumFilterPage extends GetView<FavoriteAlbumController> {
+  const FavoriteAlbumFilterPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,7 +19,7 @@ class FavoriteAlbumFilterPage extends GetView<FavoriteAlbumController> {
                 () => SimpleDropdownInput.fromJsonArray(
                   label: 'collectionStatus'.tr,
                   value: controller.purchaseStatuses.string,
-                  onChanged: controller.purchaseStatuses,
+                  onChanged: controller.purchaseStatuses.call,
                   json: [
                     {'name': 'anything'.tr, 'value': ''},
                     {
@@ -36,7 +38,7 @@ class FavoriteAlbumFilterPage extends GetView<FavoriteAlbumController> {
                       emptyItem: {'name': 'notSpecified'.tr, 'value': ''}),
                   label: 'discType'.tr,
                   value: controller.discType.string,
-                  onChanged: controller.discType,
+                  onChanged: controller.discType.call,
                 ),
               ),
               Obx(() => SimpleDropdownInput.fromJsonArray(
@@ -46,7 +48,7 @@ class FavoriteAlbumFilterPage extends GetView<FavoriteAlbumController> {
                     ],
                     label: 'sort'.tr,
                     value: controller.sort.string,
-                    onChanged: controller.sort,
+                    onChanged: controller.sort.call,
                   )),
               Divider(),
               Obx(() => ArtistInput(

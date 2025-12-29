@@ -17,10 +17,10 @@ class TagDetailController extends GetxController {
   final AlbumRepository albumRepository;
 
   TagDetailController(
-      {this.tagRepository,
-      this.songRepository,
-      this.artistRepository,
-      this.albumRepository});
+      {required this.tagRepository,
+      required this.songRepository,
+      required this.artistRepository,
+      required this.albumRepository});
 
   @override
   void onInit() {
@@ -29,7 +29,7 @@ class TagDetailController extends GetxController {
     super.onInit();
   }
 
-  initArgs() {
+  void initArgs() {
     TagDetailArgs args = Get.arguments;
 
     if (args.tag != null) {
@@ -39,16 +39,16 @@ class TagDetailController extends GetxController {
     }
   }
 
-  fetchApis() {
+  void fetchApis() {
     String lang = SharedPreferenceService.lang;
-    tagRepository.getById(tag().id, lang: lang).then(tag);
-    songRepository.getTopSongsByTagId(tag().id, lang: lang).then(topSongs);
+    tagRepository.getById(tag().id!, lang: lang).then(tag.call);
+    songRepository.getTopSongsByTagId(tag().id!, lang: lang).then(topSongs.call);
     songRepository
-        .getLatestSongsByTagId(tag().id, lang: lang)
-        .then(latestSongs);
+        .getLatestSongsByTagId(tag().id!, lang: lang)
+        .then(latestSongs.call);
     artistRepository
-        .getTopArtistsByTagId(tag().id, lang: lang)
-        .then(topArtists);
-    albumRepository.getTopAlbumsByTagId(tag().id, lang: lang).then(topAlbums);
+        .getTopArtistsByTagId(tag().id!, lang: lang)
+        .then(topArtists.call);
+    albumRepository.getTopAlbumsByTagId(tag().id!, lang: lang).then(topAlbums.call);
   }
 }

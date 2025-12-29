@@ -6,6 +6,8 @@ import 'package:vocadb_app/widgets.dart';
 
 class ReleaseEventSearchFilterPage
     extends GetView<ReleaseEventSearchController> {
+  const ReleaseEventSearchFilterPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,7 +22,7 @@ class ReleaseEventSearchFilterPage
                     emptyItem: {'name': 'notSpecified'.tr, 'value': ''}),
                 label: 'category'.tr,
                 value: controller.category.string,
-                onChanged: controller.category,
+                onChanged: controller.category.call,
               ),
             ),
             Obx(
@@ -32,7 +34,7 @@ class ReleaseEventSearchFilterPage
                 ], trPrefix: 'sort'),
                 label: 'sort'.tr,
                 value: controller.sort.string,
-                onChanged: controller.sort,
+                onChanged: controller.sort.call,
               ),
             ),
             Divider(),

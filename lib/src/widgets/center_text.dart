@@ -5,7 +5,7 @@ class CenterText extends StatelessWidget {
 
   final bool isExpanded;
 
-  const CenterText(this.text, {this.isExpanded = false});
+  const CenterText(this.text, {super.key, this.isExpanded = false});
 
   @override
   Widget build(BuildContext context) {

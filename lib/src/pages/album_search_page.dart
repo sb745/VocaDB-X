@@ -7,6 +7,8 @@ import 'package:vocadb_app/routes.dart';
 import 'package:vocadb_app/widgets.dart';
 
 class AlbumSearchPage extends GetView<AlbumSearchController> {
+  const AlbumSearchPage({super.key});
+
   void _onTapAlbum(AlbumModel album) => AppPages.toAlbumDetailPage(album);
 
   Widget _buildTextInput(BuildContext context) {
@@ -15,8 +17,8 @@ class AlbumSearchPage extends GetView<AlbumSearchController> {
         Expanded(
           child: TextField(
             controller: controller.textSearchController,
-            onChanged: controller.query,
-            style: Theme.of(context).primaryTextTheme.headline6,
+            onChanged: controller.query.call,
+            style: Theme.of(context).primaryTextTheme.headlineMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
             autofocus: true,
             decoration: InputDecoration(
                 border: InputBorder.none, hintText: 'search'.tr),
@@ -62,7 +64,7 @@ class AlbumSearchPage extends GetView<AlbumSearchController> {
                   ? CenterText(controller.errorMessage.string)
                   : AlbumListView(
                       albums: controller.results.toList(),
-                      onSelect: this._onTapAlbum,
+                      onSelect: _onTapAlbum,
                       onReachLastItem: controller.onReachLastItem,
                       emptyWidget: CenterText('searchResultNotMatched'.tr)),
         ));

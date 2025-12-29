@@ -5,6 +5,8 @@ import 'package:vocadb_app/models.dart';
 import 'package:vocadb_app/widgets.dart';
 
 class RankingFilterPage extends GetView<RankingController> {
+  const RankingFilterPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,7 +17,7 @@ class RankingFilterPage extends GetView<RankingController> {
               () => RadioButtonGroup(
                 label: 'filterBy'.tr,
                 value: controller.filterBy.string,
-                onChanged: controller.filterBy,
+                onChanged: controller.filterBy.call,
                 items: [
                   RadioButtonItem(
                       label: 'ranking.newlyAdded'.tr, value: 'CreateDate'),
@@ -30,7 +32,7 @@ class RankingFilterPage extends GetView<RankingController> {
             Obx(() => RadioButtonGroup(
                   label: 'vocalist'.tr,
                   value: controller.vocalist.string,
-                  onChanged: controller.vocalist,
+                  onChanged: controller.vocalist.call,
                   items: [
                     RadioButtonItem(
                         label: 'ranking.allVocalists'.tr, value: 'Nothing'),

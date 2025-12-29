@@ -1,6 +1,6 @@
 /// Utility classes
 
-library utils;
+library;
 
 export 'src/utils/app_directory.dart';
 export 'src/utils/date_time_utils.dart';

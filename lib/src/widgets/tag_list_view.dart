@@ -10,14 +10,14 @@ class TagListView extends StatelessWidget {
   /// A callback function when user react to last item. Only worked on list view with vertical direction.
   final Function onReachLastItem;
 
-  const TagListView({this.tags, this.onSelect, this.onReachLastItem});
+  const TagListView({super.key, required this.tags, required this.onSelect, required this.onReachLastItem});
 
   @override
   Widget build(BuildContext context) {
     return InfiniteListView(
-        onReachLastItem: this.onReachLastItem,
+        onReachLastItem: onReachLastItem,
         itemCount: tags.length,
         itemBuilder: (context, index) => ListTile(
-            title: Text(tags[index].name), onTap: () => onSelect(tags[index])));
+            title: Text(tags[index].name ?? 'Unknown Tag'), onTap: () => onSelect(tags[index])));
   }
 }

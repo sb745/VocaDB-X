@@ -5,7 +5,7 @@ class TagDetailArgs {
   final int id;
 
   /// Optional tag data for pre-display before fetch.
-  final TagModel tag;
+  final TagModel? tag;
 
-  const TagDetailArgs({this.id, this.tag});
+  const TagDetailArgs({required this.id, this.tag});
 }

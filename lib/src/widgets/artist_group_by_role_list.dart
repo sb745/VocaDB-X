@@ -12,11 +12,11 @@ class ArtistGroupByRoleList extends StatelessWidget {
   final bool displayRole;
 
   const ArtistGroupByRoleList(
-      {@required this.artistRoles, this.onTap, this.displayRole = true});
+      {super.key, required this.artistRoles, required this.onTap, this.displayRole = true});
 
   ArtistGroupByRoleList.fromArtistSongModel(
-      {@required List<ArtistSongModel> artistSongs,
-      this.onTap,
+      {super.key, required List<ArtistSongModel> artistSongs,
+      required this.onTap,
       this.displayRole = true})
       : artistRoles = artistSongs
             .map((e) => ArtistRoleModel(
@@ -27,8 +27,8 @@ class ArtistGroupByRoleList extends StatelessWidget {
             .toList();
 
   ArtistGroupByRoleList.fromArtistAlbumModel(
-      {@required List<ArtistAlbumModel> artistAlbums,
-      this.onTap,
+      {super.key, required List<ArtistAlbumModel> artistAlbums,
+      required this.onTap,
       this.displayRole = true})
       : artistRoles = artistAlbums
             .map((e) => ArtistRoleModel(
@@ -39,8 +39,8 @@ class ArtistGroupByRoleList extends StatelessWidget {
             .toList();
 
   ArtistGroupByRoleList.fromArtistEventModel(
-      {@required List<ArtistEventModel> artistEvents,
-      this.onTap,
+      {super.key, required List<ArtistEventModel> artistEvents,
+      required this.onTap,
       this.displayRole = true})
       : artistRoles = artistEvents
             .map((e) => ArtistRoleModel(
@@ -56,33 +56,36 @@ class ArtistGroupByRoleList extends StatelessWidget {
     List<ArtistRoleModel> vocalists = [];
     List<ArtistRoleModel> others = [];
 
-    this.artistRoles.forEach((e) {
+    for (var e in artistRoles) {
       if (e.isProducer) producers.add(e);
       if (e.isVocalist) vocalists.add(e);
       if (e.isOtherRole) others.add(e);
-    });
+    }
 
     if (producers.isNotEmpty) {
-      if (displayRole)
+      if (displayRole) {
         items.add(ListTile(
           title: Text('producers'.tr),
         ));
+      }
       items.addAll(producers.map(_mapArtistTile));
     }
 
     if (vocalists.isNotEmpty) {
-      if (displayRole)
+      if (displayRole) {
         items.add(ListTile(
           title: Text('vocalists'.tr),
         ));
+      }
       items.addAll(vocalists.map(_mapArtistTile));
     }
 
     if (others.isNotEmpty) {
-      if (displayRole)
+      if (displayRole) {
         items.add(ListTile(
           title: Text('other'.tr),
         ));
+      }
       items.addAll(others.map(_mapOtherArtistTile));
     }
 
@@ -93,7 +96,7 @@ class ArtistGroupByRoleList extends StatelessWidget {
     return ArtistTile(
       name: model.name,
       imageUrl: model.imageUrl,
-      onTap: () => this.onTap(model),
+      onTap: () => onTap(model),
     );
   }
 
@@ -102,7 +105,7 @@ class ArtistGroupByRoleList extends StatelessWidget {
       name: model.name,
       subtitle: model.role,
       imageUrl: model.imageUrl,
-      onTap: () => this.onTap(model),
+      onTap: () => onTap(model),
     );
   }
 

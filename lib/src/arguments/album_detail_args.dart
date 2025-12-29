@@ -5,7 +5,7 @@ class AlbumDetailArgs {
   final int id;
 
   /// Optional album data for pre-display before fetch.
-  final AlbumModel album;
+  final AlbumModel? album;
 
-  const AlbumDetailArgs({this.id, this.album});
+  const AlbumDetailArgs({required this.id, this.album});
 }

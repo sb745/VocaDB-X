@@ -4,6 +4,8 @@ import 'package:vocadb_app/controllers.dart';
 import 'package:vocadb_app/widgets.dart';
 
 class FavoriteSongFilterPage extends GetView<FavoriteSongController> {
+  const FavoriteSongFilterPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,7 +16,7 @@ class FavoriteSongFilterPage extends GetView<FavoriteSongController> {
               () => SimpleDropdownInput.fromJsonArray(
                 label: 'Rating',
                 value: controller.rating.string,
-                onChanged: controller.rating,
+                onChanged: controller.rating.call,
                 json: [
                   {'name': 'anything'.tr, 'value': ''},
                   {'name': 'Like', 'value': 'Like'},
@@ -34,13 +36,13 @@ class FavoriteSongFilterPage extends GetView<FavoriteSongController> {
                 ], trPrefix: 'sort'),
                 label: 'sort'.tr,
                 value: controller.sort.string,
-                onChanged: controller.sort,
+                onChanged: controller.sort.call,
               ),
             ),
             Obx(() => SwitchListTile(
                   title: Text('groupByRating'.tr),
                   value: controller.groupByRating.value,
-                  onChanged: controller.groupByRating,
+                  onChanged: controller.groupByRating.call,
                 )),
             Divider(),
             Obx(() => ArtistInput(

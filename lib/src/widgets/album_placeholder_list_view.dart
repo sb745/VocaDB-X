@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:vocadb_app/widgets.dart';
 
 class AlbumPlaceholderListView extends StatelessWidget {
-  AlbumPlaceholderListView(
-      {Key key, this.size = 10, this.scrollDirection = Axis.horizontal})
-      : assert(size != null),
-        super(key: key);
+  const AlbumPlaceholderListView(
+      {super.key, this.size = 10, this.scrollDirection = Axis.horizontal});
 
   /// Size of placeholders
   final int size;
@@ -18,7 +16,7 @@ class AlbumPlaceholderListView extends StatelessWidget {
     return SizedBox(
       height: 180,
       child: ListView.builder(
-          itemCount: this.size,
+          itemCount: size,
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) => AlbumCardPlaceholder()),
     );

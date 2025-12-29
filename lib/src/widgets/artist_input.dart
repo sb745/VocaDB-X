@@ -22,16 +22,16 @@ class ArtistInput extends StatelessWidget {
   final double imageSize;
 
   const ArtistInput(
-      {this.label = 'Artists',
-      this.values,
-      this.onDeleted,
-      this.onSelect,
+      {super.key, this.label = 'Artists',
+      required this.values,
+      required this.onDeleted,
+      required this.onSelect,
       this.imageSize = 50});
 
   Widget _buildLeading(String imageUrl) {
     return SizedBox(
-      width: this.imageSize,
-      height: this.imageSize,
+      width: imageSize,
+      height: imageSize,
       child: ClipOval(
           child: Container(
         color: Colors.white,
@@ -43,13 +43,13 @@ class ArtistInput extends StatelessWidget {
 
   Widget _artistBuilder(ArtistModel artistModel) {
     return ListTile(
-      leading: _buildLeading(artistModel.imageUrl),
-      title: Text(artistModel.name),
-      trailing: (this.onDeleted == null)
+      leading: _buildLeading(artistModel.imageUrl ?? ''),
+      title: Text(artistModel.name ?? 'Unknown Artist'),
+      trailing: (onDeleted == null)
           ? null
           : IconButton(
               icon: Icon(Icons.close),
-              onPressed: () => this.onDeleted(artistModel),
+              onPressed: () => onDeleted(artistModel),
             ),
     );
   }
@@ -57,12 +57,12 @@ class ArtistInput extends StatelessWidget {
   void _onBrowse() {
     Get.toNamed(Routes.ARTISTS,
             arguments: ArtistSearchArgs(selectionMode: true))
-        .then(_postBrowse);
+        ?.then(_postBrowse);
   }
 
   void _postBrowse(value) {
     if (value != null) {
-      this.onSelect(value);
+      onSelect(value);
     }
   }
 
@@ -74,12 +74,12 @@ class ArtistInput extends StatelessWidget {
       title: Text('artists'.tr),
     ));
 
-    if (this.values != null && this.values.isNotEmpty) {
-      items.addAll(this.values.map((e) => _artistBuilder(e)).toList());
+    if (values.isNotEmpty) {
+      items.addAll(values.map((e) => _artistBuilder(e)).toList());
     }
 
     items.add(ListTile(
-      onTap: this._onBrowse,
+      onTap: _onBrowse,
       leading: Icon(Icons.add),
       title: Text('add'.tr),
     ));

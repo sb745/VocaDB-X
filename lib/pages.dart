@@ -1,6 +1,6 @@
 /// Collection of pages inside app
 
-library pages;
+library;
 
 export 'src/pages/album_detail_page.dart';
 export 'src/pages/album_search_filter_page.dart';
@@ -8,6 +8,7 @@ export 'src/pages/album_search_page.dart';
 export 'src/pages/artist_detail_page.dart';
 export 'src/pages/artist_search_filter_page.dart';
 export 'src/pages/artist_search_page.dart';
+export 'src/pages/comments_page.dart';
 export 'src/pages/contact_us_page.dart';
 export 'src/pages/favorite_album_filter_page.dart';
 export 'src/pages/favorite_album_page.dart';

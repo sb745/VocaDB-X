@@ -20,5 +20,5 @@ class AppTranslation extends Translations {
       {'en': en, 'ja': ja, 'th': th, 'ms': ms, 'zh': zh};
 
   /// Gets locale from locales, and updates the locale
-  void changeLocale(String lang) => Get.updateLocale(locales[lang]);
+  void changeLocale(String lang) => Get.updateLocale(locales[lang] ?? fallbackLocale);
 }

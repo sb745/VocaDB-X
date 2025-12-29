@@ -1,10 +1,10 @@
 import 'package:vocadb_app/models.dart';
 
 class LyricModel extends BaseModel {
-  int id;
-  String translationType;
-  String cultureCode;
-  String value;
+  int? id;
+  String? translationType;
+  String? cultureCode;
+  String? value;
 
   LyricModel({this.id, this.translationType, this.cultureCode, this.value});
 
@@ -20,6 +20,6 @@ class LyricList {
 
   LyricList(this.lyrics);
 
-  List<String> get translationTypes =>
-      lyrics.map<String>((l) => l.translationType).toList();
+  List<String?> get translationTypes =>
+      lyrics.map<String?>((l) => l.translationType).toList();
 }

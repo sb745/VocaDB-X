@@ -11,43 +11,56 @@ class AuthService extends GetxService {
 
   final currentUser = UserModel().obs;
 
-  AuthService({this.httpService, this.appDirectory})
-      : assert(httpService != null),
-        assert(appDirectory != null);
+  AuthService({required this.httpService, required this.appDirectory});
 
   Future<UserCookie> login({
-    String username,
-    String password,
+    required String username,
+    required String password,
   }) async {
     return await httpService.login(username, password);
   }
 
   Future<AuthService> checkCurrentUser() async {
     print('check current user');
-    this.getCurrent().then(currentUser).catchError(print);
+    getCurrent().then(currentUser.call).catchError((e) {
+      print('Error checking current user: $e');
+      currentUser.value = UserModel();
+      return UserModel();
+    });
     return this;
   }
 
-  Future<UserModel> getCurrent() async {
+  Future<UserModel?> getCurrent() async {
     try {
-      UserModel us = await httpService.get('/api/users/current',
-          {'fields': 'MainPicture'}).then((item) => UserModel.fromJson(item));
+      // Use direct httpService.dio request to bypass cache
+      final url = Uri.https('vocadb.net', '/api/users/current', {'fields': 'MainPicture'}).toString();
+      final response = await httpService.dio.get(url);
+      
+      // If response is not a Map, it's not valid user data
+      if (response.data is! Map) {
+        print('current user response is not a map: ${response.data}');
+        return null;
+      }
+      
+      // Cast Map to Map<String, dynamic>
+      final Map<String, dynamic> userData = Map<String, dynamic>.from(response.data as Map);
+      UserModel us = UserModel.fromJson(userData);
       print('current user : $us');
       return us;
     } catch (e) {
-      if (e is DioError && e.response.statusCode == 404) {
+      if (e is DioException && e.response?.statusCode == 404) {
         print('current user not found');
         return null;
       }
 
       print('Unknown error from get current user $e');
 
-      throw e;
+      return null;
     }
   }
 
   Future<void> logout() async {
     appDirectory.clearCookies();
-    currentUser(new UserModel());
+    currentUser(UserModel());
   }
 }

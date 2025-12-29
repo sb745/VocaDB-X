@@ -1,4 +1,5 @@
-const String appName = 'VocaDB';
+const String appName = 'VocaDB X';
+const String siteName = 'VocaDB';
 const String baseUrl = 'https://vocadb.net';
 const String authority = 'vocadb.net';
 
@@ -25,6 +26,15 @@ const List<Map<String, String>> contactDeveloperSites = [
   {"title": "Twitter", "url": "https://twitter.com/up2codio"},
   {"title": "VocaDB", "url": "https://vocadb.net/Profile/up2up"},
   {"title": "Github", "url": "https://github.com/VocaDB/VocaDB-App"},
+];
+
+const List<Map<String, String>> contactMaintainerSites = [
+  {
+    "title": "Mail",
+    "url": "mailto:sb745@catgirls.mov?subject=VocaDB%20X%20Feedback"
+  },
+  {"title": "Website", "url": "https://catgirls.mov"},
+  {"title": "Github", "url": "https://github.com/sb745/VocaDB-X"},
 ];
 
 /// Set to false for hide filter menu on ranking page

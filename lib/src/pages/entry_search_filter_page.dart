@@ -4,6 +4,8 @@ import 'package:vocadb_app/controllers.dart';
 import 'package:vocadb_app/widgets.dart';
 
 class EntrySearchFilterPage extends GetView<EntrySearchController> {
+  const EntrySearchFilterPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +28,7 @@ class EntrySearchFilterPage extends GetView<EntrySearchController> {
                 ],
                 label: 'type'.tr,
                 value: controller.entryType.string,
-                onChanged: controller.entryType,
+                onChanged: controller.entryType.call,
               ),
             ),
             Obx(
@@ -37,7 +39,7 @@ class EntrySearchFilterPage extends GetView<EntrySearchController> {
                 ],
                 label: 'sort'.tr,
                 value: controller.sort.value,
-                onChanged: controller.sort,
+                onChanged: controller.sort.call,
               ),
             ),
             Divider(),

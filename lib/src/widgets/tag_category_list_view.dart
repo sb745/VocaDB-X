@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 class TagCategoryList extends StatelessWidget {
   final Function(String) onSelectCategory;
 
-  const TagCategoryList({Key key, this.onSelectCategory}) : super(key: key);
+  const TagCategoryList({super.key, required this.onSelectCategory});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class TagCategoryList extends StatelessWidget {
           padding: EdgeInsets.all(16.0),
           child: Text(
             'category'.tr,
-            style: Theme.of(context).textTheme.headline6,
+            style: Theme.of(context).textTheme.headlineMedium,
           ),
         ),
         Expanded(
@@ -29,9 +29,8 @@ class TagCategoryList extends StatelessWidget {
               mainAxisSpacing: 10,
               children: List.generate(constTagCategories.length, (index) {
                 String name = constTagCategories[index];
-                return RaisedButton(
-                  color: Theme.of(context).cardColor,
-                  onPressed: () => this.onSelectCategory(name),
+                return ElevatedButton(
+                  onPressed: () => onSelectCategory(name),
                   child: Text(name),
                 );
               })),

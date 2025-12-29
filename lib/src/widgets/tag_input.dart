@@ -19,29 +19,29 @@ class TagInput extends StatelessWidget {
   final Function(TagModel) onSelect;
 
   const TagInput(
-      {this.label = 'Tags', this.values, this.onDeleted, this.onSelect});
+      {super.key, this.label = 'Tags', required this.values, required this.onDeleted, required this.onSelect});
 
   Widget _tagBuilder(TagModel tagModel) {
     return ListTile(
       leading: Icon(Icons.label),
-      title: Text(tagModel.name),
-      trailing: (this.onDeleted == null)
+      title: Text(tagModel.name ?? 'Unknown Tag'),
+      trailing: (onDeleted == null)
           ? null
           : IconButton(
               icon: Icon(Icons.close),
-              onPressed: () => this.onDeleted(tagModel),
+              onPressed: () => onDeleted(tagModel),
             ),
     );
   }
 
   void _onBrowse() {
-    Get.toNamed(Routes.TAGS, arguments: TagSearchArgs(selectionMode: true))
+    Get.toNamed(Routes.TAGS, arguments: TagSearchArgs(selectionMode: true))!
         .then(_postBrowse);
   }
 
   void _postBrowse(value) {
     if (value != null) {
-      this.onSelect(value);
+      onSelect(value);
     }
   }
 
@@ -53,12 +53,12 @@ class TagInput extends StatelessWidget {
       title: Text('tags'.tr),
     ));
 
-    if (this.values != null && this.values.isNotEmpty) {
-      items.addAll(this.values.map((e) => _tagBuilder(e)).toList());
+    if (values.isNotEmpty) {
+      items.addAll(values.map((e) => _tagBuilder(e)).toList());
     }
 
     items.add(ListTile(
-      onTap: this._onBrowse,
+      onTap: _onBrowse,
       leading: Icon(Icons.add),
       title: Text('add'.tr),
     ));

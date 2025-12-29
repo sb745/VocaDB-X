@@ -1,4 +1,4 @@
-library bindings;
+library;
 
 export 'src/bindings/album_search_binding.dart';
 export 'src/bindings/artist_search_binding.dart';

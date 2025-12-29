@@ -5,7 +5,7 @@ class ReleaseEventDetailArgs {
   final int id;
 
   /// Optional release event data for pre-display before fetch.
-  final ReleaseEventModel event;
+  final ReleaseEventModel? event;
 
-  const ReleaseEventDetailArgs({this.id, this.event});
+  const ReleaseEventDetailArgs({required this.id, this.event});
 }

@@ -4,8 +4,7 @@ import 'package:vocadb_app/widgets.dart';
 
 /// A widget for generate release events in [Column] instead of [ListView]. Use it only when need to display release event content inside parent [ListView] widget.
 class ReleaseEventColumnView extends StatelessWidget {
-  ReleaseEventColumnView({Key key, this.events, this.onSelect})
-      : super(key: key);
+  const ReleaseEventColumnView({super.key, required this.events, required this.onSelect});
 
   /// List of events to display.
   final List<ReleaseEventModel> events;
@@ -16,11 +15,10 @@ class ReleaseEventColumnView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: this
-          .events
+      children: events
           .map((e) => ReleaseEventTile.releaseEvent(
                 e,
-                onTap: () => this.onSelect(e),
+                onTap: () => onSelect(e),
               ))
           .toList(),
     );

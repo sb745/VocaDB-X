@@ -3,32 +3,31 @@ import 'package:flutter/material.dart';
 /// A widget for wrap child widget with header and actions
 class Section extends StatelessWidget {
   /// Title display on top of widget.
-  final String title;
+  final String? title;
 
   /// List of action widgets display on top right side of header.
-  final List<Widget> actions;
+  final List<Widget>? actions;
 
   /// The child contained by the section.
-  final Widget child;
+  final Widget? child;
 
   /// A widget that will appended into the end of section.
-  final Widget divider;
+  final Widget? divider;
 
-  final bool visible;
+  final bool? visible;
 
   /// Default header height
   static const double _headerHeight = 48;
 
   const Section(
-      {Key key,
-      @required this.title,
+      {super.key,
+      this.title,
       this.actions,
-      @required this.child,
+      this.child,
       this.divider,
       this.visible = true})
       : assert(title != null),
-        assert(child != null),
-        super(key: key);
+        assert(child != null);
 
   Widget _headerBuilder(BuildContext context) {
     return Container(
@@ -37,10 +36,10 @@ class Section extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(this.title),
-          (actions == null || actions.isEmpty)
+          Text(title ?? ''),
+          (actions == null || actions!.isEmpty)
               ? Container()
-              : Row(children: actions)
+              : Row(children: actions!)
         ],
       ),
     );
@@ -48,12 +47,12 @@ class Section extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (visible == null || !visible) return Container();
+    if (visible == null || !visible!) return Container();
 
-    List<Widget> children = [_headerBuilder(context), child];
+    List<Widget> children = [_headerBuilder(context), child!];
 
     if (divider != null) {
-      children.add(divider);
+      children.add(divider!);
     }
 
     return Column(

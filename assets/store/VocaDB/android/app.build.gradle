@@ -37,7 +37,7 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 36
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -49,11 +49,11 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.coolappz.Vocadb"
-        minSdkVersion 20
-        targetSdkVersion 29
-        versionCode flutterVersionCode.toInteger()
-        versionName "3.0.0-beta.1"
+        applicationId "com.sb745.Vocadb"
+        minSdkVersion 21
+        targetSdkVersion 36
+        versionCode 1
+        versionName "4.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -89,4 +89,3 @@ dependencies {
 }
 
 apply plugin: 'io.fabric'
-apply plugin: 'com.google.gms.google-services'

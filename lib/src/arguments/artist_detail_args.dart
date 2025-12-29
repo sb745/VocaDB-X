@@ -5,7 +5,7 @@ class ArtistDetailArgs {
   final int id;
 
   /// Optional artist data for pre-display before fetch.
-  final ArtistModel artist;
+  final ArtistModel? artist;
 
-  const ArtistDetailArgs({this.id, this.artist});
+  const ArtistDetailArgs({required this.id, this.artist});
 }

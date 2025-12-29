@@ -10,6 +10,7 @@ class AppPages {
     GetPage(name: Routes.INITIAL, page: () => LoginPage()),
     GetPage(
         name: Routes.MAIN, page: () => MainPage(), binding: MainPageBinding()),
+    GetPage(name: Routes.COMMENTS, page: () => CommentsPage()),
     GetPage(
         name: Routes.SONGS,
         page: () => SongSearchPage(),
@@ -66,40 +67,44 @@ class AppPages {
         binding: FavoriteAlbumBinding()),
   ];
 
-  static toSongDetailPage(SongModel song) {
+  static void toSongDetailPage(SongModel song) {
     Get.toNamed('/songs/${song.id}',
-        arguments: SongDetailArgs(id: song.id, song: song));
+        arguments: SongDetailArgs(id: song.id!.toInt(), song: song));
   }
 
-  static toArtistDetailPage(ArtistModel artist) {
+  static void toArtistDetailPage(ArtistModel artist) {
     Get.toNamed('/artists/${artist.id}',
-        arguments: ArtistDetailArgs(id: artist.id, artist: artist));
+        arguments: ArtistDetailArgs(id: artist.id!.toInt(), artist: artist));
   }
 
-  static toAlbumDetailPage(AlbumModel album) {
+  static void toAlbumDetailPage(AlbumModel album) {
     Get.toNamed('/albums/${album.id}',
-        arguments: AlbumDetailArgs(id: album.id, album: album));
+        arguments: AlbumDetailArgs(id: album.id!.toInt(), album: album));
   }
 
-  static toTagDetailPage(TagModel tag) {
+  static void toTagDetailPage(TagModel tag) {
     Get.toNamed('/tags/${tag.id}',
-        arguments: TagDetailArgs(id: tag.id, tag: tag));
+        arguments: TagDetailArgs(id: tag.id!.toInt(), tag: tag));
   }
 
-  static toReleaseEventDetailPage(ReleaseEventModel event) {
+  static void toReleaseEventDetailPage(ReleaseEventModel event) {
     Get.toNamed('/release-events/${event.id}',
-        arguments: ReleaseEventDetailArgs(id: event.id, event: event));
+        arguments: ReleaseEventDetailArgs(id: event.id!.toInt(), event: event));
   }
 
-  static toReleaseEventSeriesDetailPage(ReleaseEventSeriesModel event) {
+  static void toReleaseEventSeriesDetailPage(ReleaseEventSeriesModel event) {
     Get.toNamed('/release-event-series/${event.id}',
         arguments:
-            ReleaseEventSeriesDetailArgs(id: event.id, eventSeries: event));
+            ReleaseEventSeriesDetailArgs(id: event.id!.toInt(), eventSeries: event));
   }
 
-  static openPVPlayListPage(List<SongModel> songs,
+  static void openPVPlayListPage(List<SongModel> songs,
       {String title = 'Playlist'}) {
     Get.to(PVPlaylistPage(),
         arguments: PVPlayListArgs(songs: songs, title: title));
+  }
+
+  static void toCommentsPage(CommentsArgs args) {
+    Get.toNamed(Routes.COMMENTS, arguments: args);
   }
 }

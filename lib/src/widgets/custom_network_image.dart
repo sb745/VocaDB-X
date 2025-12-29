@@ -7,41 +7,33 @@ class CustomNetworkImage extends StatelessWidget {
   final String imageUrl;
 
   /// A placeholder widget to display when image loading.
-  final Widget placeholder;
+  final Widget? placeholder;
 
   /// A widget to display error when fail to load image.
-  final Widget errorWidget;
+  final Widget? errorWidget;
 
-  final BoxFit fit;
+  final BoxFit? fit;
 
-  final double width;
+  final double? width;
 
-  final double height;
+  final double? height;
 
   const CustomNetworkImage(this.imageUrl,
-      {this.placeholder, this.errorWidget, this.fit, this.width, this.height});
+      {super.key, this.placeholder, this.errorWidget, this.fit, this.width, this.height});
 
   Widget _buildImage() {
     return CachedNetworkImage(
-      fit: this.fit,
-      imageUrl: this.imageUrl,
-      width: this.width,
-      height: this.height,
-      placeholder: (this.placeholder != null)
-          ? this.placeholder
-          : (context, url) => Container(color: Colors.grey),
-      errorWidget: (this.errorWidget != null)
-          ? this.errorWidget
-          : (context, url, error) => new Icon(Icons.error),
+      fit: fit,
+      imageUrl: imageUrl,
+      width: width,
+      height: height,
+      placeholder: (context, url) => placeholder ?? Container(color: Colors.grey),
+      errorWidget: (context, url, error) => errorWidget ?? Icon(Icons.error),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    if (imageUrl == null) {
-      return Placeholder();
-    }
-
-    return this._buildImage();
+    return _buildImage();
   }
 }
