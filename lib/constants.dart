@@ -29,12 +29,8 @@ const List<Map<String, String>> contactDeveloperSites = [
 ];
 
 const List<Map<String, String>> contactMaintainerSites = [
-  {
-    "title": "Mail",
-    "url": "mailto:sb745@catgirls.mov?subject=VocaDB%20X%20Feedback"
-  },
-  {"title": "Website", "url": "https://catgirls.mov"},
   {"title": "Github", "url": "https://github.com/sb745/VocaDB-X"},
+  {"title": "Website", "url": "https://catgirls.mov"},
 ];
 
 /// Set to false for hide filter menu on ranking page
