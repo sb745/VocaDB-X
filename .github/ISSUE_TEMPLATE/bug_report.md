@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Report any bugs you found in latest app version. Include beta version
+about: Report any bugs you found in the latest app version
 title: ''
 labels: bug
 assignees: ''
@@ -10,11 +10,11 @@ assignees: ''
 **Describe the bug**
 A clear and concise description of what the bug is.
 
-**To Reproduce**
+**How to reproduce**
 Steps to reproduce the behavior:
 1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
+2. Click on '...'
+3. Scroll down to '...'
 4. See error
 
 **Expected behavior**
@@ -24,12 +24,11 @@ A clear and concise description of what you expected to happen.
 If applicable, add screenshots to help explain your problem.
 
 **Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - OS Version [e.g. 22]
+ - Device: [e.g. Google Pixel 10]
+ - OS: [e.g. Android 16]
 
 **App verion**
- - VocaDB 3.0.1-beta.1
+ - VocaDB X 4.0.0
 
 **Additional context**
 Add any other context about the problem here.
