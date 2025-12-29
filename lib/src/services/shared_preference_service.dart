@@ -14,7 +14,7 @@ class SharedPreferenceService extends GetxService {
 
   final contentLang = 'Default'.obs;
 
-  final theme = 'dark'.obs;
+  final theme = 'system'.obs;
 
   final autoPlay = true.obs;
 
@@ -57,7 +57,7 @@ class SharedPreferenceService extends GetxService {
 
   void initTheme() {
     print('init theme ${theme.string}');
-    theme((box?.read('theme') as String?) ?? 'light');
+    theme((box?.read('theme') as String?) ?? 'system');
     Themes.changeTheme(theme.string);
   }
 

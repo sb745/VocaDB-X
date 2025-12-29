@@ -21,8 +21,9 @@ class SettingsPage extends StatelessWidget {
                 value: pref.theme.string,
                 onChanged: pref.updateTheme,
                 items: [
-                  RadioButtonItem(label: 'Dark', value: 'dark'),
-                  RadioButtonItem(label: 'Light', value: 'light')
+                  RadioButtonItem(label: 'System', value: 'system'),
+                  RadioButtonItem(label: 'Light', value: 'light'),
+                  RadioButtonItem(label: 'Dark', value: 'dark')
                 ],
               ),
             ),

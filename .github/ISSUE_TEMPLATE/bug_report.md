@@ -28,7 +28,7 @@ If applicable, add screenshots to help explain your problem.
  - OS: [e.g. Android 16]
 
 **App verion**
- - VocaDB X 4.0.0
+ - VocaDB X 4.0.1
 
 **Additional context**
 Add any other context about the problem here.
